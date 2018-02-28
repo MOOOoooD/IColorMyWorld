@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/paintScreen"
+    tools:context=".UserPaint_using"
+    tools:showIn="@layout/activity_user_paint"
+    >
+    <com.apps.mooooood.functforapp.PntCustView_using
+        android:id="@+id/paint_custom_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+
+        android:layout_above="@+id/toolbar_bottom" />
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:background="?attr/colorPrimary"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        />
+
+</RelativeLayout>
+    <!--              android:visibility="gone"  -->
