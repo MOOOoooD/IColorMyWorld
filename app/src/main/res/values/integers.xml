@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <integer name="medium_size">10</integer>
-    <integer name="black">0xFF000000</integer>
-    <integer name="red">0xFFFF1100</integer>
-    <integer name="blue">0xFF0027FF</integer>
-    <integer name="green">0xFF4CAF50</integer>
-    <integer name="yellow">0xFFFFEB3B</integer>
-</resources>
