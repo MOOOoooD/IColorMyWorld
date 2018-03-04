@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -29,6 +30,7 @@ public class PntCustView_using extends View {
     boolean fillToggle = false;
     boolean imgToggle = false;
     boolean save = false;
+    boolean setCan = false;
 
     private Bitmap pencil;
     private Matrix translate;
@@ -121,7 +123,7 @@ public class PntCustView_using extends View {
 
     // Initialize Variables
     private void initialize() {
-        currentBrushSize = getResources().getInteger(R.integer.medium_size);
+        currentBrushSize = getResources().getInteger(R.integer.size_small);
         lastBrushSize = currentBrushSize;
 
         drawPath = new Path();
@@ -129,7 +131,7 @@ public class PntCustView_using extends View {
         drawPaint.setColor(paintColor);
 
         // attempting to resolve lines created in paint objects with antialiasing
-        drawPaint.setAntiAlias(true);
+        drawPaint.setAntiAlias(false);
         drawPaint.setFilterBitmap(true);
 
         drawPaint.setStrokeWidth(currentBrushSize);
@@ -141,19 +143,19 @@ public class PntCustView_using extends View {
         //canvasBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.halloween_background);
         //canvasBitmap = canvasBitmap.copy(Bitmap.Config.ARGB_8888, true);
 
-        drawCanvas = new Canvas();
-
-
-        canvasPaint = new Paint(Paint.DITHER_FLAG);
-
-        // added to drag pencil
-
-        post(new Runnable() {
-            public void run(){
-                Log.d("RUNTAG","Width "+ PntCustView_using.this.getMeasuredWidth());
-                Log.d("RUNTAG","Height "+ PntCustView_using.this.getMeasuredHeight());
-            }
-        });
+//        drawCanvas = new Canvas();
+//
+//
+//        canvasPaint = new Paint(Paint.DITHER_FLAG);
+//
+//        // added to drag pencil
+//
+//        post(new Runnable() {
+//            public void run(){
+//                Log.d("RUNTAG","Width "+ PntCustView_using.this.getMeasuredWidth());
+//                Log.d("RUNTAG","Height "+ PntCustView_using.this.getMeasuredHeight());
+//            }
+//        });
 
 
     }
@@ -184,28 +186,68 @@ public class PntCustView_using extends View {
         drawPaint.setColor(paintColor);
     }
 
+    public void setCanvas(){
+        drawCanvas = new Canvas(canvasBitmap);
+
+
+        canvasPaint = new Paint(Paint.DITHER_FLAG);
+
+        // added to drag pencil
+
+        post(new Runnable() {
+            public void run(){
+                Log.d("RUNTAG","Width "+ PntCustView_using.this.getMeasuredWidth());
+                Log.d("RUNTAG","Height "+ PntCustView_using.this.getMeasuredHeight());
+            }
+        });
+    }
+
+
+    Paint p = new Paint();
+    boolean t_up = false;
     // stores drawing paths in ArrayList, draws the path on screen
     @Override
     protected void onDraw(Canvas canvas) {
 
 
         if(imgToggle) {
-            centerImg_W = (canvasWidth-imgWidth)/2;
-            centerImg_H = (canvasHeight-imgHeight)/2;
+            if(setCan){
+                setCanvas();
+                setCan = false;
+                p.setStyle(Paint.Style.FILL);
+                p.setColor(Color.BLUE);
+                canvas.drawRect(0,0,imgWidth,imgHeight,p);
+
+
+            }
+            canvas.drawRect(0,0,imgWidth,imgHeight,p);
+
+            //centerImg_W = (canvasWidth-imgWidth)/2;
+            //centerImg_H = (canvasHeight-imgHeight)/2;
+            centerImg_W = 0;
+            centerImg_H = 0;
 
             // stores drawpaths - color paths
             for (int i = 0; i < paths.size(); i++) {
                 canvas.drawPath(paths.get(i), allPaints.get(i));
             }
             //drawPaint.setColor(paintColor);
+            //canvas.drawBitmap(canvasBitmap, centerImg_W, centerImg_H, null);
 
             // draws path behind canvas bitmap, and under current drawpath
+
             canvas.drawPath(drawPath, drawPaint);
 
 
             canvas.drawBitmap(canvasBitmap, centerImg_W, centerImg_H, null);
+
+
             Log.d(PAINT_TAG," in PCust W = "+imgWidth+"  H = "+imgHeight);
 
+        }
+        if(t_up){
+            canvas.drawBitmap(canvasBitmap, centerImg_W, centerImg_H, null);
+            t_up = !t_up;
         }
 
 
@@ -248,22 +290,22 @@ public class PntCustView_using extends View {
 
     public void skew(float x, float y){
         if(x > moveX ){
-            moveX = x-xDiff;
-            //Log.d("X > MOVE", "X, MoveX: "+x+", "+moveX+"  xD:"+xDiff);
+            moveX = x-xDiff -10;
+            Log.d("X > MOVE", "X, MoveX: "+x+", "+moveX+"  xD:"+xDiff);
         }
         if(y > moveY){
-            moveY = y-yDiff;
-            //Log.d("Y > MOVE", "Y, MoveY: "+y+", "+moveY+"  yD:"+yDiff);
+            moveY = y-yDiff-15;
+            Log.d("Y > MOVE", "Y, MoveY: "+y+", "+moveY+"  yD:"+yDiff);
 
         }
         if(x < moveX ){
-            moveX = x+xDiff;
-            //Log.d("X < MOVE", "X, MoveX: "+x+", "+moveX);
+            moveX = x+xDiff-10;
+            Log.d("X < MOVE", "X, MoveX: "+x+", "+moveX);
 
         }
         if(y < moveY){
-            moveY = y+yDiff;
-            //Log.d("Y > MOVE", "Y, MoveY: "+y+", "+moveY);
+            moveY = y+yDiff-5;
+            Log.d("Y > MOVE", "Y, MoveY: "+y+", "+moveY);
 
         }
     }
@@ -418,9 +460,9 @@ public class PntCustView_using extends View {
 
         if(fillToggle){
 
-            int pixel = canvasBitmap.getPixel((int)x,(int)y);
-            Point point = new Point((int)x,(int)y);
-            fill(point,pixel);
+//            int pixel = canvasBitmap.getPixel((int)x,(int)y);
+//            Point point = new Point((int)x,(int)y);
+//            fill(point,pixel);
 
         }else if(colorToggle) {
             undonePaths.clear();
@@ -436,10 +478,10 @@ public class PntCustView_using extends View {
 
     private void fill(Point pt, int pix){
         //FloodFillThread flood = new FloodFillThread();
-        QueueLinearFloodFiller qFill = new QueueLinearFloodFiller(canvasBitmap,pix,100);
-        Log.d("FILL","IN FILL");
-        qFill.setTolerance(10);
-        qFill.floodFill(pt.x, pt.y);
+//        QueueLinearFloodFiller qFill = new QueueLinearFloodFiller(canvasBitmap,pix,100);
+//        Log.d("FILL","IN FILL");
+//        qFill.setTolerance(10);
+//        qFill.floodFill(pt.x, pt.y);
 
     }
 
@@ -461,8 +503,8 @@ public class PntCustView_using extends View {
     private void touch_up() {
         //fillToggle = !fillToggle;
         if(colorToggle) {
-            drawPath.lineTo(mX, mY);
-            drawCanvas.drawPath(drawPath, drawPaint);
+//            drawPath.lineTo(mX, mY);
+//            drawCanvas.drawPath(drawPath, drawPaint);
             paths.add(drawPath);
             drawPath = new Path();
             allPaints.add(drawPaint);
@@ -509,6 +551,7 @@ public class PntCustView_using extends View {
     public void setBitmap(Bitmap bitmap, boolean loaded){
         canvasBitmap = bitmap;
         imgToggle = loaded;
+        setCan = loaded;
 
     }
 

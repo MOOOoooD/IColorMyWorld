@@ -175,7 +175,6 @@ public class UserPaint_using extends AppCompatActivity{
         pCustomView.invalidate();
 
 
-
         //LoadSaveImages saveImage = new LoadSaveImages();
 
         //saveImage.saveCMWImage(this, pCustomView.getCanvasBitmap());

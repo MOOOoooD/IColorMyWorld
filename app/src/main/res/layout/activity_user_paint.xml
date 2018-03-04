@@ -28,6 +28,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0"
             android:layout_above="@+id/toolbar_bottom"
+            android:background="@drawable/title"
+
             android:layout_centerHorizontal="true" />
 
         <android.support.v7.widget.Toolbar
