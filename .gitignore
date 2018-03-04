@@ -26,7 +26,7 @@
 *.rar
 
 # other libraries
-/openCVLIbrary340
+openCVLibrary340/
 /app/src/main/jniLibs
 
 ######
@@ -40,6 +40,15 @@ out/
 # Gradle files
 .gradle/
 build/
+import-summary.txt
+gradlew.bat
+gradle/wrapper/gradle-wrapper.properties
+gradle.properties
+build.gradle
+
+
+
+
 
 # Local configuration file (sdk path, etc)
 local.properties
