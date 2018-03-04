@@ -128,6 +128,7 @@ public class PntCustView_using extends View {
         drawPaint = new Paint();
         drawPaint.setColor(paintColor);
         drawPaint.setAntiAlias(true);
+        drawPaint.setFilterBitmap(true);
         drawPaint.setStrokeWidth(currentBrushSize);
         drawPaint.setStyle(Paint.Style.STROKE);
         drawPaint.setStrokeJoin(Paint.Join.ROUND);
@@ -184,7 +185,6 @@ public class PntCustView_using extends View {
     @Override
     protected void onDraw(Canvas canvas) {
 
-        canvas.drawPath(drawPath, drawPaint);
 
         if(imgToggle) {
             centerImg_W = (canvasWidth-imgWidth)/2;
@@ -196,10 +196,14 @@ public class PntCustView_using extends View {
             }
             //drawPaint.setColor(paintColor);
 
+            canvas.drawPath(drawPath, drawPaint);
+
+
             canvas.drawBitmap(canvasBitmap, centerImg_W, centerImg_H, null);
             Log.d(PAINT_TAG," in PCust W = "+imgWidth+"  H = "+imgHeight);
 
         }
+
 
         if(!save) {
             canvas.drawBitmap(pencil, moveX, moveY, null);
