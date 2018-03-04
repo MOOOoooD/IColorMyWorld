@@ -9,6 +9,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
@@ -205,18 +206,21 @@ public class PntCustView_using extends View {
 
     Paint p = new Paint();
     boolean t_up = false;
+    Rect s = new Rect();
     // stores drawing paths in ArrayList, draws the path on screen
     @Override
     protected void onDraw(Canvas canvas) {
 
 
-        if(imgToggle) {
+
+        if(imgToggle & !t_up) {
             if(setCan){
                 setCanvas();
                 setCan = false;
                 p.setStyle(Paint.Style.FILL);
-                p.setColor(Color.BLUE);
+                p.setColor(Color.WHITE);
                 canvas.drawRect(0,0,imgWidth,imgHeight,p);
+                s.set(0,0,imgWidth,imgHeight);
 
 
             }
@@ -246,15 +250,18 @@ public class PntCustView_using extends View {
 
         }
         if(t_up){
-            canvas.drawBitmap(canvasBitmap, centerImg_W, centerImg_H, null);
+            canvas.drawBitmap(canvasBitmap, s, s, null);
             t_up = !t_up;
         }
+
 
 
         if(!save) {
             canvas.drawBitmap(pencil, moveX, moveY, null);
         }
     }
+
+
 
     // creates canvas due to screen size
     @Override

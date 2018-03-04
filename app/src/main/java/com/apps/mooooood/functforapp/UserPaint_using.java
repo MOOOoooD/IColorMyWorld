@@ -193,21 +193,23 @@ public class UserPaint_using extends AppCompatActivity{
         try{
             FileOutputStream saveOut = new FileOutputStream(cmvSaveImg);
 
-            Bitmap newBitmap;
-            newBitmap = pCustomView.getDrawingCache();
 
-            for(int x = 0; x < newBitmap.getWidth(); x++){
-                for(int y = 0; y < newBitmap.getHeight(); y++){
-                    int bmColor = newBitmap.getPixel(x,y);
+            // save only the range of the colored bitmap
+            Bitmap nbm ;
+            nbm = Bitmap.createBitmap(pCustomView.getDrawingCache(),0,0,pCustomView.imgWidth,pCustomView.getHeight());
+
+            for(int x = 0; x < nbm.getWidth(); x++){
+                for(int y = 0; y < nbm.getHeight(); y++){
+                    int bmColor = nbm.getPixel(x,y);
                     int r = Color.alpha(bmColor);
                     if(r==0){
-                        newBitmap.setPixel(x,y,Color.rgb(255,255,255));
+                        nbm.setPixel(x,y,Color.rgb(255,255,255));
                     }
                 }
             }
 
             //newBitmap.setHasAlpha(false);
-            newBitmap.compress(Bitmap.CompressFormat.PNG, 100, saveOut);
+            nbm.compress(Bitmap.CompressFormat.PNG, 100, saveOut);
 
             saveOut.flush();
             saveOut.close();
