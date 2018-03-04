@@ -127,8 +127,11 @@ public class PntCustView_using extends View {
         drawPath = new Path();
         drawPaint = new Paint();
         drawPaint.setColor(paintColor);
+
+        // attempting to resolve lines created in paint objects with antialiasing
         drawPaint.setAntiAlias(true);
         drawPaint.setFilterBitmap(true);
+
         drawPaint.setStrokeWidth(currentBrushSize);
         drawPaint.setStyle(Paint.Style.STROKE);
         drawPaint.setStrokeJoin(Paint.Join.ROUND);
@@ -196,6 +199,7 @@ public class PntCustView_using extends View {
             }
             //drawPaint.setColor(paintColor);
 
+            // draws path behind canvas bitmap, and under current drawpath
             canvas.drawPath(drawPath, drawPaint);
 
 
