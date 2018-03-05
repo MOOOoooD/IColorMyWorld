@@ -196,7 +196,7 @@ public class UserPaint_using extends AppCompatActivity{
 
             // save only the range of the colored bitmap
             Bitmap nbm ;
-            nbm = Bitmap.createBitmap(pCustomView.getDrawingCache(),0,0,pCustomView.imgWidth,pCustomView.getHeight());
+            nbm = Bitmap.createBitmap(pCustomView.getDrawingCache(),pCustomView.centerImg_W,pCustomView.centerImg_H,pCustomView.imgWidth,pCustomView.imgHeight);
 
             for(int x = 0; x < nbm.getWidth(); x++){
                 for(int y = 0; y < nbm.getHeight(); y++){

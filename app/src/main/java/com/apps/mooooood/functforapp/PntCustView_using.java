@@ -249,6 +249,9 @@ public class PntCustView_using extends View {
 
 
             Log.d(PAINT_TAG," in PCust W = "+imgWidth+"  H = "+imgHeight);
+            if(!save) {
+                canvas.drawBitmap(pencil, moveX, moveY, null);
+            }
 
         }
         if(t_up){
@@ -258,9 +261,7 @@ public class PntCustView_using extends View {
 
 
 
-        if(!save) {
-            canvas.drawBitmap(pencil, moveX, moveY, null);
-        }
+
     }
 
 
@@ -319,8 +320,8 @@ public class PntCustView_using extends View {
         }
     }
 
-    int xAdj = 8;
-    int yAdj = 6;
+    int xAdj = 0;//8;
+    int yAdj = 0;//6;
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
