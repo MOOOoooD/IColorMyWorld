@@ -297,25 +297,28 @@ public class PntCustView_using extends View {
 
     public void skew(float x, float y){
         if(x > moveX ){
-            moveX = x-xDiff -10;
+            moveX = x-xDiff;
             Log.d("X > MOVE", "X, MoveX: "+x+", "+moveX+"  xD:"+xDiff);
         }
         if(y > moveY){
-            moveY = y-yDiff-15;
+            moveY = y-yDiff;
             Log.d("Y > MOVE", "Y, MoveY: "+y+", "+moveY+"  yD:"+yDiff);
 
         }
         if(x < moveX ){
-            moveX = x+xDiff-10;
+            moveX = x+xDiff;
             Log.d("X < MOVE", "X, MoveX: "+x+", "+moveX);
 
         }
         if(y < moveY){
-            moveY = y+yDiff-5;
+            moveY = y+yDiff;
             Log.d("Y > MOVE", "Y, MoveY: "+y+", "+moveY);
 
         }
     }
+
+    int xAdj = 8;
+    int yAdj = 6;
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -332,10 +335,10 @@ public class PntCustView_using extends View {
 
 
                 skew(touchX, touchY);
-                touch_start(moveX, moveY+pencil.getHeight());
+                touch_start(moveX+xAdj, moveY+pencil.getHeight()-yAdj);
                 Log.d("CKX", " X is "+moveX);
                 Log.d("CKWD", " Width "+canvasBitmap.getWidth());
-                translate.postTranslate(moveX, moveY);
+                translate.postTranslate(moveX+xAdj, moveY-yAdj);
                 // need to be able to access the colorImage function in OpenCV_Paint_Image and set the
                 // color - probably in the touch_move
 
@@ -364,8 +367,9 @@ public class PntCustView_using extends View {
                 //xDiff = Math.abs(moveX-touchX);
                 //yDiff = Math.abs(moveY-touchY);
                 skew(touchX, touchY);
-                touch_move(moveX,moveY+pencil.getHeight());
-                translate.postTranslate(moveX, moveY);
+                touch_move(moveX+xAdj,moveY+pencil.getHeight()-yAdj);
+                translate.postTranslate(moveX+xAdj, moveY-yAdj);
+
 
 
                 /****
@@ -476,9 +480,10 @@ public class PntCustView_using extends View {
             undonePaints.clear();
             drawPath.reset();
             drawPath.moveTo(x, y);
+
         }
-//        Log.d(PAINT_TAG, " mX, mY "+ mX +", "+mY);
-//        Log.d(PAINT_TAG, " X, Y "+ x +", "+y);
+        Log.d(PAINT_TAG, " mX, mY "+ mX +", "+mY);
+        Log.d(PAINT_TAG, " X, Y "+ x +", "+y);
         mX = x;
         mY = y;
     }
@@ -499,7 +504,7 @@ public class PntCustView_using extends View {
         float dy = Math.abs(y - mY);
         if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
             if(colorToggle) {
-                drawPath.quadTo(mX, mY, (x + mX) / 2, (y + mY) / 2);
+                drawPath.quadTo(mX, mY, ((x + mX) / 2), ((y + mY) / 2));
             }
             mX = x;
             mY = y;
