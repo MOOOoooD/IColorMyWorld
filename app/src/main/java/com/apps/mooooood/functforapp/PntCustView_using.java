@@ -84,8 +84,8 @@ public class PntCustView_using extends View {
 
     int imgWidth = 0;
     int imgHeight = 0;
-    int centerImg_W = 0;
-    int centerImg_H = 0;
+    int centerImg_W;
+    int centerImg_H;
 
     int penWidth = 0;
     int penHeight = 0;
@@ -215,21 +215,23 @@ public class PntCustView_using extends View {
 
         if(imgToggle & !t_up) {
             if(setCan){
+                centerImg_W = (canvasWidth-imgWidth)/2;
+                centerImg_H = (canvasHeight-imgHeight)/2;
                 setCanvas();
                 setCan = false;
                 p.setStyle(Paint.Style.FILL);
                 p.setColor(Color.WHITE);
-                canvas.drawRect(0,0,imgWidth,imgHeight,p);
-                s.set(0,0,imgWidth,imgHeight);
+                canvas.drawRect(centerImg_W,centerImg_H,imgWidth+centerImg_W,imgHeight+centerImg_H,p);
+                s.set(centerImg_W,centerImg_H,imgWidth+centerImg_W,imgHeight+centerImg_H);
 
 
             }
-            canvas.drawRect(0,0,imgWidth,imgHeight,p);
 
-            //centerImg_W = (canvasWidth-imgWidth)/2;
-            //centerImg_H = (canvasHeight-imgHeight)/2;
-            centerImg_W = 0;
-            centerImg_H = 0;
+
+            canvas.drawRect(centerImg_W,centerImg_H,imgWidth+centerImg_W,imgHeight+centerImg_H,p);
+
+//            centerImg_W = 0;
+//            centerImg_H = 0;
 
             // stores drawpaths - color paths
             for (int i = 0; i < paths.size(); i++) {

@@ -387,6 +387,17 @@ public class UserPaint_using extends AppCompatActivity{
         }else{
             colorBtn.setText(R.string.color_off);
         }
+//
+//        if(view.isActivated()){
+//            view.setActivated(true);
+//            pCustomView.colorToggle = !pCustomView.colorToggle;
+//            colorBtn.setText(R.string.color_on);
+//        }else{
+//            view.setActivated(false);
+//            pCustomView.colorToggle = !pCustomView.colorToggle;
+//
+//            colorBtn.setText(R.string.color_off);
+//        }
 
     }
     public void colorBlack(View view){
