@@ -192,12 +192,19 @@ public class UserPaint_using extends AppCompatActivity{
         File cmvSaveImg = new File(colorDir, cmwSaveImgName);
         try{
             FileOutputStream saveOut = new FileOutputStream(cmvSaveImg);
+            Log.d(TAG, "savePainting: INSAVE"+ pCustomView.imgWidth+", "+pCustomView.imgHeight);
+            Log.d(TAG, "savePainting: INSAVE"+ pCustomView.centerImg_W+", "+pCustomView.centerImg_H);
+
+            int endW = pCustomView.centerImg_W+pCustomView.imgWidth;
+            int endH = pCustomView.centerImg_H+pCustomView.imgHeight;
+            Log.d(TAG, "savePainting: INSAVE"+ endW+", "+endH);
 
 
             // save only the range of the colored bitmap
             Bitmap nbm ;
-            nbm = Bitmap.createBitmap(pCustomView.getDrawingCache(),pCustomView.centerImg_W,pCustomView.centerImg_H,pCustomView.imgWidth,pCustomView.imgHeight);
-
+            //nbm = Bitmap.createBitmap(pCustomView.getDrawingCache(),pCustomView.centerImg_W,pCustomView.imgHeight,endW,endH);
+            nbm = Bitmap.createBitmap(pCustomView.getDrawingCache(),pCustomView.centerImg_W,pCustomView.imgHeight,pCustomView.imgWidth,pCustomView.imgHeight);
+            Log.d(TAG, "savePainting: INSAVE"+ pCustomView.imgWidth+", "+pCustomView.imgWidth);
             for(int x = 0; x < nbm.getWidth(); x++){
                 for(int y = 0; y < nbm.getHeight(); y++){
                     int bmColor = nbm.getPixel(x,y);
