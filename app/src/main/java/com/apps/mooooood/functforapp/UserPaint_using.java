@@ -22,6 +22,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.support.v7.widget.PopupMenu;
+import android.widget.Toast;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.LoaderCallbackInterface;
@@ -45,7 +47,7 @@ import java.util.Date;
  * Created by denise on 1/28/18.
  */
 
-public class UserPaint_using extends AppCompatActivity{
+public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener{
 
     public static final String P_TAG = "Paint Debug";
     public static final String USER_PAINT = "UserPaint_using.java";
@@ -59,11 +61,12 @@ public class UserPaint_using extends AppCompatActivity{
     ImageButton blueBtn;
     ImageButton greenBtn;
     ImageButton yellowBtn;
-    Button fillBtn;
+    //Button fillBtn;
 
     int imgWidth = 640;// standard
     int imgHeight = 480;// standard
 
+    Button menuBtn;
 
 
     @SuppressLint("WrongViewCast")
@@ -83,7 +86,8 @@ public class UserPaint_using extends AppCompatActivity{
         blueBtn = findViewById(R.id.blue_paint);
         greenBtn = findViewById(R.id.green_paint);
         yellowBtn = findViewById(R.id.yellow_paint);
-        fillBtn = findViewById(R.id.fill_button);
+        //fillBtn = findViewById(R.id.fill_button);
+        menuBtn = findViewById(R.id.menu_button);
 
         pCustomView = findViewById(R.id.paint_custom_view);
         load_btn.setOnClickListener(new View.OnClickListener(){
@@ -97,17 +101,54 @@ public class UserPaint_using extends AppCompatActivity{
 //        toolbarTop = findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbarTop);
 
-        Toolbar toolbarBottom = findViewById(R.id.toolbar_bottom);
-        toolbarBottom.inflateMenu(R.menu.draw_menu);
-
-        toolbarBottom.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                handleDrawingIconTouched(item.getItemId());
-                return false;
-            }
-        });
+//        Toolbar toolbarBottom = findViewById(R.id.toolbar_bottom);
+//        toolbarBottom.inflateMenu(R.menu.draw_menu);
+//
+//        toolbarBottom.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+//            @Override
+//            public boolean onMenuItemClick(MenuItem item) {
+//                handleDrawingIconTouched(item.getItemId());
+//                return false;
+//            }
+//        });
     }
+
+
+    public void listMenu(View v){
+        PopupMenu popupMenu = new PopupMenu(this, v);
+        popupMenu.setOnMenuItemClickListener(this);
+        popupMenu.inflate(R.menu.draw_menu);
+        popupMenu.show();
+
+    }
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.action_delete:
+                Toast.makeText(this, "Delete clicked", Toast.LENGTH_SHORT).show();
+                deleteDialog();
+                return true;
+            case R.id.action_undo:
+                Toast.makeText(this, "Undo clicked", Toast.LENGTH_SHORT).show();
+                pCustomView.onClickUndo();
+                return true;
+            case R.id.action_redo:
+                Toast.makeText(this, "Redo clicked", Toast.LENGTH_SHORT).show();
+                pCustomView.onClickRedo();
+                return true;
+            case R.id.action_share:
+                Toast.makeText(this, "Share clicked", Toast.LENGTH_SHORT).show();
+                sharePainting();
+                return true;
+            case R.id.action_save:
+                Toast.makeText(this, "Save clicked", Toast.LENGTH_SHORT).show();
+                savePainting();
+                return true;
+            default:
+                return false;
+        }
+    }
+
 
     private void handleDrawingIconTouched(int itemId){
         switch(itemId){
@@ -422,6 +463,10 @@ public class UserPaint_using extends AppCompatActivity{
     public void colorYellow(View view){
         pCustomView.setPaint(getResources().getInteger(R.integer.yellow));
     }
+
+    /*
+    For Fill Button
+
     public void fillColor(View view){
         pCustomView.fillToggle = !pCustomView.fillToggle;
         if(pCustomView.fillToggle){
@@ -432,6 +477,7 @@ public class UserPaint_using extends AppCompatActivity{
         }
 
     }
+    */
 
 
 
@@ -746,5 +792,6 @@ public class UserPaint_using extends AppCompatActivity{
         pCustomView.setBitmap(bitmap, true);
 
     }
+
 
 }

@@ -29,12 +29,15 @@ class MainActivity : AppCompatActivity() {
             startActivity(paintIntent)
         })
 
+
+        /*
         close_btn.setOnClickListener({
             Log.d(MAINTAG,"close app onclick")
             finish()
             //   System.exit(0)
 
         })
+        */
 
     }
 }

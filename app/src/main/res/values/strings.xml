@@ -12,6 +12,8 @@
     <string name="pnt_opcv_btn">Go to OpenCV Paint</string>
     <string name="close_app">Close App</string>
 
+
+    <string name="menu_btn">Menu</string>
     <string name="action_erase">erase</string>
     <string name="action_delete">delete</string>
     <string name="action_undo">undo</string>
