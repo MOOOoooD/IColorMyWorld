@@ -21,94 +21,104 @@
             android:id="@+id/paint_custom_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_above="@+id/toolbar_bottom"
+            android:layout_centerHorizontal="true"
+            android:background="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.984"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
-            android:layout_above="@+id/toolbar_bottom"
-            android:background="@drawable/title"
 
-            android:layout_centerHorizontal="true" />
-
+            app:layout_constraintVertical_bias="0.0" />
+<!--
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar_bottom"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:layout_alignParentBottom="true"
             android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            app:popupTheme="@style/AppTheme.PopupOverlay" >
+            />
+-->
+
+        <!--
 
         <ImageButton
             android:id="@+id/black_paint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
             android:layout_marginTop="49dp"
             android:contentDescription="@string/black"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             android:onClick="colorBlack"
             android:src="@drawable/ic_black_brush_24dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <ImageButton
             android:id="@+id/red_paint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            app:srcCompat="@drawable/ic_red_brush_24dp"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/black_paint"
+            android:contentDescription="@string/red"
+            android:onClick="colorRed"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:onClick="colorRed"
-            android:contentDescription="@string/red"
-            android:layout_below="@+id/black_paint"
-            android:layout_alignParentStart="true" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_red_brush_24dp" />
+
         <ImageButton
             android:id="@+id/blue_paint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
             android:layout_below="@+id/red_paint"
-            app:srcCompat="@drawable/ic_blue_brush_24dp"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/blue"
+            android:onClick="colorBlue"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_centerVertical="true"
-            android:layout_alignParentStart="true"
-            android:onClick="colorBlue"
-            android:contentDescription="@string/blue"
-            app:layout_constraintVertical_bias="0.328" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.328"
+            app:srcCompat="@drawable/ic_blue_brush_24dp" />
+
         <ImageButton
             android:id="@+id/green_paint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/blue_paint"
+            android:layout_alignParentStart="true"
 
-            app:srcCompat="@drawable/ic_green_brush_24dp"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_below="@+id/blue_paint"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/green"
+            android:onClick="colorGreen"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_centerVertical="true"
-            android:layout_alignParentStart="true"
-            android:onClick="colorGreen"
-            android:contentDescription="@string/green"
-            app:layout_constraintVertical_bias="0.419" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.419"
+            app:srcCompat="@drawable/ic_green_brush_24dp" />
+
         <ImageButton
             android:id="@+id/yellow_paint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
             android:layout_below="@+id/green_paint"
-            app:srcCompat="@drawable/ic_yellow_brush_24dp"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/yellow"
+            android:onClick="colorYellow"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_centerVertical="true"
-            android:layout_alignParentStart="true"
-            android:onClick="colorYellow"
-            android:contentDescription="@string/yellow"
-            app:layout_constraintVertical_bias="0.51" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.51"
+            app:srcCompat="@drawable/ic_yellow_brush_24dp" />
+
+            -->
 
 
     </RelativeLayout>
@@ -154,10 +164,10 @@
         android:text="@string/load_btn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.031"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.774" />
 
     <Button
         android:id="@+id/menu_button"
@@ -168,10 +178,92 @@
         android:text="@string/menu_btn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.968"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.774" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="9"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@color/black"
+        >
+
+
+        <Button
+            android:id="@+id/colorBrBtn"
+            style="@style/SmallButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/brown"
+            android:layout_margin="10dp" />
+
+        <Button
+            android:id="@+id/colorBlueBtn"
+            style="@style/SmallButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/blue"
+            android:layout_margin="10dp" />
+
+
+        <Button
+            android:id="@+id/colorPBtn"
+            style="@style/SmallButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/purple"
+            android:layout_margin="10dp" />
+
+        <Button
+            android:id="@+id/colorRedBtn"
+            style="@style/SmallButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/red"
+            android:layout_margin="10dp" />
+
+        <Button
+            android:id="@+id/colorOBtn"
+            style="@style/SmallButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/orange"
+            android:layout_margin="10dp"/>
+
+        <Button
+            android:id="@+id/colorYBtn"
+            style="@style/SmallButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/yellow"
+            android:layout_margin="10dp" />
+
+        <Button
+            android:id="@+id/colorGBtn"
+            style="@style/SmallButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/green"
+            android:layout_margin="10dp" />
+
+    </LinearLayout>
+
+    <!--
+
+
+-->
 
     <!--
     Close Button
@@ -191,6 +283,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
         -->
+
 
 
 </android.support.constraint.ConstraintLayout>

@@ -98,19 +98,21 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
             }
         });
 
-//        toolbarTop = findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbarTop);
 
-//        Toolbar toolbarBottom = findViewById(R.id.toolbar_bottom);
-//        toolbarBottom.inflateMenu(R.menu.draw_menu);
-//
-//        toolbarBottom.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-//            @Override
-//            public boolean onMenuItemClick(MenuItem item) {
-//                handleDrawingIconTouched(item.getItemId());
-//                return false;
-//            }
-//        });
+        /*****************************************8
+
+for menu bottom toolbar
+         Toolbar toolbarBottom = findViewById(R.id.toolbar_bottom);
+        toolbarBottom.inflateMenu(R.menu.draw_menu);
+
+        toolbarBottom.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                handleDrawingIconTouched(item.getItemId());
+                return false;
+            }
+        });
+        *************************************************/
     }
 
 
@@ -149,6 +151,8 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
         }
     }
 
+    /*************************************************
+For menu items on bottom tool bar
 
     private void handleDrawingIconTouched(int itemId){
         switch(itemId){
@@ -170,6 +174,7 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
         }
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         // Inflate the menu; this adds the items to the action bar if present
@@ -182,6 +187,8 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
         int id = item.getItemId();
         return super.onOptionsItemSelected(item);
     }
+    ***********************************************/
+
 
     // Allert Dialog - confirm the wipe screen call
     private void deleteDialog(){
