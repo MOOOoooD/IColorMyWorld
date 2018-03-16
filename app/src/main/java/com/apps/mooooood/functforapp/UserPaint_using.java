@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
@@ -15,14 +14,11 @@ import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.support.v7.widget.PopupMenu;
 import android.widget.Toast;
 
@@ -57,13 +53,6 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
     private PntCustView_using pCustomView;
     Button load_btn;
     Button colorBtn;
-//    ImageButton blackBtn;
-//    ImageButton redBtn;
-//    ImageButton blueBtn;
-//    ImageButton greenBtn;
-//    ImageButton yellowBtn;
-    //Button fillBtn;
-
     Button brownBtn;
     Button blueBtn;
     Button purpleBtn;
@@ -73,16 +62,10 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
     Button greenBtn;
 
 
-
-
-
-
-
     int imgWidth = 640;// standard
     int imgHeight = 480;// standard
 
     Button menuBtn;
-
 
     @SuppressLint({"WrongViewCast", "ClickableViewAccessibility"})
     @Override
@@ -105,11 +88,6 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
         yellowBtn = findViewById(R.id.colorYBtn);
         greenBtn = findViewById(R.id.colorGBtn);
 
-//        redBtn = findViewById(R.id.red_paint);
-//        blueBtn = findViewById(R.id.blue_paint);
-//        greenBtn = findViewById(R.id.green_paint);
-//        yellowBtn = findViewById(R.id.yellow_paint);
-        //fillBtn = findViewById(R.id.fill_button);
         menuBtn = findViewById(R.id.menu_button);
 
         pCustomView = findViewById(R.id.paint_custom_view);
@@ -325,49 +303,6 @@ For menu items on bottom tool bar
         }
         pCustomView.save = !pCustomView.save;
 
-        //pCustomView.saveImage.recycle();
-
-
-//        pCustomView.save = !pCustomView.save;
-//        //cache drawing/img
-//
-//        pCustomView.setDrawingCacheEnabled(true);
-//        pCustomView.invalidate();
-//        pCustomView.save = !pCustomView.save;
-//
-//        String path = Environment.getExternalStorageDirectory().toString();
-//        OutputStream fileOut = null;
-//        File file = new File(path,"UserPaint_app.png");
-//        file.getParentFile().mkdirs();
-//
-//        try{
-//            file.createNewFile();
-//        }catch (Exception e){
-//            Log.e(P_TAG, "New File: "+e.getCause()+e.getMessage());
-//        }
-//
-//        try{
-//            fileOut = new FileOutputStream(file);
-//        }catch(Exception e){
-//            Log.e(P_TAG, "FileOut "+e.getCause()+e.getMessage());
-//        }
-//        if(pCustomView.getDrawingCache() == null){
-//            Log.e(P_TAG, "Unable to get drawing cache ");
-//        }
-//        pCustomView.getDrawingCache().compress(Bitmap.CompressFormat.JPEG, 100, fileOut);
-//
-//        try{
-//            fileOut.flush();
-//            fileOut.close();
-//        }catch(IOException e){
-//            Log.e(P_TAG, "Flush-Close: "+e.getCause()+e.getMessage());
-//        }
-//        Intent shareIntent = new Intent();
-//        shareIntent.setAction(Intent.ACTION_SEND);
-//        shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
-//        shareIntent.setType("image/png");
-//        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//        startActivity(Intent.createChooser(shareIntent, "Share Image"));
     }
 
 
@@ -478,30 +413,6 @@ For menu items on bottom tool bar
     public void backToMain(View view){
         finish();
     }
-    public void colorSwitch(View view){
-        pCustomView.colorToggle = !pCustomView.colorToggle;
-        if(pCustomView.colorToggle){
-
-            colorBtn.setText(R.string.color_on);
-        }else{
-            colorBtn.setText(R.string.color_off);
-        }
-//
-//        if(view.isActivated()){
-//            view.setActivated(true);
-//            pCustomView.colorToggle = !pCustomView.colorToggle;
-//            colorBtn.setText(R.string.color_on);
-//        }else{
-//            view.setActivated(false);
-//            pCustomView.colorToggle = !pCustomView.colorToggle;
-//
-//            colorBtn.setText(R.string.color_off);
-//        }
-
-    }
-
-
-
 
 
 
@@ -529,24 +440,6 @@ For menu items on bottom tool bar
     public void colorGreen(View view){
         pCustomView.setPaint(getResources().getColor(R.color.green));
     }
-
-
-    /*
-    For Fill Button
-
-    public void fillColor(View view){
-        pCustomView.fillToggle = !pCustomView.fillToggle;
-        if(pCustomView.fillToggle){
-
-            fillBtn.setText(R.string.fill_on);
-        }else{
-            fillBtn.setText(R.string.fill_off);
-        }
-
-    }
-    */
-
-
 
 
     private static int RESULT_LOAD_IMG = 1;

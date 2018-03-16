@@ -42,84 +42,6 @@
             />
 -->
 
-        <!--
-
-        <ImageButton
-            android:id="@+id/black_paint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="49dp"
-            android:contentDescription="@string/black"
-            android:onClick="colorBlack"
-            android:src="@drawable/ic_black_brush_24dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageButton
-            android:id="@+id/red_paint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/black_paint"
-            android:contentDescription="@string/red"
-            android:onClick="colorRed"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_red_brush_24dp" />
-
-        <ImageButton
-            android:id="@+id/blue_paint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/red_paint"
-            android:layout_centerVertical="true"
-            android:contentDescription="@string/blue"
-            android:onClick="colorBlue"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.328"
-            app:srcCompat="@drawable/ic_blue_brush_24dp" />
-
-        <ImageButton
-            android:id="@+id/green_paint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-
-            android:layout_below="@+id/blue_paint"
-            android:layout_centerVertical="true"
-            android:contentDescription="@string/green"
-            android:onClick="colorGreen"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.419"
-            app:srcCompat="@drawable/ic_green_brush_24dp" />
-
-        <ImageButton
-            android:id="@+id/yellow_paint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/green_paint"
-            android:layout_centerVertical="true"
-            android:contentDescription="@string/yellow"
-            android:onClick="colorYellow"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.51"
-            app:srcCompat="@drawable/ic_yellow_brush_24dp" />
-
-            -->
-
 
     </RelativeLayout>
 
@@ -130,7 +52,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
-        android:onClick="colorSwitch"
         android:text="@string/color_off"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -139,22 +60,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
-    <!--
-    <Button
-        android:id="@+id/fill_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:onClick="fillColor"
-        android:text="@string/fill_btn"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.457"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
-    -->
+    <!--        android:onClick="colorSwitch"  -->
+
 
     <Button
         android:id="@+id/load_images"

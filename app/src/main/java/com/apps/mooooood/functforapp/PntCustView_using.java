@@ -141,39 +141,10 @@ public class PntCustView_using extends View {
         drawPaint.setStrokeCap(Paint.Cap.ROUND);
 
 
-        //canvasBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.halloween_background);
-        //canvasBitmap = canvasBitmap.copy(Bitmap.Config.ARGB_8888, true);
-
-//        drawCanvas = new Canvas();
-//
-//
-//        canvasPaint = new Paint(Paint.DITHER_FLAG);
-//
-//        // added to drag pencil
-//
-//        post(new Runnable() {
-//            public void run(){
-//                Log.d("RUNTAG","Width "+ PntCustView_using.this.getMeasuredWidth());
-//                Log.d("RUNTAG","Height "+ PntCustView_using.this.getMeasuredHeight());
-//            }
-//        });
-
-
     }
     //Bitmap saveImage;
     public Bitmap getCanvasBitmap(){
 
-
-        // adding to save current bitmap only
- //       save = true;
-        //invalidate();
-
-//        saveImage = Bitmap.createBitmap(imgWidth, imgHeight,Bitmap.Config.ARGB_8888 );
-//        drawCanvas.drawBitmap(saveImage, new Rect(centerImg_W, centerImg_H, imgWidth, imgHeight), new Rect(0,0,imgWidth, imgHeight),null);
-
-
-        //save = false;
-        //return saveImage;
 
         return canvasBitmap;
 
