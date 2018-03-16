@@ -201,6 +201,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@color/brown"
+            android:onClick="colorBrown"
             android:layout_margin="10dp" />
 
         <Button
@@ -210,6 +211,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@color/blue"
+            android:onClick="colorBlue"
             android:layout_margin="10dp" />
 
 
@@ -220,6 +222,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@color/purple"
+            android:onClick="colorPurple"
             android:layout_margin="10dp" />
 
         <Button
@@ -229,6 +232,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@color/red"
+            android:onClick="colorRed"
             android:layout_margin="10dp" />
 
         <Button
@@ -238,6 +242,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@color/orange"
+            android:onClick="colorOrange"
             android:layout_margin="10dp"/>
 
         <Button
@@ -247,6 +252,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@color/yellow"
+            android:onClick="colorYellow"
             android:layout_margin="10dp" />
 
         <Button
@@ -256,6 +262,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@color/green"
+            android:onClick="colorGreen"
             android:layout_margin="10dp" />
 
     </LinearLayout>

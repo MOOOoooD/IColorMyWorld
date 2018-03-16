@@ -19,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -56,12 +57,26 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
     private PntCustView_using pCustomView;
     Button load_btn;
     Button colorBtn;
-    ImageButton blackBtn;
-    ImageButton redBtn;
-    ImageButton blueBtn;
-    ImageButton greenBtn;
-    ImageButton yellowBtn;
+//    ImageButton blackBtn;
+//    ImageButton redBtn;
+//    ImageButton blueBtn;
+//    ImageButton greenBtn;
+//    ImageButton yellowBtn;
     //Button fillBtn;
+
+    Button brownBtn;
+    Button blueBtn;
+    Button purpleBtn;
+    Button redBtn;
+    Button orangeBtn;
+    Button yellowBtn;
+    Button greenBtn;
+
+
+
+
+
+
 
     int imgWidth = 640;// standard
     int imgHeight = 480;// standard
@@ -69,7 +84,7 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
     Button menuBtn;
 
 
-    @SuppressLint("WrongViewCast")
+    @SuppressLint({"WrongViewCast", "ClickableViewAccessibility"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme_PopupOverlay);
@@ -81,11 +96,19 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
         load_btn = findViewById(R.id.load_images);
 
         colorBtn = findViewById(R.id.color_button);
-        blackBtn = findViewById(R.id.black_paint);
-        redBtn = findViewById(R.id.red_paint);
-        blueBtn = findViewById(R.id.blue_paint);
-        greenBtn = findViewById(R.id.green_paint);
-        yellowBtn = findViewById(R.id.yellow_paint);
+      //  blackBtn = findViewById(R.id.black_paint);
+        brownBtn = findViewById(R.id.colorBrBtn);
+        blueBtn = findViewById(R.id.colorBlueBtn);
+        purpleBtn = findViewById(R.id.colorPBtn);
+        redBtn = findViewById(R.id.colorRedBtn);
+        orangeBtn = findViewById(R.id.colorOBtn);
+        yellowBtn = findViewById(R.id.colorYBtn);
+        greenBtn = findViewById(R.id.colorGBtn);
+
+//        redBtn = findViewById(R.id.red_paint);
+//        blueBtn = findViewById(R.id.blue_paint);
+//        greenBtn = findViewById(R.id.green_paint);
+//        yellowBtn = findViewById(R.id.yellow_paint);
         //fillBtn = findViewById(R.id.fill_button);
         menuBtn = findViewById(R.id.menu_button);
 
@@ -97,6 +120,27 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
                 startActivityForResult(image, RESULT_LOAD_IMG);
             }
         });
+
+
+        colorBtn.setOnTouchListener(new View.OnTouchListener(){
+
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        pCustomView.colorToggle = true;
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        pCustomView.colorToggle = false;
+                        break;
+                    default:
+                        return false;
+                }
+                return false;
+            }
+        });
+
 
 
         /*****************************************8
@@ -455,21 +499,37 @@ For menu items on bottom tool bar
 //        }
 
     }
-    public void colorBlack(View view){
-        pCustomView.setPaint(getResources().getInteger(R.integer.black));
-    }
-    public void colorRed(View view){
-        pCustomView.setPaint(getResources().getInteger(R.integer.red));
+
+
+
+
+
+
+//    public void colorBlack(View view){
+//        pCustomView.setPaint(getResources().getInteger(R.integer.black));
+//    }
+    public void colorBrown(View view){
+        pCustomView.setPaint(getResources().getColor(R.color.brown));
     }
     public void colorBlue(View view){
-        pCustomView.setPaint(getResources().getInteger(R.integer.blue));
+        pCustomView.setPaint(getResources().getColor(R.color.blue));
     }
-    public void colorGreen(View view){
-        pCustomView.setPaint(getResources().getInteger(R.integer.green));
+    public void colorPurple(View view){
+        pCustomView.setPaint(getResources().getColor(R.color.purple));
+    }
+    public void colorRed(View view){
+        pCustomView.setPaint(getResources().getColor(R.color.red));
+    }
+    public void colorOrange(View view){
+        pCustomView.setPaint(getResources().getColor(R.color.orange));
     }
     public void colorYellow(View view){
-        pCustomView.setPaint(getResources().getInteger(R.integer.yellow));
+        pCustomView.setPaint(getResources().getColor(R.color.yellow));
     }
+    public void colorGreen(View view){
+        pCustomView.setPaint(getResources().getColor(R.color.green));
+    }
+
 
     /*
     For Fill Button
