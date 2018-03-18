@@ -108,9 +108,11 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
                 switch (motionEvent.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         pCustomView.colorToggle = true;
+                        pCustomView.invalidate();
                         break;
                     case MotionEvent.ACTION_UP:
                         pCustomView.colorToggle = false;
+                        pCustomView.invalidate();
                         break;
                     default:
                         return false;

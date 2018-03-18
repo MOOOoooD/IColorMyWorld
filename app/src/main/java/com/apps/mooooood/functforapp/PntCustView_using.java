@@ -454,6 +454,7 @@ public class PntCustView_using extends View {
             undonePaints.clear();
             drawPath.reset();
             drawPath.moveTo(x, y);
+            invalidate();
 
         }
         Log.d(PAINT_TAG, " mX, mY "+ mX +", "+mY);
