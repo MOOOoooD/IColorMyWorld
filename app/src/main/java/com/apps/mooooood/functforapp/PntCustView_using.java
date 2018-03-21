@@ -108,7 +108,7 @@ public class PntCustView_using extends View {
         pencil = BitmapFactory.decodeResource(getResources(), R.drawable.test_pencil);
         penWidth = pencil.getWidth();
         penHeight = pencil.getHeight();
-        Log.d(PAINT_TAG, "penW: "+penWidth+", penH: "+penHeight);
+        //Log.d(PAINT_TAG, "penW: "+penWidth+", penH: "+penHeight);
 
 
         translate = new Matrix();
@@ -116,7 +116,7 @@ public class PntCustView_using extends View {
 
 
 
-        Log.d(PAINT_TAG, "in Paint View constuctor");
+        //Log.d(PAINT_TAG, "in Paint View constuctor");
         initialize();
     }
 
@@ -152,7 +152,7 @@ public class PntCustView_using extends View {
 
     public void setPaint(int color){
 
-        Log.d("Color ", "C ="+color);
+        //Log.d("Color ", "C ="+color);
 
         paintColor = color;
         drawPaint.setColor(paintColor);
@@ -168,8 +168,8 @@ public class PntCustView_using extends View {
 
         post(new Runnable() {
             public void run(){
-                Log.d("RUNTAG","Width "+ PntCustView_using.this.getMeasuredWidth());
-                Log.d("RUNTAG","Height "+ PntCustView_using.this.getMeasuredHeight());
+              //  Log.d("RUNTAG","Width "+ PntCustView_using.this.getMeasuredWidth());
+              //  Log.d("RUNTAG","Height "+ PntCustView_using.this.getMeasuredHeight());
             }
         });
     }
@@ -207,6 +207,7 @@ public class PntCustView_using extends View {
             // stores drawpaths - color paths
             for (int i = 0; i < paths.size(); i++) {
                 canvas.drawPath(paths.get(i), allPaints.get(i));
+               // Log.d("POINTS", drawPath.toString());
             }
             //drawPaint.setColor(paintColor);
             //canvas.drawBitmap(canvasBitmap, centerImg_W, centerImg_H, null);
@@ -219,7 +220,7 @@ public class PntCustView_using extends View {
             canvas.drawBitmap(canvasBitmap, centerImg_W, centerImg_H, null);
 
 
-            Log.d(PAINT_TAG," in PCust W = "+imgWidth+"  H = "+imgHeight);
+          //  Log.d(PAINT_TAG," in PCust W = "+imgWidth+"  H = "+imgHeight);
             if(!save) {
                 canvas.drawBitmap(pencil, moveX, moveY, null);
             }
@@ -252,12 +253,12 @@ public class PntCustView_using extends View {
         //canvasBitmap = canvasBitmap.copy(Bitmap.Config.ARGB_8888, true);
 
         //Log.d(PAINT_TAG, "losing my mind - "+canvasBitmap);
-        Log.d(PAINT_TAG, "--- new group ---");
-        Log.d(PAINT_TAG, "---V-> V-Width: "+canvasWidth+", V-Height: "+canvasHeight);
-        Log.d(PAINT_TAG, "---I-> I-Width: "+imgWidth+", I-Height: "+imgHeight);
+//        Log.d(PAINT_TAG, "--- new group ---");
+//        Log.d(PAINT_TAG, "---V-> V-Width: "+canvasWidth+", V-Height: "+canvasHeight);
+//        Log.d(PAINT_TAG, "---I-> I-Width: "+imgWidth+", I-Height: "+imgHeight);
 //        centerImg_W = (canvasWidth-imgWidth)/2;
 //        centerImg_H = (canvasHeight-imgHeight)/2;
-        Log.d(PAINT_TAG,"---C-> CenterW: "+centerImg_W+", CenterH: "+centerImg_H);
+//        Log.d(PAINT_TAG,"---C-> CenterW: "+centerImg_W+", CenterH: "+centerImg_H);
         centerPen_W = canvasWidth-penWidth;
         centerPen_H = (canvasHeight-penHeight)/2;
         moveX = centerPen_W;
@@ -272,21 +273,21 @@ public class PntCustView_using extends View {
     public void skew(float x, float y){
         if(x > moveX ){
             moveX = x-xDiff;
-            Log.d("X > MOVE", "X, MoveX: "+x+", "+moveX+"  xD:"+xDiff);
+           // Log.d("X > MOVE", "X, MoveX: "+x+", "+moveX+"  xD:"+xDiff);
         }
         if(y > moveY){
             moveY = y-yDiff;
-            Log.d("Y > MOVE", "Y, MoveY: "+y+", "+moveY+"  yD:"+yDiff);
+          //  Log.d("Y > MOVE", "Y, MoveY: "+y+", "+moveY+"  yD:"+yDiff);
 
         }
         if(x < moveX ){
             moveX = x+xDiff;
-            Log.d("X < MOVE", "X, MoveX: "+x+", "+moveX);
+        //    Log.d("X < MOVE", "X, MoveX: "+x+", "+moveX);
 
         }
         if(y < moveY){
             moveY = y+yDiff;
-            Log.d("Y > MOVE", "Y, MoveY: "+y+", "+moveY);
+          //  Log.d("Y > MOVE", "Y, MoveY: "+y+", "+moveY);
 
         }
     }
@@ -309,9 +310,9 @@ public class PntCustView_using extends View {
 
 
                 skew(touchX, touchY);
-                touch_start(moveX+xAdj, moveY+pencil.getHeight()-yAdj);
-                Log.d("CKX", " X is "+moveX);
-                Log.d("CKWD", " Width "+canvasBitmap.getWidth());
+                touch_start(moveX + xAdj, moveY + pencil.getHeight() - yAdj);
+              //  Log.d("CKX", " X is "+moveX);
+              //  Log.d("CKWD", " Width "+canvasBitmap.getWidth());
                 translate.postTranslate(moveX+xAdj, moveY-yAdj);
                 // need to be able to access the colorImage function in OpenCV_Paint_Image and set the
                 // color - probably in the touch_move
@@ -435,7 +436,7 @@ public class PntCustView_using extends View {
 
         //drawCanvas.drawColor(0, PorterDuff.Mode.CLEAR);
         paths.clear();
-        Log.d(PAINT_TAG, " in Erase All - new drawing??");
+ //       Log.d(PAINT_TAG, " in Erase All - new drawing??");
         invalidate();
     }
 
@@ -443,13 +444,9 @@ public class PntCustView_using extends View {
     private void touch_start(float x, float y) {
         //tool.drawBitmap(pencil, 500,0, null);
 
-        if(fillToggle){
+         if(colorToggle) {
+            Log.d("PAINT_B4", " X, Y "+ x +", "+y);
 
-//            int pixel = canvasBitmap.getPixel((int)x,(int)y);
-//            Point point = new Point((int)x,(int)y);
-//            fill(point,pixel);
-
-        }else if(colorToggle) {
             undonePaths.clear();
             undonePaints.clear();
             drawPath.reset();
@@ -478,6 +475,8 @@ public class PntCustView_using extends View {
         float dx = Math.abs(x - mX);
         float dy = Math.abs(y - mY);
         if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
+            Log.d("MOVE_XY", " X, Y "+ x +", "+y);
+
             if(colorToggle) {
                 drawPath.quadTo(mX, mY, ((x + mX) / 2), ((y + mY) / 2));
             }
@@ -497,6 +496,8 @@ public class PntCustView_using extends View {
             allPaints.add(drawPaint);
             drawPaint = new Paint(drawPaint);
         }
+        //drawPath.reset();
+
 
     }
 
