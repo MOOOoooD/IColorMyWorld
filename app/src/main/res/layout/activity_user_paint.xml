@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
-    tools:context="com.apps.mooooood.functforapp.UserPaint_using">
+    tools:context="com.apps.mooooood.functforapp.UserPaint_using"
+    android:background="@color/dkgray">
 
 
     <Button
@@ -58,7 +58,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:background="@color/black"
+        android:background="@color/palettegray"
         android:gravity="center"
         android:orientation="horizontal"
         android:weightSum="9"
@@ -69,6 +69,15 @@
         app:layout_constraintVertical_bias="1.0">
 
 
+        <Button
+            android:id="@+id/colorBlkBtn"
+            style="@style/SmallButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:background="@color/black"
+            android:onClick="colorBlack" />
         <Button
             android:id="@+id/colorBrBtn"
             style="@style/SmallButton"

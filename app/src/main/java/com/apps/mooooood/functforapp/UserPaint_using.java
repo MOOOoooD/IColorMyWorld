@@ -418,9 +418,9 @@ For menu items on bottom tool bar
 
 
 
-//    public void colorBlack(View view){
-//        pCustomView.setPaint(getResources().getInteger(R.integer.black));
-//    }
+    public void colorBlack(View view){
+        pCustomView.setPaint(getResources().getInteger(R.color.black));
+    }
     public void colorBrown(View view){
         pCustomView.setPaint(getResources().getColor(R.color.brown));
     }
