@@ -7,44 +7,6 @@
     android:background="@color/colorPrimary"
     tools:context="com.apps.mooooood.functforapp.UserPaint_using">
 
-    <RelativeLayout
-        android:id="@+id/paintcanvas"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/background_light"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="18dp">
-
-        <com.apps.mooooood.functforapp.PntCustView_using
-            android:id="@+id/paint_custom_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/toolbar_bottom"
-            android:layout_centerHorizontal="true"
-            android:background="@color/black"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.984"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-
-            app:layout_constraintVertical_bias="0.0" />
-<!--
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar_bottom"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_alignParentBottom="true"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" >
-            />
--->
-
-
-    </RelativeLayout>
-
 
     <Button
         android:id="@+id/color_button"
@@ -58,7 +20,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.498" />
 
     <!--        android:onClick="colorSwitch"  -->
 
@@ -74,7 +36,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.774" />
+        app:layout_constraintVertical_bias="0.205" />
 
     <Button
         android:id="@+id/menu_button"
@@ -85,20 +47,26 @@
         android:text="@string/menu_btn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.774" />
+        app:layout_constraintVertical_bias="0.051" />
 
     <LinearLayout
+
+        android:id="@+id/pallete_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@color/black"
         android:gravity="center"
         android:orientation="horizontal"
         android:weightSum="9"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:background="@color/black"
-        >
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
 
 
         <Button
@@ -106,20 +74,20 @@
             style="@style/SmallButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:layout_weight="1"
             android:background="@color/brown"
-            android:onClick="colorBrown"
-            android:layout_margin="10dp" />
+            android:onClick="colorBrown" />
 
         <Button
             android:id="@+id/colorBlueBtn"
             style="@style/SmallButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:layout_weight="1"
             android:background="@color/blue"
-            android:onClick="colorBlue"
-            android:layout_margin="10dp" />
+            android:onClick="colorBlue" />
 
 
         <Button
@@ -127,52 +95,69 @@
             style="@style/SmallButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:layout_weight="1"
             android:background="@color/purple"
-            android:onClick="colorPurple"
-            android:layout_margin="10dp" />
+            android:onClick="colorPurple" />
 
         <Button
             android:id="@+id/colorRedBtn"
             style="@style/SmallButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:layout_weight="1"
             android:background="@color/red"
-            android:onClick="colorRed"
-            android:layout_margin="10dp" />
+            android:onClick="colorRed" />
 
         <Button
             android:id="@+id/colorOBtn"
             style="@style/SmallButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:layout_weight="1"
             android:background="@color/orange"
-            android:onClick="colorOrange"
-            android:layout_margin="10dp"/>
+            android:onClick="colorOrange" />
 
         <Button
             android:id="@+id/colorYBtn"
             style="@style/SmallButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:layout_weight="1"
             android:background="@color/yellow"
-            android:onClick="colorYellow"
-            android:layout_margin="10dp" />
+            android:onClick="colorYellow" />
 
         <Button
             android:id="@+id/colorGBtn"
             style="@style/SmallButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:layout_weight="1"
             android:background="@color/green"
-            android:onClick="colorGreen"
-            android:layout_margin="10dp" />
+            android:onClick="colorGreen" />
 
     </LinearLayout>
+
+    <com.apps.mooooood.functforapp.PntCustView_using
+        android:id="@+id/paint_custom_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/black"
+        app:layout_constraintBottom_toTopOf="@+id/pallete_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!--
 
@@ -197,7 +182,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
         -->
-
 
 
 </android.support.constraint.ConstraintLayout>
