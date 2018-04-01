@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+>
+
+    <Button
+        android:id="@+id/color_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorHold"
+        android:layout_margin="10dp"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:text="@string/color_off" />
+
+    <!--        android:onClick="colorSwitch"  -->
+
+
+    <Button
+        android:id="@+id/load_images"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/loadButn"
+        android:layout_margin="10dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerVertical="true"
+        android:text="@string/load_btn" />
+
+    <Button
+        android:id="@+id/menu_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/menuBtn"
+        android:layout_margin="10dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerVertical="true"
+        android:onClick="listMenu"
+        android:text="@string/menu_btn" />
+
+</merge>

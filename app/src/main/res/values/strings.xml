@@ -40,9 +40,9 @@
     <string name="fill_btn">Fill</string>
     <string name="fill_off">Fill Off</string>
     <string name="fill_on">Fill On</string>
-    <string name="color_btn">Color</string>
-    <string name="color_off">Color Off</string>
-    <string name="color_on">Color On</string>
+    <string name="color_btn">Hold to Color</string>
+    <string name="color_off">Hold to Color</string>
+    <string name="color_on">Hold to Color</string>
 
     <string name="black">color black</string>
     <string name="red">color red</string>

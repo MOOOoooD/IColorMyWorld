@@ -40,8 +40,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <!-- <activity android:namPntCustView_usingView"></activity> -->
+        <!-- <activity android:name="PntCustView_usingView"></activity> -->
 
+       <!-- <activity android:name=".MenuCustView"></activity> -->
     </application>
 
 </manifest>

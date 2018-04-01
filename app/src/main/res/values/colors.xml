@@ -4,6 +4,10 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
+    <color name="loadButn">#ffb2b2</color>
+    <color name="colorHold">#b2ffb2</color>
+    <color name="menuBtn">#b2b2ff</color>
+
 
     <color name="brown">#8B4513</color>
     <color name="blue">#0000FF</color>

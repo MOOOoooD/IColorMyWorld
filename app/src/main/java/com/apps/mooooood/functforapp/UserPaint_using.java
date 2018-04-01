@@ -51,8 +51,8 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
 
     //private FloatingActionButton floatActBtn;
     private PntCustView_using pCustomView;
-    Button load_btn;
-    Button colorBtn;
+//    Button load_btn;
+//    Button colorBtn;
     Button brownBtn;
     Button blueBtn;
     Button purpleBtn;
@@ -65,7 +65,9 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
     int imgWidth = 640;// standard
     int imgHeight = 480;// standard
 
-    Button menuBtn;
+    private MenuCustView menuCustView;
+
+//    Button menuBtn;
 
     @SuppressLint({"WrongViewCast", "ClickableViewAccessibility"})
     @Override
@@ -76,9 +78,8 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
         setContentView(R.layout.activity_user_paint);
         System.loadLibrary("opencv_java3");
 
-        load_btn = findViewById(R.id.load_images);
+//        load_btn = findViewById(R.id.load_images);
 
-        colorBtn = findViewById(R.id.color_button);
       //  blackBtn = findViewById(R.id.black_paint);
         brownBtn = findViewById(R.id.colorBrBtn);
         blueBtn = findViewById(R.id.colorBlueBtn);
@@ -88,38 +89,42 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
         yellowBtn = findViewById(R.id.colorYBtn);
         greenBtn = findViewById(R.id.colorGBtn);
 
-        menuBtn = findViewById(R.id.menu_button);
+//        menuBtn = findViewById(R.id.menu_button);
 
         pCustomView = findViewById(R.id.paint_custom_view);
-        load_btn.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                Intent image = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(image, RESULT_LOAD_IMG);
-            }
-        });
+        menuCustView = findViewById(R.id.menu_cust_view);
+
+        //menuCustView.colorBtn = findViewById(R.id.color_button);
+//        load_btn.setOnClickListener(new View.OnClickListener(){
+//            @Override
+//            public void onClick(View view){
+//                Intent image = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//                startActivityForResult(image, RESULT_LOAD_IMG);
+//            }
+//        });
+//
 
 
-        colorBtn.setOnTouchListener(new View.OnTouchListener(){
-
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-
-                switch (motionEvent.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        pCustomView.colorToggle = true;
-                        //pCustomView.invalidate();
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        pCustomView.colorToggle = false;
-                        //pCustomView.invalidate();
-                        break;
-                    default:
-                        return false;
-                }
-                return false;
-            }
-        });
+//        colorBtn.setOnTouchListener(new View.OnTouchListener(){
+//
+//            @Override
+//            public boolean onTouch(View view, MotionEvent motionEvent) {
+//
+//                switch (motionEvent.getAction()) {
+//                    case MotionEvent.ACTION_DOWN:
+//                        pCustomView.colorToggle = true;
+//                        //pCustomView.invalidate();
+//                        break;
+//                    case MotionEvent.ACTION_UP:
+//                        pCustomView.colorToggle = false;
+//                        //pCustomView.invalidate();
+//                        break;
+//                    default:
+//                        return false;
+//                }
+//                return false;
+//            }
+//        });
 
 
 
@@ -419,7 +424,7 @@ For menu items on bottom tool bar
 
 
     public void colorBlack(View view){
-        pCustomView.setPaint(getResources().getInteger(R.color.black));
+        pCustomView.setPaint(getResources().getColor(R.color.black));
     }
     public void colorBrown(View view){
         pCustomView.setPaint(getResources().getColor(R.color.brown));
