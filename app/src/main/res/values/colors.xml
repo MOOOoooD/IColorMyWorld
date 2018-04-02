@@ -5,8 +5,11 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="loadButn">#ffb2b2</color>
+    <color name="loadButn2">#dd8181</color>
     <color name="colorHold">#b2ffb2</color>
+    <color name="colorHold1">#00cc00</color>
     <color name="menuBtn">#b2b2ff</color>
+    <color name="menuBtn2">#8181ff</color>
 
 
     <color name="brown">#8B4513</color>
