@@ -4,25 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/palettegray"
+    android:background="@color/dkgray"
 
+    android:minHeight="0dp"
     tools:context="com.apps.mooooood.functforapp.UserPaint_using">
 
 
     <LinearLayout
 
         android:id="@+id/pallete_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:background="@color/dkgray"
+        android:layout_width="495dp"
+        android:layout_height="45dp"
 
+        android:background="@color/dkgray"
         android:gravity="center"
         android:orientation="horizontal"
         android:weightSum="8"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/menu_cust_view"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0">
 
@@ -31,30 +32,30 @@
             android:id="@+id/colorBlkBtn"
             style="@style/SmallButton"
             android:layout_width="0dp"
-            android:layout_height="35dp"
-            android:layout_margin="10dp"
+            android:layout_height="@dimen/p_height"
+            android:layout_margin="@dimen/margins"
             android:layout_weight="1"
-            android:background="@color/black"
+            android:background="@drawable/c_black_palette"
             android:onClick="colorBlack" />
 
         <Button
             android:id="@+id/colorBrBtn"
             style="@style/SmallButton"
             android:layout_width="0dp"
-            android:layout_height="35dp"
-            android:layout_margin="10dp"
+            android:layout_height="@dimen/p_height"
+            android:layout_margin="@dimen/margins"
             android:layout_weight="1"
-            android:background="@color/brown"
+            android:background="@drawable/c_brown_palette"
             android:onClick="colorBrown" />
 
         <Button
             android:id="@+id/colorBlueBtn"
             style="@style/SmallButton"
             android:layout_width="0dp"
-            android:layout_height="35dp"
-            android:layout_margin="10dp"
+            android:layout_height="@dimen/p_height"
+            android:layout_margin="@dimen/margins"
             android:layout_weight="1"
-            android:background="@color/blue"
+            android:background="@drawable/c_blue_palette"
             android:onClick="colorBlue" />
 
 
@@ -62,50 +63,50 @@
             android:id="@+id/colorPBtn"
             style="@style/SmallButton"
             android:layout_width="0dp"
-            android:layout_height="35dp"
-            android:layout_margin="10dp"
+            android:layout_height="@dimen/p_height"
+            android:layout_margin="@dimen/margins"
             android:layout_weight="1"
-            android:background="@drawable/menubtn"
+            android:background="@drawable/c_purp_palette"
             android:onClick="colorPurple" />
 
         <Button
             android:id="@+id/colorRedBtn"
             style="@style/SmallButton"
             android:layout_width="0dp"
-            android:layout_height="35dp"
-            android:layout_margin="10dp"
+            android:layout_height="@dimen/p_height"
+            android:layout_margin="@dimen/margins"
             android:layout_weight="1"
-            android:background="@color/red"
+            android:background="@drawable/c_red_palette"
             android:onClick="colorRed" />
 
         <Button
             android:id="@+id/colorOBtn"
             style="@style/SmallButton"
             android:layout_width="0dp"
-            android:layout_height="35dp"
-            android:layout_margin="10dp"
+            android:layout_height="@dimen/p_height"
+            android:layout_margin="@dimen/margins"
             android:layout_weight="1"
-            android:background="@color/orange"
+            android:background="@drawable/c_orange_palette"
             android:onClick="colorOrange" />
 
         <Button
             android:id="@+id/colorYBtn"
             style="@style/SmallButton"
             android:layout_width="0dp"
-            android:layout_height="35dp"
-            android:layout_margin="10dp"
+            android:layout_height="@dimen/p_height"
+            android:layout_margin="@dimen/margins"
             android:layout_weight="1"
-            android:background="@color/yellow"
+            android:background="@drawable/c_yell_palette"
             android:onClick="colorYellow" />
 
         <Button
             android:id="@+id/colorGBtn"
             style="@style/SmallButton"
             android:layout_width="0dp"
-            android:layout_height="35dp"
-            android:layout_margin="10dp"
+            android:layout_height="@dimen/p_height"
+            android:layout_margin="@dimen/margins"
             android:layout_weight="1"
-            android:background="@color/green"
+            android:background="@drawable/c_green_palette"
             android:onClick="colorGreen" />
 
     </LinearLayout>
@@ -116,9 +117,8 @@
         android:layout_height="0dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginStart="100dp"
+        android:layout_marginStart="108dp"
         android:layout_marginTop="8dp"
         android:background="@color/black"
         app:layout_constraintBottom_toTopOf="@+id/pallete_bar"
@@ -135,11 +135,9 @@
         android:layout_alignParentTop="true"
         android:layout_marginEnd="8dp"
         android:background="@color/palettegray"
-        app:layout_constraintBottom_toTopOf="@+id/pallete_bar"
         app:layout_constraintEnd_toStartOf="@+id/paint_custom_view"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintTop_toTopOf="parent">
 
         <Button
             android:id="@+id/load_images"

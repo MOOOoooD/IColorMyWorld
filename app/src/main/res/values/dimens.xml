@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="palet_outline">1dp</dimen>
+    <dimen name="corn_rad">20dp</dimen>
+    <dimen name="margins">8dp</dimen>
+    <dimen name="p_height">30dp</dimen>
 </resources>
