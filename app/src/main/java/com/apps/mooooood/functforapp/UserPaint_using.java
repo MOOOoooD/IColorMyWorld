@@ -51,8 +51,6 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
 
     //private FloatingActionButton floatActBtn;
     private PntCustView_using pCustomView;
-//    Button load_btn;
-//    Button colorBtn;
     Button brownBtn;
     Button blueBtn;
     Button purpleBtn;
@@ -67,7 +65,6 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
 
     private MenuCustView menuCustView;
 
-//    Button menuBtn;
 
     @SuppressLint({"WrongViewCast", "ClickableViewAccessibility"})
     @Override
@@ -78,8 +75,8 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
         setContentView(R.layout.activity_user_paint);
         System.loadLibrary("opencv_java3");
 
-//        load_btn = findViewById(R.id.load_images);
 
+        /** may not need to find view by id **/
         //  blackBtn = findViewById(R.id.black_paint);
         brownBtn = findViewById(R.id.colorBrBtn);
         blueBtn = findViewById(R.id.colorBlueBtn);
@@ -88,11 +85,7 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
         orangeBtn = findViewById(R.id.colorOBtn);
         yellowBtn = findViewById(R.id.colorYBtn);
         greenBtn = findViewById(R.id.colorGBtn);
-
-
         pCustomView = findViewById(R.id.paint_custom_view);
-
-
     }
 
 
