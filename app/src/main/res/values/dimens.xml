@@ -5,4 +5,6 @@
     <dimen name="corn_rad">20dp</dimen>
     <dimen name="margins">8dp</dimen>
     <dimen name="p_height">30dp</dimen>
+    <dimen name="mcv_width">100dp</dimen>
+
 </resources>

@@ -2,17 +2,66 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="@dimen/mcv_width"
     android:layout_height="match_parent"
     android:id="@+id/menusection"
     tools:context=".UserPaint_using"
     tools:showIn="@layout/activity_user_paint"
+
+
         >
     <com.apps.mooooood.functforapp.MenuCustView
+
         android:id="@+id/menu_cust_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_alignParentStart="true">
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="8dp"
+        android:background="@color/palettegray"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/load_images"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="false"
+            android:layout_centerInParent="false"
+            android:layout_margin="10dp"
+            android:background="@drawable/loadbtn"
+            android:text="@string/load_btn"
+            android:onClick="loadImg"
+            tools:layout_editor_absoluteX="10dp"
+            tools:layout_editor_absoluteY="10dp" />
+
+        <Button
+            android:id="@+id/color_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="10dp"
+            android:background="@drawable/button_circle"
+            android:onClick="applyColor"
+            android:text="@string/color_btn"
+            tools:layout_editor_absoluteX="10dp"
+            tools:layout_editor_absoluteY="102dp" />
+
+        <!--        android:onClick="colorSwitch"  -->
+
+
+        <Button
+            android:id="@+id/menu_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="10dp"
+            android:background="@drawable/menubtn"
+            android:onClick="listMenu"
+            android:text="@string/menu_btn" />
 
 
     </com.apps.mooooood.functforapp.MenuCustView>

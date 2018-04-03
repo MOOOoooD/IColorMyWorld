@@ -80,7 +80,7 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
 
 //        load_btn = findViewById(R.id.load_images);
 
-      //  blackBtn = findViewById(R.id.black_paint);
+        //  blackBtn = findViewById(R.id.black_paint);
         brownBtn = findViewById(R.id.colorBrBtn);
         blueBtn = findViewById(R.id.colorBlueBtn);
         purpleBtn = findViewById(R.id.colorPBtn);
@@ -89,68 +89,59 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
         yellowBtn = findViewById(R.id.colorYBtn);
         greenBtn = findViewById(R.id.colorGBtn);
 
-//        menuBtn = findViewById(R.id.menu_button);
 
         pCustomView = findViewById(R.id.paint_custom_view);
-        menuCustView = findViewById(R.id.menu_cust_view);
-
-        //menuCustView.colorBtn = findViewById(R.id.color_button);
-//        load_btn.setOnClickListener(new View.OnClickListener(){
-//            @Override
-//            public void onClick(View view){
-//                Intent image = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//                startActivityForResult(image, RESULT_LOAD_IMG);
-//            }
-//        });
-//
 
 
-//        colorBtn.setOnTouchListener(new View.OnTouchListener(){
-//
-//            @Override
-//            public boolean onTouch(View view, MotionEvent motionEvent) {
-//
-//                switch (motionEvent.getAction()) {
-//                    case MotionEvent.ACTION_DOWN:
-//                        pCustomView.colorToggle = true;
-//                        //pCustomView.invalidate();
-//                        break;
-//                    case MotionEvent.ACTION_UP:
-//                        pCustomView.colorToggle = false;
-//                        //pCustomView.invalidate();
-//                        break;
-//                    default:
-//                        return false;
-//                }
-//                return false;
-//            }
-//        });
-
-
-
-        /*****************************************8
-
-for menu bottom toolbar
-         Toolbar toolbarBottom = findViewById(R.id.toolbar_bottom);
-        toolbarBottom.inflateMenu(R.menu.draw_menu);
-
-        toolbarBottom.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                handleDrawingIconTouched(item.getItemId());
-                return false;
-            }
-        });
-        *************************************************/
     }
 
 
+    /**
+     * on click and on touch listener for color button - needs work
+     * @param v
+     */
+    public void applyColor(View v){
+        v.setOnTouchListener(new View.OnTouchListener(){
+
+
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        pCustomView.colorToggle = true;
+                        //pCustomView.invalidate();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        pCustomView.colorToggle = false;
+                        view.performClick();
+                        //pCustomView.invalidate();
+                        break;
+                }
+                return false;
+            }
+        });
+    }
+
+
+
+    /**
+     * onClick method to load images
+     * @param v - load_btn
+     */
+    public void loadImg(View v){
+        Intent image = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(image, RESULT_LOAD_IMG);
+    }
+
+    /**
+     * onClick method to display popup menu
+     * @param v - menu_btn
+     */
     public void listMenu(View v){
         PopupMenu popupMenu = new PopupMenu(this, v);
         popupMenu.setOnMenuItemClickListener(this);
         popupMenu.inflate(R.menu.draw_menu);
         popupMenu.show();
-
     }
     @Override
     public boolean onMenuItemClick(MenuItem item) {
