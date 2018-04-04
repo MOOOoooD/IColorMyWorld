@@ -263,8 +263,10 @@ For menu items on bottom tool bar
 
             // save only the range of the colored bitmap
             Bitmap nbm ;
-            //nbm = Bitmap.createBitmap(pCustomView.getDrawingCache(),pCustomView.centerImg_W,pCustomView.imgHeight,endW,endH);
-            nbm = Bitmap.createBitmap(pCustomView.getDrawingCache(),pCustomView.centerImg_W,pCustomView.imgHeight,pCustomView.imgWidth,pCustomView.imgHeight);
+            //nbm = Bitmap.createBitmap(pCustomView.getDrawingCache(),pCustomView.centerImg_W,pCustomView.centerImg_H,pCustomView.imgWidth,pCustomView.imgHeight);
+            nbm = Bitmap.createBitmap(pCustomView.getDrawingCache(),5,5,564,564);
+
+            //nbm = Bitmap.createBitmap(pCustomView.getDrawingCache(),pCustomView.centerImg_W,pCustomView.imgHeight,pCustomView.imgWidth,pCustomView.imgHeight);
             Log.d(TAG, "savePainting: INSAVE"+ pCustomView.imgWidth+", "+pCustomView.imgWidth);
             for(int x = 0; x < nbm.getWidth(); x++){
                 for(int y = 0; y < nbm.getHeight(); y++){

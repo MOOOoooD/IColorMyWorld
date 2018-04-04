@@ -117,7 +117,7 @@ public class PntCustView_using extends View {
 
 
         //Log.d(PAINT_TAG, "in Paint View constuctor");
-        initialize();
+        //initialize();
     }
 
 
