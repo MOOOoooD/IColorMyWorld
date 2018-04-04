@@ -59,6 +59,8 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
     Button yellowBtn;
     Button greenBtn;
 
+    // from activity_menu_cust_view
+    Button clr;
 
     int imgWidth = 640;// standard
     int imgHeight = 480;// standard
@@ -86,17 +88,15 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
         yellowBtn = findViewById(R.id.colorYBtn);
         greenBtn = findViewById(R.id.colorGBtn);
         pCustomView = findViewById(R.id.paint_custom_view);
-    }
+        clr = findViewById(R.id.color_button);
 
 
-    /**
-     * on click and on touch listener for color button - needs work
-     * @param v
-     */
-    public void applyColor(View v){
-        v.setOnTouchListener(new View.OnTouchListener(){
-
-
+        /**
+         * setting onTouchListener for touch and hold button
+         * may switch to on long click -
+         *
+         */
+        clr.setOnTouchListener(new View.OnTouchListener(){
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 switch (motionEvent.getAction()) {

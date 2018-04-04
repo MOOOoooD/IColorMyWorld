@@ -166,12 +166,12 @@ public class PntCustView_using extends View {
 
         // added to drag pencil
 
-        post(new Runnable() {
-            public void run(){
-              //  Log.d("RUNTAG","Width "+ PntCustView_using.this.getMeasuredWidth());
-              //  Log.d("RUNTAG","Height "+ PntCustView_using.this.getMeasuredHeight());
-            }
-        });
+//        post(new Runnable() {
+//            public void run(){
+//              //  Log.d("RUNTAG","Width "+ PntCustView_using.this.getMeasuredWidth());
+//              //  Log.d("RUNTAG","Height "+ PntCustView_using.this.getMeasuredHeight());
+//            }
+//        });
     }
 
 

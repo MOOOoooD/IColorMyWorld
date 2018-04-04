@@ -8,7 +8,7 @@ import android.widget.RelativeLayout;
 public class MenuCustView extends RelativeLayout {
 
     Button load_btn;
-    Button colorBtn;
+  //  Button colorBtn;
     Button menuBtn;
 
 
@@ -18,7 +18,7 @@ public class MenuCustView extends RelativeLayout {
 
         load_btn = findViewById(R.id.load_images);
         menuBtn = findViewById(R.id.menu_button);
-        colorBtn = findViewById(R.id.color_button);
+  //      colorBtn = findViewById(R.id.color_button);
 
 
 //

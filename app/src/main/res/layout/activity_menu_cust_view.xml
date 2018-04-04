@@ -44,7 +44,6 @@
             android:layout_gravity="center_vertical"
             android:layout_margin="10dp"
             android:background="@drawable/button_circle"
-            android:onClick="applyColor"
             android:text="@string/color_btn"
             tools:layout_editor_absoluteX="10dp"
             tools:layout_editor_absoluteY="102dp" />
