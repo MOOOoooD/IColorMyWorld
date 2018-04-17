@@ -106,6 +106,7 @@ public class PntCustView_using extends View {
         // for pencil!!!
         RelativeLayout paintLayout = findViewById(R.id.paintScreen);
         pencil = BitmapFactory.decodeResource(getResources(), R.drawable.test_pencil);
+        //pencil = BitmapFactory.decodeResource(getResources(), R.drawable.pencil_icon);
         penWidth = pencil.getWidth();
         penHeight = pencil.getHeight();
         //Log.d(PAINT_TAG, "penW: "+penWidth+", penH: "+penHeight);
@@ -117,7 +118,7 @@ public class PntCustView_using extends View {
 
 
         //Log.d(PAINT_TAG, "in Paint View constuctor");
-        //initialize();
+        initialize();
     }
 
 
