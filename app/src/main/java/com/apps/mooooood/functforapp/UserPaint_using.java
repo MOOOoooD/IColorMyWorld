@@ -562,106 +562,27 @@ For menu items on bottom tool bar
             Log.d(USER_PAINT,"ih="+loadedImg.height()+", iw="+loadedImg.width());
             Log.d(USER_PAINT,"scaled h="+height+", scaled w="+width);
 
-/********************************************************
-
-            //Sobel
-            Imgproc.GaussianBlur(loadedImg, loadedImg, new Size(3,3),0,0,Core.BORDER_DEFAULT);
-            Imgproc.GaussianBlur(loadedImg, loadedImg, new Size(3,3),0,0,Core.BORDER_DEFAULT);
-
-            //Utils.matToBitmap(loadedImg, bitmap);
-            //Imgproc.erode(loadedImg,loadedImg, new Mat(), new Point(-1,-1),2,1, Scalar.all(1));
-            //Imgproc.dilate(loadedImg,loadedImg, new Mat(), new Point(-1,-1),2,1, Scalar.all(1));
-
-            Imgproc.cvtColor(loadedImg, loadedImg, Imgproc.COLOR_RGB2GRAY);
-
-            // Varibles needed
-            int scale = 1, delta = 0, xDx = 1, xDy = 0, yDy = 1, yDx = 0, kernalSz = 3;
-            double alph = 0.5, bet = 0.5, gamm = 1;
-            Mat gradXY = new Mat(), absGradX = new Mat(), absGradY = new Mat();
-
-            // Gradient X
-            Imgproc.Sobel(loadedImg, gradXY, CvType.CV_16S,xDx,xDy,kernalSz,scale,delta,Core.BORDER_DEFAULT);
-            //Log.d(SOBELTAG,"SOBEL_Type = "+loadedImg.type());
-            Core.convertScaleAbs(gradXY, absGradX);
-            gradXY = new Mat();
-
-            // Gradient Y
-            Imgproc.Sobel(loadedImg, gradXY, CvType.CV_16S,yDx,yDy,kernalSz,scale,delta,Core.BORDER_DEFAULT);
-            loadedImg.release();
-            Core.convertScaleAbs(gradXY, absGradY);
-
-            loadedImg = new Mat();
-            gradXY.release();
-            Core.addWeighted(absGradX,alph,absGradY,bet,gamm,loadedImg);
-            absGradX.release();
-            absGradY.release();
-
-            Imgproc.threshold(loadedImg, loadedImg, 15.0, 255, Imgproc.THRESH_BINARY_INV);
-
-            // invert colors
-            //Core.bitwise_not(loadedImg, loadedImg);
-            //Log.d(SOBELTAG,loadedImg.channels()+" ");
-
-            // set Mat to Bitmap
-            bitmap = Bitmap.createBitmap(loadedImg.width(), loadedImg.height(),Bitmap.Config.ARGB_8888 );
-            Utils.matToBitmap(loadedImg, bitmap);
-            loadedImg.release();
-
-            for(int x = 0; x < bitmap.getWidth(); x++){
-                for(int y = 0; y < bitmap.getHeight(); y++){
-                    int bmColor = bitmap.getPixel(x,y);
-                    int r = Color.red(bmColor);
-                    if(r==255){
-                        bitmap.setPixel(x,y,Color.alpha(0));
-                    }
-                }
-            }
-            pCustomView.setBitmap(bitmap, true);
-****************************************************/
-
-            // Canny Filter
-//            Imgproc.cvtColor(loadedImg, loadedImg, Imgproc.COLOR_RGB2GRAY);
-//
-//            //Mat canImg = Mat.zeros(loadedImg.width(), loadedImg.height(), loadedImg.type());
-//            //Mat canImg = new Mat();
-//
-//            Imgproc.blur(loadedImg, loadedImg, new Size(3,3) );
-//            Imgproc.Canny(loadedImg, loadedImg, lowThresh, lowThresh * ratio, kernalSize, false );
-//            //canImg = Scalar::all(0);
-//
-//            //loadedImg.copyTo(canImg, loadedImg);
-//            // invert colors
-//            Core.bitwise_not(loadedImg, loadedImg);
-
-            //Bitmap btmp = Bitmap.createBitmap(loadedImg.width(), loadedImg.height(),Bitmap.Config.ARGB_8888 );
-//            bitmap = Bitmap.createBitmap(loadedImg.width(), loadedImg.height(),Bitmap.Config.ARGB_8888 );
-//            Utils.matToBitmap(loadedImg, bitmap);
 
             // using with Laplacian
-            Imgproc.GaussianBlur(loadedImg, loadedImg, new Size(5,5),0,0,Core.BORDER_DEFAULT);
+            //Imgproc.GaussianBlur(loadedImg, loadedImg, new Size(5,5),0,0,Core.BORDER_DEFAULT);
             Imgproc.GaussianBlur(loadedImg, loadedImg, new Size(3,3),0,0,Core.BORDER_DEFAULT);
-            //Utils.matToBitmap(loadedImg, bitmap);
-
             Imgproc.cvtColor(loadedImg, loadedImg, Imgproc.COLOR_RGB2GRAY);
 //            Utils.matToBitmap(loadedImg, bitmap);
             Log.d("IMG_TYPE","Type = "+loadedImg.type());
 
             Mat bLap = new Mat();
             Imgproc.Laplacian(loadedImg, bLap, CvType.CV_16S,3,1,0,Core.BORDER_DEFAULT);
-            Log.d("IMG_TYPE","Lap_Type = "+loadedImg.type());
             loadedImg.release();
-//            //Utils.matToBitmap(loadedImg, bitmap);
-            Log.d("IMG_TYPE","Img_Values = "+bLap);
 
             Mat lapImg = new Mat();
-
             bLap.convertTo(lapImg,CvType.CV_8UC4);
             bLap.release();
+
 //            //Core.convertScaleAbs(loadedImg, lapImg);
             Log.d("IMG_TYPE","Lap_Type_After = "+lapImg.type());
             Log.d("IMG_TYPE","Img_Values_2 = "+lapImg);
             // invert colors
-            Imgproc.threshold(lapImg, lapImg, 13.0, 255, Imgproc.THRESH_BINARY_INV);
+            Imgproc.threshold(lapImg, lapImg, 15.0, 255, Imgproc.THRESH_BINARY_INV);
             int imgCH = lapImg.channels();
             Log.d(TAG, "Pixel val "+ lapImg.type()+ " chan "+ lapImg.channels());
 
@@ -683,68 +604,5 @@ For menu items on bottom tool bar
             pCustomView.setBitmap(bitmap, true);
         }
     }
-    /***  Sobel Filter  ***/
-    public void sobFilter(String pictPath){
-
-        Bitmap bitmap = BitmapFactory.decodeFile(pictPath);
-        Mat loadedImg = new Mat();
-        Utils.bitmapToMat(bitmap, loadedImg );
-
-        //Sobel
-        Imgproc.GaussianBlur(loadedImg, loadedImg, new Size(3,3),0,0,Core.BORDER_DEFAULT);
-        Imgproc.GaussianBlur(loadedImg, loadedImg, new Size(3,3),0,0,Core.BORDER_DEFAULT);
-
-        //Utils.matToBitmap(loadedImg, bitmap);
-        //Imgproc.erode(loadedImg,loadedImg, new Mat(), new Point(-1,-1),2,1, Scalar.all(1));
-        //Imgproc.dilate(loadedImg,loadedImg, new Mat(), new Point(-1,-1),2,1, Scalar.all(1));
-
-        Imgproc.cvtColor(loadedImg, loadedImg, Imgproc.COLOR_RGB2GRAY);
-
-        // Varibles needed
-        int scale = 1, delta = 0, xDx = 1, xDy = 0, yDy = 1, yDx = 0, kernalSz = 3;
-        double alph = 0.5, bet = 0.5, gamm = 1;
-        Mat gradXY = new Mat(), absGradX = new Mat(), absGradY = new Mat();
-
-        // Gradient X
-        Imgproc.Sobel(loadedImg, gradXY, CvType.CV_16S,xDx,xDy,kernalSz,scale,delta,Core.BORDER_DEFAULT);
-        //Log.d(SOBELTAG,"SOBEL_Type = "+loadedImg.type());
-        Core.convertScaleAbs(gradXY, absGradX);
-        gradXY = new Mat();
-
-        // Gradient Y
-        Imgproc.Sobel(loadedImg, gradXY, CvType.CV_16S,yDx,yDy,kernalSz,scale,delta,Core.BORDER_DEFAULT);
-        loadedImg.release();
-        Core.convertScaleAbs(gradXY, absGradY);
-
-        loadedImg = new Mat();
-        gradXY.release();
-        Core.addWeighted(absGradX,alph,absGradY,bet,gamm,loadedImg);
-        absGradX.release();
-        absGradY.release();
-
-        Imgproc.threshold(loadedImg, loadedImg, 15.0, 255, Imgproc.THRESH_BINARY_INV);
-
-        // invert colors
-        //Core.bitwise_not(loadedImg, loadedImg);
-        //Log.d(SOBELTAG,loadedImg.channels()+" ");
-
-        // set Mat to Bitmap
-        bitmap = Bitmap.createBitmap(loadedImg.width(), loadedImg.height(),Bitmap.Config.ARGB_8888 );
-        Utils.matToBitmap(loadedImg, bitmap);
-        loadedImg.release();
-
-        for(int x = 0; x < bitmap.getWidth(); x++){
-            for(int y = 0; y < bitmap.getHeight(); y++){
-                int bmColor = bitmap.getPixel(x,y);
-                int r = Color.red(bmColor);
-                if(r==255){
-                    bitmap.setPixel(x,y,Color.alpha(0));
-                }
-            }
-        }
-        pCustomView.setBitmap(bitmap, true);
-
-    }
-
 
 }

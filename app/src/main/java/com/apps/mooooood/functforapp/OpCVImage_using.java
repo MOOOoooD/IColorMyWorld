@@ -377,7 +377,7 @@ public class OpCVImage_using extends AppCompatActivity{
         absGradX.release();
         absGradY.release();
 
-        Imgproc.threshold(loadedImg, loadedImg, 15.0, 255, Imgproc.THRESH_BINARY_INV);
+        Imgproc.threshold(loadedImg, loadedImg, 17.0, 255, Imgproc.THRESH_BINARY_INV);
 
         // invert colors
         //Core.bitwise_not(loadedImg, loadedImg);

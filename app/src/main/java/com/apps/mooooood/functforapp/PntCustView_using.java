@@ -15,6 +15,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
 import android.widget.RelativeLayout;
@@ -28,7 +29,6 @@ import java.util.ArrayList;
 
 public class PntCustView_using extends View {
     boolean colorToggle = false;
-    boolean fillToggle = false;
     boolean imgToggle = false;
     boolean save = false;
     boolean setCan = false;
@@ -91,6 +91,7 @@ public class PntCustView_using extends View {
     int penHeight = 0;
     int centerPen_W = 0;
     int centerPen_H = 0;
+    Context needContext;
 
 
 
@@ -115,7 +116,7 @@ public class PntCustView_using extends View {
         translate = new Matrix();
         gestures = new GestureDetector(context, new GestureListener(PntCustView_using.this));
 
-
+        this.needContext = context;
 
         //Log.d(PAINT_TAG, "in Paint View constuctor");
         initialize();
@@ -143,7 +144,32 @@ public class PntCustView_using extends View {
 
 
     }
-    //Bitmap saveImage;
+
+
+
+    private float scaleFactor = 1.f;
+    private static float MIN_ZOOM = .6f;
+    private static float MAX_ZOOM = 6f;
+    private static float SCALE_CHANGE = 0.4f;
+    private class zScaleGestureListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+
+        public zScaleGestureListener(){
+            super();
+        }
+
+        @Override
+        public boolean onScale(ScaleGestureDetector detect){
+
+                scaleFactor *= detect.getScaleFactor();
+                scaleFactor = Math.max(MIN_ZOOM, Math.min(scaleFactor, MAX_ZOOM));
+
+            return true;
+        }
+
+    }
+
+
+//    //Bitmap saveImage;
     public Bitmap getCanvasBitmap(){
 
 
@@ -159,11 +185,15 @@ public class PntCustView_using extends View {
         drawPaint.setColor(paintColor);
     }
 
+    private ScaleGestureDetector detector;
+
     public void setCanvas(){
         drawCanvas = new Canvas(canvasBitmap);
 
 
         canvasPaint = new Paint(Paint.DITHER_FLAG);
+
+        detector = new ScaleGestureDetector(needContext,new zScaleGestureListener());
 
         // added to drag pencil
 
@@ -183,6 +213,12 @@ public class PntCustView_using extends View {
     @Override
     protected void onDraw(Canvas canvas) {
 
+        if(Z_MODE) {
+            Log.d("Z_DRAW", "onDraw: ---- in onDraw --");
+            drawCanvas.scale(scaleFactor, scaleFactor);
+            drawPaint.setStrokeWidth(8 / scaleFactor);
+            Z_MODE = false;
+        }
 
 
         if(imgToggle & !t_up) {
@@ -296,6 +332,26 @@ public class PntCustView_using extends View {
     int xAdj = 0;//8;
     int yAdj = 0;//6;
 
+
+    final int IsREMOVED = -1;
+
+    private int mEventState;
+    private final static int NONE = 0;
+    private final static int PAN = 1;
+    private final static int ZOOM = 2;
+    Boolean Z_MODE = false;
+
+    // initialize the pointers for onTouch events
+    int primaryZoomPtr = IsREMOVED;
+    int primaryPtrIdxZ = IsREMOVED;
+    int secondZoomPtr = IsREMOVED;
+    int secondPtrIdxZ = IsREMOVED;
+//    private float prevTranslateX = 0;
+//    private float prevTranslateY = 0;
+//
+//    private float mTranslateX = 0;
+//    private float mTranslateY = 0;
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         float touchX = event.getX();
@@ -339,14 +395,26 @@ public class PntCustView_using extends View {
 
                 invalidate();
                 break;
+            case MotionEvent.ACTION_POINTER_DOWN:
+                mEventState = ZOOM;
+                Z_MODE=true;
+
+                Log.d("TWO_TOUCH", "onTouchEvent: --------Testing two touch ------");
+                secondPtrIdxZ = event.getActionIndex();
+                secondZoomPtr = event.getPointerId(secondPtrIdxZ);
+
+                invalidate();
+                break;
             case MotionEvent.ACTION_MOVE:
                 //xDiff = Math.abs(moveX-touchX);
                 //yDiff = Math.abs(moveY-touchY);
-                skew(touchX, touchY);
-                touch_move(moveX+xAdj,moveY+pencil.getHeight()-yAdj);
-                translate.postTranslate(moveX+xAdj, moveY-yAdj);
-
-
+                if(secondPtrIdxZ == IsREMOVED) {
+                    skew(touchX, touchY);
+                    touch_move(moveX + xAdj, moveY + pencil.getHeight() - yAdj);
+                    translate.postTranslate(moveX + xAdj, moveY - yAdj);
+                    invalidate();
+                }
+                break;
 
                 /****
                  if(touchX > mLastX) {
@@ -365,12 +433,22 @@ public class PntCustView_using extends View {
 //                touch_move(touchX-shiftLeft, touchY);
 //                moveX = touchX-shiftLeft;
 //                moveY = touchY-pencil.getHeight();
-                invalidate();
+//                invalidate();
+//                break;
+
+            // if both fingers are lifted
+            case MotionEvent.ACTION_POINTER_UP:
+                mEventState = NONE;
+                secondPtrIdxZ = IsREMOVED;
                 break;
+
             case MotionEvent.ACTION_UP:
                 touch_up();
                 invalidate();
+                primaryPtrIdxZ = IsREMOVED;
+                secondPtrIdxZ = IsREMOVED;
                 break;
+
             default:
                 return false;
         }
