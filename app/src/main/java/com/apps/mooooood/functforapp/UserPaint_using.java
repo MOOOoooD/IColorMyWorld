@@ -20,6 +20,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.support.v7.widget.PopupMenu;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import org.opencv.android.BaseLoaderCallback;
@@ -66,6 +67,7 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
     int imgHeight = 480;// standard
 
     private MenuCustView menuCustView;
+    private LinearLayout pbar;
 
 
     @SuppressLint({"WrongViewCast", "ClickableViewAccessibility"})
@@ -73,8 +75,11 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme_PopupOverlay);
         super.onCreate(savedInstanceState);
+
         Log.d(P_TAG, "in onCreate before cust view");
         setContentView(R.layout.activity_user_paint);
+
+        // loads the openCV library
         System.loadLibrary("opencv_java3");
 
 
@@ -89,11 +94,14 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
         greenBtn = findViewById(R.id.colorGBtn);
         pCustomView = findViewById(R.id.paint_custom_view);
         clr = findViewById(R.id.color_button);
+        pbar = findViewById(R.id.pallete_bar);
 
 
         /**
          * setting onTouchListener for touch and hold button
          * may switch to on long click -
+         * When user holds button and drags pencil, creates drawPaths
+         * for 'coloring' on canvas
          *
          */
         clr.setOnTouchListener(new View.OnTouchListener(){
@@ -136,6 +144,14 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
         popupMenu.inflate(R.menu.draw_menu);
         popupMenu.show();
     }
+
+    /**
+     * Menu items - with Toasts for menu item selected
+     * takes in item based onMenuItemClickListener
+     * returns boolean based on item clicked
+     * @param item
+     * @return
+     */
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch(item.getItemId()){
@@ -203,7 +219,13 @@ For menu items on bottom tool bar
     ***********************************************/
 
 
+
     // Allert Dialog - confirm the wipe screen call
+
+    /**
+     * Delete dialogs
+     * need to connect delete behavior
+     */
     private void deleteDialog(){
         AlertDialog.Builder deleteDialog = new AlertDialog.Builder(this);
         deleteDialog.setTitle(getString(R.string.delete_drawing));
@@ -226,26 +248,37 @@ For menu items on bottom tool bar
         deleteDialog.show();
     }
 
+    /**
+     * need to implement delete painting and option to load image
+     *
+     */
+    private void deletePainting(){
 
-    private String galeryFolder = "/Color_My_World";
+    }
 
+    /**
+     * name for gallery saved on phone
+     */
+    private String galleryFolder = "/Color_My_World";
+
+
+    /**
+     * saves colored canvas in gallery established by app
+     */
     private void savePainting(){
 
         pCustomView.save = !pCustomView.save;
         pCustomView.setDrawingCacheEnabled(true);
         pCustomView.invalidate();
-
-
         //LoadSaveImages saveImage = new LoadSaveImages();
 
         //saveImage.saveCMWImage(this, pCustomView.getCanvasBitmap());
         Log.d("in SAVE Painting", "hope it workd");
-        String filePath = Environment.getExternalStorageDirectory().getAbsolutePath()+galeryFolder;
+        String filePath = Environment.getExternalStorageDirectory().getAbsolutePath()+ galleryFolder;
         File colorDir = new File(filePath);
         if(!colorDir.exists()){
             colorDir.mkdirs();
         }
-
 
         Date current = new Date();
         SimpleDateFormat fileSaveDate = new SimpleDateFormat("MMddyy_kkmmss");
@@ -253,51 +286,64 @@ For menu items on bottom tool bar
         File cmvSaveImg = new File(colorDir, cmwSaveImgName);
         try{
             FileOutputStream saveOut = new FileOutputStream(cmvSaveImg);
-            Log.d(TAG, "savePainting: INSAVE"+ pCustomView.imgWidth+", "+pCustomView.imgHeight);
-            Log.d(TAG, "savePainting: INSAVE"+ pCustomView.centerImg_W+", "+pCustomView.centerImg_H);
 
-            int endW = pCustomView.centerImg_W+pCustomView.imgWidth;
-            int endH = pCustomView.centerImg_H+pCustomView.imgHeight;
-            Log.d(TAG, "savePainting: INSAVE"+ endW+", "+endH);
+            int startW, startH, endW, endH;
 
+            /**
+             * if img width and height is less than actual size
+             * use pcustview.center img w and h for start and pcustview imgwidth/height for end
+             * if pcustview.center img h or w is < 0, then use 0 for the right one to endpoint
+             * pcustview.getwidth()/height()
+             *
+             */
+            if(pCustomView.centerImg_W < 0){
+                startW = 0;
+                endW = pCustomView.getWidth();
+            }else{
+                startW = pCustomView.centerImg_W;
+                endW = pCustomView.imgWidth;
+            }
+            if(pCustomView.centerImg_H<0){
+                startH = 0;
+                endH = pCustomView.getHeight();
+            }else{
+                startH = pCustomView.centerImg_H;
+                endH = pCustomView.imgHeight;
+            }
 
             // save only the range of the colored bitmap
-            Bitmap nbm ;
-            //nbm = Bitmap.createBitmap(pCustomView.getDrawingCache(),pCustomView.centerImg_W,pCustomView.centerImg_H,pCustomView.imgWidth,pCustomView.imgHeight);
-            nbm = Bitmap.createBitmap(pCustomView.getDrawingCache(),5,5,564,564);
+             Bitmap savImg = Bitmap.createBitmap(pCustomView.getDrawingCache(),startW, startH,endW,endH);
 
-            //nbm = Bitmap.createBitmap(pCustomView.getDrawingCache(),pCustomView.centerImg_W,pCustomView.imgHeight,pCustomView.imgWidth,pCustomView.imgHeight);
-            Log.d(TAG, "savePainting: INSAVE"+ pCustomView.imgWidth+", "+pCustomView.imgWidth);
-            for(int x = 0; x < nbm.getWidth(); x++){
-                for(int y = 0; y < nbm.getHeight(); y++){
-                    int bmColor = nbm.getPixel(x,y);
+            for(int x = 0; x < savImg.getWidth(); x++){
+                for(int y = 0; y < savImg.getHeight(); y++){
+                    int bmColor = savImg.getPixel(x,y);
                     int r = Color.alpha(bmColor);
                     if(r==0){
-                        nbm.setPixel(x,y,Color.rgb(255,255,255));
+                        savImg.setPixel(x,y,Color.rgb(255,255,255));
                     }
                 }
             }
 
             //newBitmap.setHasAlpha(false);
-            nbm.compress(Bitmap.CompressFormat.PNG, 100, saveOut);
-
+            savImg.compress(Bitmap.CompressFormat.PNG, 100, saveOut);
+            savImg.recycle();
             saveOut.flush();
             saveOut.close();
             fileAvailabilityMediaScanner(cmvSaveImg);
 
 
-            Log.d("in save...", "pleae saveimg");
-            Log.d("SAveDirPlease",colorDir.toString());
-            Log.d("SAveFile",cmwSaveImgName);
-
         }catch(Exception e){
-            e.printStackTrace();
-            Log.d("In Exception","   BLAHHHHH");
+            //e.printStackTrace();
+            Log.d("In Exception","Could not save file: \n"+e.getStackTrace());
         }
         pCustomView.save = !pCustomView.save;
 
     }
 
+
+    /**
+     * need to implement save for later
+     */
 
     //SAve for later
     private String progressFolder = "/Inprogress";
@@ -313,7 +359,7 @@ For menu items on bottom tool bar
 
         //saveImage.saveCMWImage(this, pCustomView.getCanvasBitmap());
         Log.d("in SAVE Painting", "hope it workd");
-        String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + galeryFolder;
+        String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + galleryFolder;
         File colorDir = new File(filePath);
         if (!colorDir.exists()) {
             colorDir.mkdirs();
@@ -346,7 +392,13 @@ For menu items on bottom tool bar
     }
     public static final String EXT_STORAGE = "EXT-STORAGE";
 
-    // Jeff Jones - https://www.youtube.com/watch?v=2Wg45ia6nXs
+
+    /**
+     *  Jeff Jones - https://www.youtube.com/watch?v=2Wg45ia6nXs
+     *  checks for existing file
+     *  takes in file implemented by app
+     * @param file
+     */
     private void fileAvailabilityMediaScanner(File file){
         MediaScannerConnection.scanFile(this, new String[]{file.toString()}, null,
                 new MediaScannerConnection.OnScanCompletedListener(){
@@ -357,6 +409,9 @@ For menu items on bottom tool bar
                 });
     }
 
+    /**
+     *
+     */
     private void sharePainting(){
         pCustomView.save = !pCustomView.save;
         //cache drawing/img
@@ -447,6 +502,11 @@ For menu items on bottom tool bar
     int ratio = 3;
     int kernalSize = 3;
 
+
+    /**
+     * callback method which allows the OpenCV API to be available to use in functions
+     * at a later time -
+     */
     private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
 
         @Override
@@ -466,6 +526,10 @@ For menu items on bottom tool bar
             }
         }
     };
+
+    /**
+     *
+     */
     @Override
     public void onResume()
     {
@@ -582,7 +646,7 @@ For menu items on bottom tool bar
             Log.d("IMG_TYPE","Lap_Type_After = "+lapImg.type());
             Log.d("IMG_TYPE","Img_Values_2 = "+lapImg);
             // invert colors
-            Imgproc.threshold(lapImg, lapImg, 15.0, 255, Imgproc.THRESH_BINARY_INV);
+            Imgproc.threshold(lapImg, lapImg, 17.0, 255, Imgproc.THRESH_BINARY_INV);
             int imgCH = lapImg.channels();
             Log.d(TAG, "Pixel val "+ lapImg.type()+ " chan "+ lapImg.channels());
 
@@ -601,6 +665,8 @@ For menu items on bottom tool bar
                     }
                 }
             }
+            pCustomView.pbarWidth = pbar.getWidth();
+            pCustomView.pbarHeight = pbar.getHeight();
             pCustomView.setBitmap(bitmap, true);
         }
     }

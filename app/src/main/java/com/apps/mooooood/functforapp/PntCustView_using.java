@@ -18,6 +18,7 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
@@ -115,8 +116,9 @@ public class PntCustView_using extends View {
 
         translate = new Matrix();
         gestures = new GestureDetector(context, new GestureListener(PntCustView_using.this));
+        detector = new ScaleGestureDetector(context,new zScaleGestureListener());
 
-        this.needContext = context;
+        //this.needContext = context;
 
         //Log.d(PAINT_TAG, "in Paint View constuctor");
         initialize();
@@ -160,6 +162,7 @@ public class PntCustView_using extends View {
         @Override
         public boolean onScale(ScaleGestureDetector detect){
 
+            Log.d("SCALE_C","In Scale Gesture Detector");
                 scaleFactor *= detect.getScaleFactor();
                 scaleFactor = Math.max(MIN_ZOOM, Math.min(scaleFactor, MAX_ZOOM));
 
@@ -193,7 +196,8 @@ public class PntCustView_using extends View {
 
         canvasPaint = new Paint(Paint.DITHER_FLAG);
 
-        detector = new ScaleGestureDetector(needContext,new zScaleGestureListener());
+        // added to on create
+        //detector = new ScaleGestureDetector(needContext,new zScaleGestureListener());
 
         // added to drag pencil
 
@@ -206,25 +210,35 @@ public class PntCustView_using extends View {
     }
 
 
+    float strokWid=8;
     Paint p = new Paint();
     boolean t_up = false;
     Rect s = new Rect();
+    int pbarWidth;
+    int pbarHeight;
     // stores drawing paths in ArrayList, draws the path on screen
     @Override
     protected void onDraw(Canvas canvas) {
 
         if(Z_MODE) {
+            canvas.save();
             Log.d("Z_DRAW", "onDraw: ---- in onDraw --");
-            drawCanvas.scale(scaleFactor, scaleFactor);
-            drawPaint.setStrokeWidth(8 / scaleFactor);
+            canvas.scale(scaleFactor, scaleFactor);
+
+            strokWid = 8/scaleFactor;
+            //drawPaint.setStrokeWidth(8 / scaleFactor);
+
             Z_MODE = false;
+            canvas.restore();
         }
 
 
         if(imgToggle & !t_up) {
             if(setCan){
+                //if()
                 centerImg_W = (canvasWidth-imgWidth)/2;
                 centerImg_H = (canvasHeight-imgHeight)/2;
+                Log.d("TEST_37","why 37: " +centerImg_H+" result of "+canvasHeight+" - "+imgHeight+" / 2");
                 setCanvas();
                 setCan = false;
                 p.setStyle(Paint.Style.FILL);
@@ -250,7 +264,7 @@ public class PntCustView_using extends View {
             //canvas.drawBitmap(canvasBitmap, centerImg_W, centerImg_H, null);
 
             // draws path behind canvas bitmap, and under current drawpath
-
+            drawPaint.setStrokeWidth(strokWid);
             canvas.drawPath(drawPath, drawPaint);
 
 
@@ -282,7 +296,7 @@ public class PntCustView_using extends View {
         super.onSizeChanged(w, h, oldW, oldH);
 
         canvasWidth = w;
-        canvasHeight = h;
+        canvasHeight = h-50;
         // create Bitmap of certain w, h
         //canvasBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
 
@@ -297,7 +311,7 @@ public class PntCustView_using extends View {
 //        centerImg_H = (canvasHeight-imgHeight)/2;
 //        Log.d(PAINT_TAG,"---C-> CenterW: "+centerImg_W+", CenterH: "+centerImg_H);
         centerPen_W = canvasWidth-penWidth;
-        centerPen_H = (canvasHeight-penHeight)/2;
+        centerPen_H = (canvasHeight+50-penHeight)/2;
         moveX = centerPen_W;
         moveY = centerPen_H;
 
@@ -403,7 +417,7 @@ public class PntCustView_using extends View {
                 secondPtrIdxZ = event.getActionIndex();
                 secondZoomPtr = event.getPointerId(secondPtrIdxZ);
 
-                invalidate();
+                //invalidate();
                 break;
             case MotionEvent.ACTION_MOVE:
                 //xDiff = Math.abs(moveX-touchX);
@@ -453,6 +467,11 @@ public class PntCustView_using extends View {
                 return false;
         }
 
+
+        // calls onDraw method
+        if(mEventState== ZOOM){
+            invalidate();
+        }
         // return true;
         return gestures.onTouchEvent(event);
     }
