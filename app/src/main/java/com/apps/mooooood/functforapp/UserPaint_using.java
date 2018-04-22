@@ -464,15 +464,18 @@ For menu items on bottom tool bar
     }
 
 
-
+    /**
+     * onClick buttons for palette to change  pen/paint color
+     * when color selected, the push to color button changes to gradient of selected color
+     * and white, so user knows the color has been selected
+     * @param view
+     */
     public void colorBlack(View view){
-
         pCustomView.setPaint(getResources().getColor(R.color.black));
         int colors [] = {Color.parseColor("#ffffff"),Color.parseColor("#000000")};
         GradientDrawable gd = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,colors);
         gd.setCornerRadius(8);
         color.setBackground(gd);
-
     }
     public void colorBrown(View view){
         pCustomView.setPaint(getResources().getColor(R.color.brown));
