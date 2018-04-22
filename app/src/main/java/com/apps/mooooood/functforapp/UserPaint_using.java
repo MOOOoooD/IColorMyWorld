@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
@@ -61,7 +62,7 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
     Button greenBtn;
 
     // from activity_menu_cust_view
-    Button clr;
+    Button color;
 
     int imgWidth = 640;// standard
     int imgHeight = 480;// standard
@@ -93,7 +94,7 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
         yellowBtn = findViewById(R.id.colorYBtn);
         greenBtn = findViewById(R.id.colorGBtn);
         pCustomView = findViewById(R.id.paint_custom_view);
-        clr = findViewById(R.id.color_button);
+        color= findViewById(R.id.color_button);
         pbar = findViewById(R.id.pallete_bar);
 
 
@@ -104,7 +105,7 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
          * for 'coloring' on canvas
          *
          */
-        clr.setOnTouchListener(new View.OnTouchListener(){
+        color.setOnTouchListener(new View.OnTouchListener(){
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 switch (motionEvent.getAction()) {
@@ -465,28 +466,62 @@ For menu items on bottom tool bar
 
 
     public void colorBlack(View view){
+
         pCustomView.setPaint(getResources().getColor(R.color.black));
+        int colors [] = {Color.parseColor("#ffffff"),Color.parseColor("#000000")};
+        GradientDrawable gd = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,colors);
+        gd.setCornerRadius(8);
+        color.setBackground(gd);
+
     }
     public void colorBrown(View view){
         pCustomView.setPaint(getResources().getColor(R.color.brown));
+        int colors [] = {Color.parseColor("#ffffff"),Color.parseColor("#8B4513")};
+        GradientDrawable gd = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,colors);
+        gd.setCornerRadius(8);
+        color.setBackground(gd);
     }
     public void colorBlue(View view){
         pCustomView.setPaint(getResources().getColor(R.color.blue));
+        int colors [] = {Color.parseColor("#ffffff"),Color.parseColor("#0000FF")};
+        GradientDrawable gd = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,colors);
+        gd.setCornerRadius(8);
+        color.setBackground(gd);
     }
     public void colorPurple(View view){
         pCustomView.setPaint(getResources().getColor(R.color.purple));
+        int colors [] = {Color.parseColor("#ffffff"),Color.parseColor("#FF00FF")};
+        GradientDrawable gd = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,colors);
+        gd.setCornerRadius(8);
+        color.setBackground(gd);
     }
     public void colorRed(View view){
         pCustomView.setPaint(getResources().getColor(R.color.red));
+        int colors [] = {Color.parseColor("#ffffff"),Color.parseColor("#FF0000")};
+        GradientDrawable gd = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,colors);
+        gd.setCornerRadius(8);
+        color.setBackground(gd);
     }
     public void colorOrange(View view){
         pCustomView.setPaint(getResources().getColor(R.color.orange));
+        int colors [] = {Color.parseColor("#ffffff"),Color.parseColor("#ffa500")};
+        GradientDrawable gd = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,colors);
+        gd.setCornerRadius(8);
+        color.setBackground(gd);
     }
     public void colorYellow(View view){
         pCustomView.setPaint(getResources().getColor(R.color.yellow));
+        int colors [] = {Color.parseColor("#ffffff"),Color.parseColor("#FFFF00")};
+        GradientDrawable gd = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,colors);
+        gd.setCornerRadius(8);
+        color.setBackground(gd);
     }
     public void colorGreen(View view){
         pCustomView.setPaint(getResources().getColor(R.color.green));
+        int colors [] = {Color.parseColor("#ffffff"),Color.parseColor("#00FF00")};
+        GradientDrawable gd = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,colors);
+        gd.setCornerRadius(8);
+        color.setBackground(gd);
     }
 
 

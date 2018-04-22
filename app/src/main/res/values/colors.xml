@@ -20,6 +20,7 @@
     <color name="yellow">#FFFF00</color>
     <color name="green">#00FF00</color>
     <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
 
     <color name="palettegray">#1e1e1e</color>
     <color name="dkgray">#2e2e2e</color>
