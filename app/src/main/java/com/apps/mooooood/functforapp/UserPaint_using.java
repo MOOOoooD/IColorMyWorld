@@ -126,6 +126,7 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
 
 
 
+
     /**
      * onClick method to load images
      * @param v - load_btn
@@ -249,19 +250,33 @@ For menu items on bottom tool bar
         deleteDialog.show();
     }
 
-    /**
-     * need to implement delete painting and option to load image
-     *
-     */
-    private void deletePainting(){
 
-    }
 
     /**
      * name for gallery saved on phone
      */
     private String galleryFolder = "/Color_My_World";
 
+    /**
+     * creates name for saved/shared image
+     * @return String image name
+     */
+    private String imageName(){
+        Date current = new Date();
+        SimpleDateFormat fileSaveDate = new SimpleDateFormat("MMddyy_kkmmss");
+        String imgName = "cmw"+fileSaveDate.format(current).toString()+".png";
+        return imgName;
+    }
+
+    private File directoryName(){
+        String filePath = Environment.getExternalStorageDirectory().getAbsolutePath()+ galleryFolder;
+        File colorDir = new File(filePath);
+        if(!colorDir.exists()){
+            colorDir.mkdirs();
+
+        }
+        return colorDir;
+    }
 
     /**
      * saves colored canvas in gallery established by app
@@ -275,16 +290,9 @@ For menu items on bottom tool bar
 
         //saveImage.saveCMWImage(this, pCustomView.getCanvasBitmap());
         Log.d("in SAVE Painting", "hope it workd");
-        String filePath = Environment.getExternalStorageDirectory().getAbsolutePath()+ galleryFolder;
-        File colorDir = new File(filePath);
-        if(!colorDir.exists()){
-            colorDir.mkdirs();
-        }
 
-        Date current = new Date();
-        SimpleDateFormat fileSaveDate = new SimpleDateFormat("MMddyy_kkmmss");
-        String cmwSaveImgName = "cmw"+fileSaveDate.format(current).toString()+".png";
-        File cmvSaveImg = new File(colorDir, cmwSaveImgName);
+
+        File cmvSaveImg = new File(directoryName(), imageName());
         try{
             FileOutputStream saveOut = new FileOutputStream(cmvSaveImg);
 
@@ -360,17 +368,8 @@ For menu items on bottom tool bar
 
         //saveImage.saveCMWImage(this, pCustomView.getCanvasBitmap());
         Log.d("in SAVE Painting", "hope it workd");
-        String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + galleryFolder;
-        File colorDir = new File(filePath);
-        if (!colorDir.exists()) {
-            colorDir.mkdirs();
-        }
 
-
-        Date current = new Date();
-        SimpleDateFormat fileSaveDate = new SimpleDateFormat("MMddyy_kkmmss");
-        String cmwSaveImgName = "cmw" + fileSaveDate.format(current).toString() + ".png";
-        File cmvSaveImg = new File(colorDir, cmwSaveImgName);
+        File cmvSaveImg = new File(directoryName(), imageName());
         try {
             FileOutputStream saveOut = new FileOutputStream(cmvSaveImg);
 
@@ -382,8 +381,8 @@ For menu items on bottom tool bar
 
 
             Log.d("in save...", "pleae saveimg");
-            Log.d("SAveDirPlease", colorDir.toString());
-            Log.d("SAveFile", cmwSaveImgName);
+            Log.d("SAveDirPlease", cmvSaveImg.getPath());
+            Log.d("SAveFile", cmvSaveImg.getName());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -391,6 +390,7 @@ For menu items on bottom tool bar
         }
         pCustomView.save = !pCustomView.save;
     }
+
     public static final String EXT_STORAGE = "EXT-STORAGE";
 
 

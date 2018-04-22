@@ -9,6 +9,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -101,10 +102,12 @@ public class PntCustView_using extends View {
     private ArrayList<Path> undonePaths = new ArrayList<Path>();
     private ArrayList<Paint> allPaints = new ArrayList<Paint>();
     private ArrayList<Paint> undonePaints = new ArrayList<Paint>();
+    AttributeSet pAttr;
 
     public PntCustView_using(Context context, AttributeSet attr) {
         super(context, attr);
 
+        pAttr = attr;
         // for pencil!!!
         RelativeLayout paintLayout = findViewById(R.id.paintScreen);
         pencil = BitmapFactory.decodeResource(getResources(), R.drawable.test_pencil);
@@ -532,8 +535,11 @@ public class PntCustView_using extends View {
     // Start new Drawing
     public void eraseAll() {
 
-        //drawCanvas.drawColor(0, PorterDuff.Mode.CLEAR);
+        drawCanvas.drawColor(0, PorterDuff.Mode.CLEAR);
+        drawPaint.reset();
+        drawPath.reset();
         paths.clear();
+        allPaints.clear();
  //       Log.d(PAINT_TAG, " in Erase All - new drawing??");
         invalidate();
     }
