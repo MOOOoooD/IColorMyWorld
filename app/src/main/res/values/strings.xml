@@ -6,6 +6,10 @@
     <string name="can_load_btn_txt">Can lod</string>
     <string name="sob_load_btn_txt">Sob lod</string>
     <string name="load_btn">Load Img</string>
+
+    <string name="load_img_btn"><![CDATA[Press to load image\nfrom gallery to start coloring]]> </string>
+    <string name="load_canvas_btn"><![CDATA[Press to load clean canvas\nto freestyle draw]]></string>
+
     <string name="opcv_img_btn">Go to OpenCV Image Load</string>
     <string name="gallery_img">Loaded Image</string>
     <string name="pnt_btn">Go to Paint Activity</string>
@@ -23,7 +27,8 @@
     <string name="action_save">save</string>
     <string name="action_share">share</string>
     <string name="delete_drawing">Do you want to delete?</string>
-    <string name="new_draw_warning">Something about a new drawing</string>
+    <string name="new_draw_warning"><![CDATA[If you select yes, the current work will be deleted.
+    \n\nYou cannot undo this action.\nThis does not delete the gallery image]]></string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
 

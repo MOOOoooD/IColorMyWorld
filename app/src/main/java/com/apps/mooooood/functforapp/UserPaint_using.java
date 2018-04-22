@@ -53,13 +53,9 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
 
     //private FloatingActionButton floatActBtn;
     private PntCustView_using pCustomView;
-    Button brownBtn;
-    Button blueBtn;
-    Button purpleBtn;
-    Button redBtn;
-    Button orangeBtn;
-    Button yellowBtn;
-    Button greenBtn;
+    Button brownBtn, blueBtn, purpleBtn, redBtn, orangeBtn, yellowBtn, greenBtn;
+    Button loadCanvasBtn, loadImgBtn;
+
 
     // from activity_menu_cust_view
     Button color;
@@ -96,7 +92,10 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
         pCustomView = findViewById(R.id.paint_custom_view);
         color= findViewById(R.id.color_button);
         pbar = findViewById(R.id.pallete_bar);
+        loadCanvasBtn = findViewById(R.id.load_canvas);
+        loadImgBtn = findViewById(R.id.load_image);
 
+        buttonVisibility();
 
         /**
          * setting onTouchListener for touch and hold button
@@ -235,9 +234,10 @@ For menu items on bottom tool bar
         deleteDialog.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                pCustomView.eraseAll();
-                Log.d(P_TAG, " after erase in UserPaint_using...");
-                dialogInterface.dismiss();
+                //pCustomView.eraseAll();
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
             }
         });
         deleteDialog.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
@@ -598,6 +598,7 @@ For menu items on bottom tool bar
             Uri selectedImage = data.getData();
             String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
+
             assert selectedImage != null;
             Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
             assert cursor != null;
@@ -703,10 +704,18 @@ For menu items on bottom tool bar
                     }
                 }
             }
+
+            buttonVisibility();
+
             pCustomView.pbarWidth = pbar.getWidth();
             pCustomView.pbarHeight = pbar.getHeight();
             pCustomView.setBitmap(bitmap, true);
         }
+    }
+
+    private void buttonVisibility(){
+        loadImgBtn.setVisibility(loadImgBtn.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+        loadCanvasBtn.setVisibility(loadCanvasBtn.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
     }
 
 }

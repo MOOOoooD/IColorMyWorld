@@ -15,16 +15,7 @@ public class MenuCustView extends RelativeLayout {
     public MenuCustView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
 
-
-        load_btn = findViewById(R.id.load_images);
         menuBtn = findViewById(R.id.menu_button);
-  //      colorBtn = findViewById(R.id.color_button);
-
-
-//
-//        LayoutInflater layoutInflater = (LayoutInflater)context
-//                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        layoutInflater.inflate(R.layout.activity_menu_cust_view, this, true);
 
     }
 
