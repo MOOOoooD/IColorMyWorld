@@ -18,14 +18,17 @@
 
 
     <string name="menu_btn">Menu</string>
-    <string name="action_erase">erase</string>
+    <string name="action_erase">Eraser</string>
     <string name="action_delete">delete</string>
-    <string name="action_undo">undo</string>
-    <string name="action_redo">redo</string>
-    <string name="action_brush">brush</string>
+    <string name="action_undo">Undo</string>
+    <string name="action_redo">Redo</string>
+    <string name="action_brush_size">Brush Size</string>
+    <string name="action_brush">Brush</string>
+
     <string name="action_color">color</string>
     <string name="action_save">save</string>
     <string name="action_share">share</string>
+
     <string name="delete_drawing">Do you want to delete?</string>
     <string name="new_draw_warning"><![CDATA[If you select yes, the current work will be deleted.
     \n\nYou cannot undo this action.\nThis does not delete the gallery image]]></string>

@@ -16,7 +16,7 @@
     </item>
     <item >
         <shape android:shape="rectangle"  >
-            <corners android:radius="8dip" />
+            <corners android:radius="3dip" />
             <stroke android:width="3dip" android:color="@color/menuBtn" />
             <gradient android:angle="-90" android:startColor="@color/menuBtn" android:endColor="@color/menuBtn2" />
         </shape>

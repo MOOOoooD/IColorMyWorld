@@ -6,5 +6,6 @@
     <dimen name="margins">8dp</dimen>
     <dimen name="p_height">40dp</dimen>
     <dimen name="mcv_width">100dp</dimen>
+    <dimen name="img_menu">50dp</dimen>
 
 </resources>

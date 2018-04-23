@@ -39,37 +39,81 @@
             tools:layout_editor_absoluteY="339dp" />
 -->
 
-        <Button
+        <ImageButton
             android:id="@+id/menu_button"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/img_menu"
             android:layout_alignParentTop="true"
             android:layout_centerVertical="true"
-            android:layout_margin="10dp"
-            android:background="@drawable/menubtn"
-            android:onClick="listMenu"
-            android:text="@string/menu_btn"
-            android:fontFamily="@font/purisa_bold"
-            android:textAllCaps="false"/>
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/menu"
+            android:contentDescription="@string/menu_btn"
+            android:onClick="listMenu" />
+
+        <ImageButton
+            android:id="@+id/undo_button"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/img_menu"
+            android:layout_below="@id/menu_button"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/undobtn"
+            android:onClick="undoClicked"
+            android:contentDescription="@string/action_undo" />
+        <ImageButton
+            android:id="@+id/redo_button"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/img_menu"
+            android:layout_below="@id/undo_button"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/redobtn"
+            android:onClick="redoClicked"
+            android:contentDescription="@string/action_redo" />
 
         <Button
             android:id="@+id/color_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
+            android:layout_below="@id/redo_button"
             android:layout_margin="10dp"
-            android:background="@drawable/button_circle"
+            android:background="@drawable/menu_btns"
             android:text="@string/color_btn"
             android:fontFamily="@font/purisa_bold"
             android:textAllCaps="false"
             />
 
-        <!--        android:onClick="colorSwitch"  -->
 
-
-
-
+        <ImageButton
+            android:id="@+id/erase_btn"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/img_menu"
+            android:layout_below="@id/color_button"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/eraser"
+            android:contentDescription="@string/action_erase" />
+<!--
+        <Button
+            android:id="@+id/brush_size_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_below="@id/erase_btn"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/menu_btns"
+            android:fontFamily="@font/purisa_bold"
+            android:text="@string/action_brush_size"
+            android:textAllCaps="false" />
+-->
 
     </com.apps.mooooood.functforapp.MenuCustView>
 

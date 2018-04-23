@@ -110,10 +110,12 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
                 switch (motionEvent.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         pCustomView.colorToggle = true;
+                        Log.d("COLOR_","In ColorBtn Down: "+pCustomView.colorToggle);
                         //pCustomView.invalidate();
                         break;
                     case MotionEvent.ACTION_UP:
-                        pCustomView.colorToggle = false;
+                        //pCustomView.colorToggle = false;
+                        Log.d("COLOR_","In ColorBtn Up: "+pCustomView.colorToggle);
                         view.performClick();
                         //pCustomView.invalidate();
                         break;
@@ -146,6 +148,25 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
         popupMenu.show();
     }
 
+
+    /**
+     * Undo - calls function in paintCustomView to undo drawpaths
+     * @param v
+     */
+    public void undoClicked(View v){
+        Toast.makeText(this, "undo line", Toast.LENGTH_SHORT).show();
+        pCustomView.onClickUndo();
+    }
+
+    /**
+     * Redo - calls function in paintCustomView to redo undone drawpaths
+     * @param v
+     */
+    public void redoClicked(View v){
+        Toast.makeText(this, "redo line", Toast.LENGTH_SHORT).show();
+        pCustomView.onClickRedo();
+    }
+
     /**
      * Menu items - with Toasts for menu item selected
      * takes in item based onMenuItemClickListener
@@ -157,23 +178,15 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
     public boolean onMenuItemClick(MenuItem item) {
         switch(item.getItemId()){
             case R.id.action_delete:
-                Toast.makeText(this, "Delete clicked", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "Delete clicked", Toast.LENGTH_SHORT).show();
                 deleteDialog();
-                return true;
-            case R.id.action_undo:
-                Toast.makeText(this, "Undo clicked", Toast.LENGTH_SHORT).show();
-                pCustomView.onClickUndo();
-                return true;
-            case R.id.action_redo:
-                Toast.makeText(this, "Redo clicked", Toast.LENGTH_SHORT).show();
-                pCustomView.onClickRedo();
                 return true;
             case R.id.action_share:
                 Toast.makeText(this, "Share clicked", Toast.LENGTH_SHORT).show();
                 sharePainting();
                 return true;
             case R.id.action_save:
-                Toast.makeText(this, "Save clicked", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Your picture has been saved", Toast.LENGTH_SHORT).show();
                 savePainting();
                 return true;
             default:

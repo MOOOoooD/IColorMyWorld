@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.animation.OvershootInterpolator;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -121,7 +122,7 @@ public class PntCustView_using extends View {
         gestures = new GestureDetector(context, new GestureListener(PntCustView_using.this));
         detector = new ScaleGestureDetector(context,new zScaleGestureListener());
 
-        //this.needContext = context;
+        needContext = context;
 
         //Log.d(PAINT_TAG, "in Paint View constuctor");
         initialize();
@@ -223,19 +224,7 @@ public class PntCustView_using extends View {
     @Override
     protected void onDraw(Canvas canvas) {
 
-        if(Z_MODE) {
-            canvas.save();
-            Log.d("Z_DRAW", "onDraw: ---- in onDraw --");
-            canvas.scale(scaleFactor, scaleFactor);
-
-            strokWid = 8/scaleFactor;
-            //drawPaint.setStrokeWidth(8 / scaleFactor);
-
-            Z_MODE = false;
-            canvas.restore();
-        }
-
-
+        // to set the canvas and image
         if(imgToggle & !t_up) {
             if(setCan){
                 //if()
@@ -261,7 +250,6 @@ public class PntCustView_using extends View {
             // stores drawpaths - color paths
             for (int i = 0; i < paths.size(); i++) {
                 canvas.drawPath(paths.get(i), allPaints.get(i));
-               // Log.d("POINTS", drawPath.toString());
             }
             //drawPaint.setColor(paintColor);
             //canvas.drawBitmap(canvasBitmap, centerImg_W, centerImg_H, null);
@@ -347,27 +335,7 @@ public class PntCustView_using extends View {
     }
 
     int xAdj = 0;//8;
-    int yAdj = 0;//6;
-
-
-    final int IsREMOVED = -1;
-
-    private int mEventState;
-    private final static int NONE = 0;
-    private final static int PAN = 1;
-    private final static int ZOOM = 2;
-    Boolean Z_MODE = false;
-
-    // initialize the pointers for onTouch events
-    int primaryZoomPtr = IsREMOVED;
-    int primaryPtrIdxZ = IsREMOVED;
-    int secondZoomPtr = IsREMOVED;
-    int secondPtrIdxZ = IsREMOVED;
-//    private float prevTranslateX = 0;
-//    private float prevTranslateY = 0;
-//
-//    private float mTranslateX = 0;
-//    private float mTranslateY = 0;
+    int yAdj = 0;//6;;
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -385,154 +353,38 @@ public class PntCustView_using extends View {
 
                 skew(touchX, touchY);
                 touch_start(moveX + xAdj, moveY + pencil.getHeight() - yAdj);
-              //  Log.d("CKX", " X is "+moveX);
+                Log.d("ACTDOWN", " checking x and y : "+moveX+", "+moveY);
               //  Log.d("CKWD", " Width "+canvasBitmap.getWidth());
                 translate.postTranslate(moveX+xAdj, moveY-yAdj);
                 // need to be able to access the colorImage function in OpenCV_Paint_Image and set the
                 // color - probably in the touch_move
 
-                /*****
-                 if(touchX > mLastX) {
-                 touch_start(touchX - shiftLeft, touchY);
-                 moveX = touchX - shiftLeft;
-                 moveY = touchY - pencil.getHeight();
-                 translate.postTranslate(moveX, moveY-pencil.getHeight());
-                 }else if(touchX < mLastX){
-                 touch_start(touchX + shiftLeft, touchY);
-                 moveX = touchX + shiftLeft;
-                 moveY = touchY - pencil.getHeight();
-                 translate.postTranslate(moveX, moveY-pencil.getHeight());
-                 }
-                 mLastX = moveX;
-                 ****/
-
-//                touch_start(touchX - shiftLeft, touchY);
-//                moveX = touchX - shiftLeft;
-//                moveY = touchY - pencil.getHeight();
-
                 invalidate();
                 break;
-            case MotionEvent.ACTION_POINTER_DOWN:
-                mEventState = ZOOM;
-                Z_MODE=true;
 
-                Log.d("TWO_TOUCH", "onTouchEvent: --------Testing two touch ------");
-                secondPtrIdxZ = event.getActionIndex();
-                secondZoomPtr = event.getPointerId(secondPtrIdxZ);
-
-                //invalidate();
-                break;
             case MotionEvent.ACTION_MOVE:
-                //xDiff = Math.abs(moveX-touchX);
-                //yDiff = Math.abs(moveY-touchY);
-                if(secondPtrIdxZ == IsREMOVED) {
-                    skew(touchX, touchY);
-                    touch_move(moveX + xAdj, moveY + pencil.getHeight() - yAdj);
-                    translate.postTranslate(moveX + xAdj, moveY - yAdj);
-                    invalidate();
-                }
-                break;
-
-                /****
-                 if(touchX > mLastX) {
-                 touch_move(touchX - shiftLeft, touchY);
-                 moveX = touchX - shiftLeft;
-                 moveY = touchY - pencil.getHeight();
-                 translate.postTranslate(moveX, moveY-pencil.getHeight());
-                 }else if( touchX< mLastX){
-                 touch_move(touchX + shiftLeft, touchY);
-                 moveX = touchX + shiftLeft;
-                 moveY = touchY - pencil.getHeight();
-                 translate.postTranslate(moveX, moveY-pencil.getHeight());
-                 }
-                 mLastX = moveX;
-                 ****/
-//                touch_move(touchX-shiftLeft, touchY);
-//                moveX = touchX-shiftLeft;
-//                moveY = touchY-pencil.getHeight();
-//                invalidate();
-//                break;
-
-            // if both fingers are lifted
-            case MotionEvent.ACTION_POINTER_UP:
-                mEventState = NONE;
-                secondPtrIdxZ = IsREMOVED;
+                skew(touchX, touchY);
+                Log.d("ACT_MOV","Checking Action Move values: "+touchX+", "+touchY);
+                touch_move(moveX + xAdj, moveY + pencil.getHeight() - yAdj);
+                translate.postTranslate(moveX + xAdj, moveY - yAdj);
+                invalidate();
                 break;
 
             case MotionEvent.ACTION_UP:
                 touch_up();
-                invalidate();
-                primaryPtrIdxZ = IsREMOVED;
-                secondPtrIdxZ = IsREMOVED;
                 break;
 
             default:
                 return false;
         }
 
-
-        // calls onDraw method
-        if(mEventState== ZOOM){
-            invalidate();
-        }
         // return true;
         return gestures.onTouchEvent(event);
     }
 
-
-
-
-
-
-    /*************************************************************/
-    public void onMove(float distX, float distY){
-//        if(touchedX > mLastX) {
-//
-//        }else {
-//            touch_move(touchX + shiftLeft, touchY);
-//            moveX = touchX + shiftLeft;
-//            moveY = touchY + pencil.getHeight();
-//        }
-
-
-//        invalidate();
-    }
-
-    private Matrix animateStart;
-    private OvershootInterpolator animateInterpolator;
-    private long startTime;
-    private long endTime;
-    private float totalAnimDistX;
-    private float totalAnimDistY;
-    public void onAnimateMove(float distX, float distY, long duration){
-        animateStart = new Matrix(translate);
-        animateInterpolator = new OvershootInterpolator();
-        startTime = System.currentTimeMillis();
-        endTime = startTime + duration;
-        totalAnimDistX = distX;
-        totalAnimDistY = distY;
-        post(new Runnable() {
-            @Override
-            public void run() {
-                onAnimateStep();
-            }
-        });
-
-    }
-    private void onAnimateStep(){
-        long currentTime = System.currentTimeMillis();
-        float percentTime = (float)(currentTime - startTime)/(float)(endTime - startTime);
-        float percentDistance = animateInterpolator.getInterpolation(percentTime);
-        float currentDistX = percentDistance * totalAnimDistX;
-        float currentDistY = percentDistance * totalAnimDistY;
-        translate.set(animateStart);
-        onMove(currentDistX, currentDistY);
-        Log.d("ANIMATE ", "Percent Dist: "+percentDistance);
-    }
-
     /**************************************************/
 
-    // Start new Drawing
+    // Start new Drawing - work on side effects that are cool
     public void eraseAll() {
 
         drawCanvas.drawColor(0, PorterDuff.Mode.CLEAR);
@@ -540,37 +392,25 @@ public class PntCustView_using extends View {
         drawPath.reset();
         paths.clear();
         allPaints.clear();
- //       Log.d(PAINT_TAG, " in Erase All - new drawing??");
         invalidate();
     }
 
     // called when finger touches screen
     private void touch_start(float x, float y) {
-        //tool.drawBitmap(pencil, 500,0, null);
+        Log.d("T_START", "Checking X and Y : "+x+", "+y);
 
-         if(colorToggle) {
-            Log.d("PAINT_B4", " X, Y "+ x +", "+y);
-
+        if(colorToggle) {
+            Log.d("T_START", "In if statement -> X, Y "+ x +", "+y+" colorToggle : "+colorToggle);
             undonePaths.clear();
             undonePaints.clear();
             drawPath.reset();
             drawPath.moveTo(x, y);
             invalidate();
-
         }
-        Log.d(PAINT_TAG, " mX, mY "+ mX +", "+mY);
-        Log.d(PAINT_TAG, " X, Y "+ x +", "+y);
+        //Log.d(PAINT_TAG, " mX, mY "+ mX +", "+mY);
+        //Log.d(PAINT_TAG, " X, Y "+ x +", "+y);
         mX = x;
         mY = y;
-    }
-
-    private void fill(Point pt, int pix){
-        //FloodFillThread flood = new FloodFillThread();
-//        QueueLinearFloodFiller qFill = new QueueLinearFloodFiller(canvasBitmap,pix,100);
-//        Log.d("FILL","IN FILL");
-//        qFill.setTolerance(10);
-//        qFill.floodFill(pt.x, pt.y);
-
     }
 
     // evaluating move of user
@@ -579,9 +419,10 @@ public class PntCustView_using extends View {
         float dx = Math.abs(x - mX);
         float dy = Math.abs(y - mY);
         if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
-            Log.d("MOVE_XY", " X, Y "+ x +", "+y);
+           // Log.d("T_MOVE", "Checking X, Y and colortoggle : "+ x +", "+y+"  colorToggle-"+colorToggle);
 
             if(colorToggle) {
+              //  Log.d("T_MOVE", "In if colorToggle X, Y "+ x +", "+y+"   colorTog - : "+colorToggle);
                 drawPath.quadTo(mX, mY, ((x + mX) / 2), ((y + mY) / 2));
             }
             mX = x;
@@ -592,6 +433,10 @@ public class PntCustView_using extends View {
     // called when user lifts finger
     private void touch_up() {
         //fillToggle = !fillToggle;
+
+        Log.d("TOUCH_UP", "Color Toggle Value B4:"+ colorToggle);
+        Log.d("TOUCH_UP", "Path Size Value B4:"+ paths.size());
+
         if(colorToggle) {
 //            drawPath.lineTo(mX, mY);
 //            drawCanvas.drawPath(drawPath, drawPaint);
@@ -599,7 +444,14 @@ public class PntCustView_using extends View {
             drawPath = new Path();
             allPaints.add(drawPaint);
             drawPaint = new Paint(drawPaint);
+            invalidate();
+            Log.d("TOUCH_UP", "Color Toggle Value In:"+ colorToggle);
+            Log.d("TOUCH_UP", "Path Size Value In:"+ paths.size());
+            colorToggle = false;
         }
+        Log.d("TOUCH_UP", "Color Toggle Value AFT:"+ colorToggle);
+        Log.d("TOUCH_UP", "Path Size Value AFT:"+ paths.size());
+
         //drawPath.reset();
 
 
@@ -610,7 +462,6 @@ public class PntCustView_using extends View {
         if (paths.size() > 0) {
             undonePaths.add(paths.remove(paths.size() - 1));
             undonePaints.add(allPaints.remove(allPaints.size() - 1));
-
             invalidate();
         }
     }
@@ -629,6 +480,7 @@ public class PntCustView_using extends View {
         canvasPaint.setStrokeWidth(newSize);
 
     }
+
     public void setLastBrushSize(float lastSize){
         lastBrushSize = lastSize;
     }
@@ -639,54 +491,35 @@ public class PntCustView_using extends View {
         void onNewBrushSizeSelected(float newBrushSize);
     }
 
-
+    /**
+     * sets canvas with bitmap - toggles boolean values to allow coloring
+     * @param bitmap
+     * @param loaded
+     */
     public void setBitmap(Bitmap bitmap, boolean loaded){
         canvasBitmap = bitmap;
         imgToggle = loaded;
         setCan = loaded;
-
     }
 
-
-    /*****************************************************************/
-    // For PENCIL!!
-
+    /**
+     * Gesture detector for pencil and drawpaths
+     */
     private class GestureListener implements GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener{
 
         public static final String G_TAG = "Gesture tag ";
-
         PntCustView_using view;
         public GestureListener(PntCustView_using view){this.view = view;}
-
         @Override
-        public boolean onDoubleTap(MotionEvent motionEvent) {
-            Log.v(G_TAG, "onDoubleTap");
-            return true;
-        }
-
+        public boolean onDoubleTap(MotionEvent motionEvent) {return true;}
         @Override
-        public boolean onDown(MotionEvent motionEvent) {
-            //           Log.v(G_TAG, "onDown");
-            return true;
-        }
-
+        public boolean onDown(MotionEvent motionEvent) {return true;}
         @Override
-        public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float velX, float velY) {
-//            Log.v(G_TAG, "onFling");
-            final float distanceTimeFactor = 0.4f;
-            final float totalDistX = (distanceTimeFactor * velX/2);
-            final float totalDistY = (distanceTimeFactor * velY/2);
-            view.onAnimateMove(totalDistX, totalDistY, (long)(1000 * distanceTimeFactor));
-            return true;
-        }
-
+        public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float velX,
+                               float velY) {return true;}
         @Override
-        public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float distanceX, float distanceY) {
-////            Log.v(G_TAG, "onScroll");
-//            view.onMove(-distanceX, -distanceY);
-            return true;
-        }
-
+        public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1,
+                                float distanceX, float distanceY) {return true;}
         @Override
         public void onShowPress(MotionEvent motionEvent) {}
         @Override
