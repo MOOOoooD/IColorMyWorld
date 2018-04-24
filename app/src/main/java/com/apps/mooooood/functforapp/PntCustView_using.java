@@ -19,6 +19,7 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -111,8 +112,8 @@ public class PntCustView_using extends View {
         pAttr = attr;
         // for pencil!!!
         RelativeLayout paintLayout = findViewById(R.id.paintScreen);
-        pencil = BitmapFactory.decodeResource(getResources(), R.drawable.test_pencil);
-        //pencil = BitmapFactory.decodeResource(getResources(), R.drawable.pencil_icon);
+        //pencil = BitmapFactory.decodeResource(getResources(), R.drawable.test_pencil);
+        pencil = BitmapFactory.decodeResource(getResources(), R.drawable.pencil_icon);
         penWidth = pencil.getWidth();
         penHeight = pencil.getHeight();
         //Log.d(PAINT_TAG, "penW: "+penWidth+", penH: "+penHeight);
@@ -464,6 +465,16 @@ public class PntCustView_using extends View {
             undonePaints.add(allPaints.remove(allPaints.size() - 1));
             invalidate();
         }
+    }
+
+    public void onClickEraseDraw(boolean eraserPencil){
+        if(!eraserPencil){
+            pencil = BitmapFactory.decodeResource(getResources(), R.drawable.eraserd);
+        }else{
+            pencil = BitmapFactory.decodeResource(getResources(), R.drawable.pencil_icon);
+        }
+        invalidate();
+
     }
 
     public void onClickRedo() {

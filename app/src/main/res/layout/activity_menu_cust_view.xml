@@ -96,7 +96,8 @@
             android:layout_centerVertical="true"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="5dp"
-            android:background="@drawable/eraser"
+            android:background="@drawable/eraserd"
+            android:onClick="eraseDrawClicked"
             android:contentDescription="@string/action_erase" />
 <!--
         <Button

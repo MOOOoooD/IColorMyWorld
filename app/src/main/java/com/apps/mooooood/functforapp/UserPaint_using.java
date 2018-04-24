@@ -94,6 +94,7 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
         pbar = findViewById(R.id.pallete_bar);
         loadCanvasBtn = findViewById(R.id.load_canvas);
         loadImgBtn = findViewById(R.id.load_image);
+        menuCustView = findViewById(R.id.menu_cust_view);
 
         buttonVisibility();
 
@@ -165,6 +166,24 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
     public void redoClicked(View v){
         Toast.makeText(this, "redo line", Toast.LENGTH_SHORT).show();
         pCustomView.onClickRedo();
+    }
+
+    /**
+     * Erase/Draw - changes image on tool and button
+     * @param v
+     */
+    private boolean eraseDraw = true;
+    public void eraseDrawClicked(View v){
+        Toast.makeText(this, "erase", Toast.LENGTH_SHORT).show();
+        eraseDraw = !eraseDraw;
+        pCustomView.onClickEraseDraw(eraseDraw);
+        if(!eraseDraw) {
+
+            pCustomView.setPaint(getResources().getColor(R.color.white));
+            v.setBackgroundResource(R.drawable.pencil_icon);
+        }else{
+            v.setBackgroundResource(R.drawable.eraserd);
+        }
     }
 
     /**
@@ -484,60 +503,76 @@ For menu items on bottom tool bar
      * @param view
      */
     public void colorBlack(View view){
-        pCustomView.setPaint(getResources().getColor(R.color.black));
-        int colors [] = {Color.parseColor("#ffffff"),Color.parseColor("#000000")};
-        GradientDrawable gd = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,colors);
-        gd.setCornerRadius(8);
-        color.setBackground(gd);
+        if(eraseDraw) {
+            pCustomView.setPaint(getResources().getColor(R.color.black));
+            int colors[] = {Color.parseColor("#ffffff"), Color.parseColor("#000000")};
+            GradientDrawable gd = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors);
+            gd.setCornerRadius(8);
+            color.setBackground(gd);
+        }
     }
     public void colorBrown(View view){
-        pCustomView.setPaint(getResources().getColor(R.color.brown));
-        int colors [] = {Color.parseColor("#ffffff"),Color.parseColor("#8B4513")};
-        GradientDrawable gd = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,colors);
-        gd.setCornerRadius(8);
-        color.setBackground(gd);
+        if(eraseDraw) {
+            pCustomView.setPaint(getResources().getColor(R.color.brown));
+            int colors[] = {Color.parseColor("#ffffff"), Color.parseColor("#8B4513")};
+            GradientDrawable gd = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors);
+            gd.setCornerRadius(8);
+            color.setBackground(gd);
+        }
     }
     public void colorBlue(View view){
-        pCustomView.setPaint(getResources().getColor(R.color.blue));
-        int colors [] = {Color.parseColor("#ffffff"),Color.parseColor("#0000FF")};
-        GradientDrawable gd = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,colors);
-        gd.setCornerRadius(8);
-        color.setBackground(gd);
+        if(eraseDraw) {
+            pCustomView.setPaint(getResources().getColor(R.color.blue));
+            int colors[] = {Color.parseColor("#ffffff"), Color.parseColor("#0000FF")};
+            GradientDrawable gd = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors);
+            gd.setCornerRadius(8);
+            color.setBackground(gd);
+        }
     }
     public void colorPurple(View view){
-        pCustomView.setPaint(getResources().getColor(R.color.purple));
-        int colors [] = {Color.parseColor("#ffffff"),Color.parseColor("#FF00FF")};
-        GradientDrawable gd = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,colors);
-        gd.setCornerRadius(8);
-        color.setBackground(gd);
+        if(eraseDraw) {
+            pCustomView.setPaint(getResources().getColor(R.color.purple));
+            int colors[] = {Color.parseColor("#ffffff"), Color.parseColor("#FF00FF")};
+            GradientDrawable gd = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors);
+            gd.setCornerRadius(8);
+            color.setBackground(gd);
+        }
     }
     public void colorRed(View view){
-        pCustomView.setPaint(getResources().getColor(R.color.red));
-        int colors [] = {Color.parseColor("#ffffff"),Color.parseColor("#FF0000")};
-        GradientDrawable gd = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,colors);
-        gd.setCornerRadius(8);
-        color.setBackground(gd);
+        if(eraseDraw) {
+            pCustomView.setPaint(getResources().getColor(R.color.red));
+            int colors[] = {Color.parseColor("#ffffff"), Color.parseColor("#FF0000")};
+            GradientDrawable gd = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors);
+            gd.setCornerRadius(8);
+            color.setBackground(gd);
+        }
     }
     public void colorOrange(View view){
-        pCustomView.setPaint(getResources().getColor(R.color.orange));
-        int colors [] = {Color.parseColor("#ffffff"),Color.parseColor("#ffa500")};
-        GradientDrawable gd = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,colors);
-        gd.setCornerRadius(8);
-        color.setBackground(gd);
+        if(eraseDraw) {
+            pCustomView.setPaint(getResources().getColor(R.color.orange));
+            int colors[] = {Color.parseColor("#ffffff"), Color.parseColor("#ffa500")};
+            GradientDrawable gd = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors);
+            gd.setCornerRadius(8);
+            color.setBackground(gd);
+        }
     }
     public void colorYellow(View view){
-        pCustomView.setPaint(getResources().getColor(R.color.yellow));
-        int colors [] = {Color.parseColor("#ffffff"),Color.parseColor("#FFFF00")};
-        GradientDrawable gd = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,colors);
-        gd.setCornerRadius(8);
-        color.setBackground(gd);
+        if(eraseDraw) {
+            pCustomView.setPaint(getResources().getColor(R.color.yellow));
+            int colors[] = {Color.parseColor("#ffffff"), Color.parseColor("#FFFF00")};
+            GradientDrawable gd = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors);
+            gd.setCornerRadius(8);
+            color.setBackground(gd);
+        }
     }
     public void colorGreen(View view){
-        pCustomView.setPaint(getResources().getColor(R.color.green));
-        int colors [] = {Color.parseColor("#ffffff"),Color.parseColor("#00FF00")};
-        GradientDrawable gd = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,colors);
-        gd.setCornerRadius(8);
-        color.setBackground(gd);
+        if(eraseDraw) {
+            pCustomView.setPaint(getResources().getColor(R.color.green));
+            int colors[] = {Color.parseColor("#ffffff"), Color.parseColor("#00FF00")};
+            GradientDrawable gd = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors);
+            gd.setCornerRadius(8);
+            color.setBackground(gd);
+        }
     }
 
 
