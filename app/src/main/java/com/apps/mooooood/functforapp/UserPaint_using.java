@@ -664,6 +664,19 @@ For menu items on bottom tool bar
             imgHeight = pCustomView.canvasHeight;
             Log.d(USER_PAINT, "P Cust in UP width: "+imgWidth+"  height: "+imgHeight);
             Log.d(USER_PAINT, "p-cust width: "+loadedImg.width()+"  height: "+loadedImg.height());
+            int setMaxW = 1365;
+            int setMaxH = 1024;
+            double thresh;
+            double kernalSz;
+
+            if(imgWidth > setMaxW|| imgHeight>setMaxH){
+                thresh = 9;
+                kernalSz = 3;
+            }else{
+                thresh = 17;
+                kernalSz = 3;
+            }
+            Log.d("Thresh: ","CUrrent Thresh - "+thresh);
 
 
             if(loadedImg.width()>imgWidth||loadedImg.height()>imgHeight){
@@ -672,7 +685,9 @@ For menu items on bottom tool bar
 
                 double scale;
                 //double scaleH;
-                if(((double)imgWidth/(double)loadedImg.width()) <1.0) {
+                if((double)imgWidth > setMaxW && (double)loadedImg.width()>setMaxW){
+                    scale = ((double)setMaxW/(double)loadedImg.width());
+                }else if(((double)imgWidth/(double)loadedImg.width()) <1.0) {
                     scale = ((double) imgWidth / (double) loadedImg.width());
                     //scaleH = ((double) imgWidth / (double) loadedImg.height());
                 }else{
@@ -716,13 +731,13 @@ For menu items on bottom tool bar
 
             // using with Laplacian
             //Imgproc.GaussianBlur(loadedImg, loadedImg, new Size(5,5),0,0,Core.BORDER_DEFAULT);
-            Imgproc.GaussianBlur(loadedImg, loadedImg, new Size(3,3),0,0,Core.BORDER_DEFAULT);
+            Imgproc.GaussianBlur(loadedImg, loadedImg, new Size(5,5),0,0,Core.BORDER_DEFAULT);
             Imgproc.cvtColor(loadedImg, loadedImg, Imgproc.COLOR_RGB2GRAY);
 //            Utils.matToBitmap(loadedImg, bitmap);
             Log.d("IMG_TYPE","Type = "+loadedImg.type());
 
             Mat bLap = new Mat();
-            Imgproc.Laplacian(loadedImg, bLap, CvType.CV_16S,3,1,0,Core.BORDER_DEFAULT);
+            Imgproc.Laplacian(loadedImg, bLap, CvType.CV_16S,(int)kernalSz,1,0,Core.BORDER_DEFAULT);
             loadedImg.release();
 
             Mat lapImg = new Mat();
@@ -733,7 +748,8 @@ For menu items on bottom tool bar
             Log.d("IMG_TYPE","Lap_Type_After = "+lapImg.type());
             Log.d("IMG_TYPE","Img_Values_2 = "+lapImg);
             // invert colors
-            Imgproc.threshold(lapImg, lapImg, 17.0, 255, Imgproc.THRESH_BINARY_INV);
+
+            Imgproc.threshold(lapImg, lapImg, thresh, 255, Imgproc.THRESH_BINARY_INV);
             int imgCH = lapImg.channels();
             Log.d(TAG, "Pixel val "+ lapImg.type()+ " chan "+ lapImg.channels());
 
