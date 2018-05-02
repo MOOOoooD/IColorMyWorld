@@ -54,7 +54,8 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
     //private FloatingActionButton floatActBtn;
     private PntCustView_using pCustomView;
     Button brownBtn, blueBtn, purpleBtn, redBtn, orangeBtn, yellowBtn, greenBtn;
-    Button loadCanvasBtn, loadImgBtn;
+    //Button loadCanvasBtn;
+    Button loadImgBtn;
 
 
     // from activity_menu_cust_view
@@ -92,7 +93,7 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
         pCustomView = findViewById(R.id.paint_custom_view);
         color= findViewById(R.id.color_button);
         pbar = findViewById(R.id.pallete_bar);
-        loadCanvasBtn = findViewById(R.id.load_canvas);
+        //loadCanvasBtn = findViewById(R.id.load_canvas);
         loadImgBtn = findViewById(R.id.load_image);
         menuCustView = findViewById(R.id.menu_cust_view);
 
@@ -115,7 +116,7 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
                         //pCustomView.invalidate();
                         break;
                     case MotionEvent.ACTION_UP:
-                        //pCustomView.colorToggle = false;
+                        pCustomView.colorToggle = false;
                         Log.d("COLOR_","In ColorBtn Up: "+pCustomView.colorToggle);
                         view.performClick();
                         //pCustomView.invalidate();
@@ -179,10 +180,13 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
         pCustomView.onClickEraseDraw(eraseDraw);
         if(!eraseDraw) {
 
-            pCustomView.setPaint(getResources().getColor(R.color.white));
+            pCustomView.setLastPaintColor();
+            pCustomView.setPaint(getResources().getColor(R.color.erase));
+
             v.setBackgroundResource(R.drawable.pencil_icon);
         }else{
             v.setBackgroundResource(R.drawable.eraserd);
+            pCustomView.setPaint(pCustomView.getLastPaintColor());
         }
     }
 
@@ -779,7 +783,7 @@ For menu items on bottom tool bar
 
     private void buttonVisibility(){
         loadImgBtn.setVisibility(loadImgBtn.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
-        loadCanvasBtn.setVisibility(loadCanvasBtn.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+        //loadCanvasBtn.setVisibility(loadCanvasBtn.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
     }
 
 }

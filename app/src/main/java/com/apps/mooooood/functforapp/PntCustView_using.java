@@ -48,7 +48,8 @@ public class PntCustView_using extends View {
     // defines how to draw
     private Paint drawPaint;
     // initial color
-    private int paintColor = 0xFF00ABAD;
+    private int paintColor;
+    private int lastPaintColor;
     //canvas-holding pen, holds drawings, transfers to view
     private Canvas drawCanvas;
     // canvas - bitmap
@@ -98,6 +99,8 @@ public class PntCustView_using extends View {
     Context needContext;
 
 
+    boolean moveTo = true;
+
 
     // adding path list for drawing and undoing paths
     private ArrayList<Path> paths = new ArrayList<Path>();
@@ -123,6 +126,8 @@ public class PntCustView_using extends View {
         gestures = new GestureDetector(context, new GestureListener(PntCustView_using.this));
         detector = new ScaleGestureDetector(context,new zScaleGestureListener());
 
+        paintColor = getResources().getColor(R.color.red);
+        lastPaintColor = paintColor;
         needContext = context;
 
         //Log.d(PAINT_TAG, "in Paint View constuctor");
@@ -148,11 +153,7 @@ public class PntCustView_using extends View {
         drawPaint.setStyle(Paint.Style.STROKE);
         drawPaint.setStrokeJoin(Paint.Join.ROUND);
         drawPaint.setStrokeCap(Paint.Cap.ROUND);
-
-
     }
-
-
 
     private float scaleFactor = 1.f;
     private static float MIN_ZOOM = .6f;
@@ -179,43 +180,44 @@ public class PntCustView_using extends View {
 
 //    //Bitmap saveImage;
     public Bitmap getCanvasBitmap(){
-
-
         return canvasBitmap;
-
     }
 
+    boolean paintChange = false;
+
+    boolean erasing = false;
+    /**
+     * when color is changed, when color button is selected
+     * store current drawpath and paint and create new ones so that
+     * existing path does not change color
+     * @param color
+     */
     public void setPaint(int color){
 
-        //Log.d("Color ", "C ="+color);
-
         paintColor = color;
+        paintChange=true;
+        paths.add(drawPath);
+        drawPath = new Path();
+        allPaints.add(drawPaint);
+        drawPaint = new Paint(drawPaint);
         drawPaint.setColor(paintColor);
+    }
+    public void setLastPaintColor() {
+        lastPaintColor = paintColor;
+    }
+    public int getLastPaintColor(){
+        return lastPaintColor;
     }
 
     private ScaleGestureDetector detector;
 
     public void setCanvas(){
         drawCanvas = new Canvas(canvasBitmap);
-
-
         canvasPaint = new Paint(Paint.DITHER_FLAG);
-
-        // added to on create
-        //detector = new ScaleGestureDetector(needContext,new zScaleGestureListener());
-
-        // added to drag pencil
-
-//        post(new Runnable() {
-//            public void run(){
-//              //  Log.d("RUNTAG","Width "+ PntCustView_using.this.getMeasuredWidth());
-//              //  Log.d("RUNTAG","Height "+ PntCustView_using.this.getMeasuredHeight());
-//            }
-//        });
+        invalidate();
     }
 
 
-    float strokWid=8;
     Paint p = new Paint();
     boolean t_up = false;
     Rect s = new Rect();
@@ -238,25 +240,24 @@ public class PntCustView_using extends View {
                 p.setColor(Color.WHITE);
                 canvas.drawRect(centerImg_W,centerImg_H,imgWidth+centerImg_W,imgHeight+centerImg_H,p);
                 s.set(centerImg_W,centerImg_H,imgWidth+centerImg_W,imgHeight+centerImg_H);
-
-
             }
 
 
             canvas.drawRect(centerImg_W,centerImg_H,imgWidth+centerImg_W,imgHeight+centerImg_H,p);
 
-//            centerImg_W = 0;
-//            centerImg_H = 0;
-
             // stores drawpaths - color paths
             for (int i = 0; i < paths.size(); i++) {
                 canvas.drawPath(paths.get(i), allPaints.get(i));
             }
-            //drawPaint.setColor(paintColor);
-            //canvas.drawBitmap(canvasBitmap, centerImg_W, centerImg_H, null);
 
             // draws path behind canvas bitmap, and under current drawpath
-            drawPaint.setStrokeWidth(strokWid);
+            if(erasing){
+                Log.d("ERASE-", "Checking erase "+erasing);
+                drawPaint.setStrokeWidth(getResources().getInteger(R.integer.medium_size));
+            }else {
+                drawPaint.setStrokeWidth(getResources().getInteger(R.integer.size_small));
+            }
+            //drawPaint.setStrokeWidth(strokWid);
             canvas.drawPath(drawPath, drawPaint);
 
 
@@ -267,16 +268,11 @@ public class PntCustView_using extends View {
             if(!save) {
                 canvas.drawBitmap(pencil, moveX, moveY, null);
             }
-
         }
         if(t_up){
             canvas.drawBitmap(canvasBitmap, s, s, null);
             t_up = !t_up;
         }
-
-
-
-
     }
 
 
@@ -348,26 +344,37 @@ public class PntCustView_using extends View {
         // respond to down, move and up events
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                xDiff = Math.abs(moveX-touchX);
-                yDiff = Math.abs(moveY-touchY);
+                    xDiff = Math.abs(moveX - touchX);
+                    yDiff = Math.abs(moveY - touchY);
 
 
-                skew(touchX, touchY);
-                touch_start(moveX + xAdj, moveY + pencil.getHeight() - yAdj);
-                Log.d("ACTDOWN", " checking x and y : "+moveX+", "+moveY);
-              //  Log.d("CKWD", " Width "+canvasBitmap.getWidth());
-                translate.postTranslate(moveX+xAdj, moveY-yAdj);
-                // need to be able to access the colorImage function in OpenCV_Paint_Image and set the
-                // color - probably in the touch_move
 
-                invalidate();
+                    skew(touchX, touchY);
+                    if(!erasing) {
+                        touch_start(moveX + xAdj, moveY + pencil.getHeight() - yAdj);
+                        Log.d("ACTDOWN", " checking x and y : " + moveX + ", " + moveY);
+                        //  Log.d("CKWD", " Width "+canvasBitmap.getWidth());
+                        translate.postTranslate(moveX + xAdj, moveY - yAdj);
+                        // need to be able to access the colorImage function in OpenCV_Paint_Image and set the
+                        // color - probably in the touch_move
+                    }else{
+                        touch_start(moveX + xAdj + 20, moveY + pencil.getHeight() - yAdj);
+                        Log.d("ACTDOWN", " checking x and y : " + moveX + ", " + moveY);
+                        //  Log.d("CKWD", " Width "+canvasBitmap.getWidth());
+                        translate.postTranslate(moveX + xAdj + 20, moveY - yAdj);
+                    }
+                    invalidate();
                 break;
 
             case MotionEvent.ACTION_MOVE:
                 skew(touchX, touchY);
-                Log.d("ACT_MOV","Checking Action Move values: "+touchX+", "+touchY);
-                touch_move(moveX + xAdj, moveY + pencil.getHeight() - yAdj);
-                translate.postTranslate(moveX + xAdj, moveY - yAdj);
+                if(!erasing) {
+                    touch_move(moveX + xAdj, moveY + pencil.getHeight() - yAdj);
+                    translate.postTranslate(moveX + xAdj, moveY - yAdj);
+                }else{
+                    touch_move(moveX + xAdj + 20, moveY + pencil.getHeight() - yAdj);
+                    translate.postTranslate(moveX + xAdj + 20, moveY - yAdj);
+                }
                 invalidate();
                 break;
 
@@ -406,10 +413,7 @@ public class PntCustView_using extends View {
             undonePaints.clear();
             drawPath.reset();
             drawPath.moveTo(x, y);
-            invalidate();
         }
-        //Log.d(PAINT_TAG, " mX, mY "+ mX +", "+mY);
-        //Log.d(PAINT_TAG, " X, Y "+ x +", "+y);
         mX = x;
         mY = y;
     }
@@ -423,11 +427,19 @@ public class PntCustView_using extends View {
            // Log.d("T_MOVE", "Checking X, Y and colortoggle : "+ x +", "+y+"  colorToggle-"+colorToggle);
 
             if(colorToggle) {
-              //  Log.d("T_MOVE", "In if colorToggle X, Y "+ x +", "+y+"   colorTog - : "+colorToggle);
+                Log.d("T_MOVE", "In if colorToggle dX, dY "+ dx +", "+dy+"   colorTog - : "+colorToggle+" mx, my "+ mX+", "+mY+"  x, y "+x+", "+y);
+
+                if(moveTo) {
+                    drawPath.moveTo(mX, mY);
+                    moveTo=false;
+                }
                 drawPath.quadTo(mX, mY, ((x + mX) / 2), ((y + mY) / 2));
             }
             mX = x;
             mY = y;
+            if(!colorToggle){
+                moveTo=true;
+            }
         }
     }
 
@@ -448,8 +460,9 @@ public class PntCustView_using extends View {
             invalidate();
             Log.d("TOUCH_UP", "Color Toggle Value In:"+ colorToggle);
             Log.d("TOUCH_UP", "Path Size Value In:"+ paths.size());
-            colorToggle = false;
+            //colorToggle = false;
         }
+        moveTo = true;
         Log.d("TOUCH_UP", "Color Toggle Value AFT:"+ colorToggle);
         Log.d("TOUCH_UP", "Path Size Value AFT:"+ paths.size());
 
@@ -469,8 +482,10 @@ public class PntCustView_using extends View {
 
     public void onClickEraseDraw(boolean eraserPencil){
         if(!eraserPencil){
+            erasing = true;
             pencil = BitmapFactory.decodeResource(getResources(), R.drawable.eraserd);
         }else{
+            erasing = false;
             pencil = BitmapFactory.decodeResource(getResources(), R.drawable.pencil_icon);
         }
         invalidate();
