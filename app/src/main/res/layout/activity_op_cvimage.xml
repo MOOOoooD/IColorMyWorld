@@ -26,6 +26,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_toEndOf="@+id/can_load_btn"
+            android:fontFamily="@font/purisa_bold"
+            android:textAllCaps="false"
             android:text="@string/sob_load_btn_txt" />
 
         <Button
@@ -34,6 +36,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_toEndOf="@+id/lap_load_btn"
+            android:fontFamily="@font/purisa_bold"
+            android:textAllCaps="false"
             android:text="@string/can_load_btn_txt" />
 
         <Button
@@ -42,6 +46,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
+            android:fontFamily="@font/purisa_bold"
+            android:textAllCaps="false"
             android:text="@string/lap_load_btn_txt" />
 
         <Button
@@ -51,6 +57,8 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:onClick="backToMain"
+            android:fontFamily="@font/purisa_bold"
+            android:textAllCaps="false"
             android:text="@string/back_to_main" />
 
         <ImageView
@@ -130,6 +138,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
+            android:fontFamily="@font/purisa_bold"
+            android:textAllCaps="false"
             android:onClick="dragMode"
             android:text="@string/drag_mode_btn_true" />
 

@@ -10,9 +10,9 @@
     <string name="load_img_btn"><![CDATA[Press to load image\nfrom gallery to start coloring]]> </string>
     <string name="load_canvas_btn"><![CDATA[Press to load clean canvas\nto freestyle draw]]></string>
 
-    <string name="opcv_img_btn">Go to OpenCV Image Load</string>
+    <string name="opcv_img_btn">OpenCV edge Functions</string>
     <string name="gallery_img">Loaded Image</string>
-    <string name="pnt_btn">Go to Paint Activity</string>
+    <string name="pnt_btn">Click here to Color</string>
     <string name="pnt_opcv_btn">Go to OpenCV Paint</string>
     <string name="close_app">Close App</string>
 
