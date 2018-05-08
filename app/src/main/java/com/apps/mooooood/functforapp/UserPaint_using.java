@@ -205,7 +205,7 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
                 deleteDialog();
                 return true;
             case R.id.action_share:
-                Toast.makeText(this, "Share clicked", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Share selected", Toast.LENGTH_SHORT).show();
                 sharePainting();
                 return true;
             case R.id.action_save:
@@ -333,6 +333,8 @@ For menu items on bottom tool bar
             FileOutputStream saveOut = new FileOutputStream(cmvSaveImg);
 
             int startW, startH, endW, endH;
+            //int startW=481, startH=302, endW=1365, endH=767;
+            //int startW=162, startH=6, endW=640, endH=480;
 
             /**
              * if img width and height is less than actual size
@@ -342,19 +344,27 @@ For menu items on bottom tool bar
              *
              */
             if(pCustomView.centerImg_W < 0){
+                Log.d("CIMGw<0", " pcustView Cimg W: "+pCustomView.centerImg_W);
                 startW = 0;
                 endW = pCustomView.getWidth();
             }else{
+                Log.d("CIMGELS", " pcustView Cimg W else: "+pCustomView.centerImg_W);
+
                 startW = pCustomView.centerImg_W;
                 endW = pCustomView.imgWidth;
             }
             if(pCustomView.centerImg_H<0){
+                Log.d("CIMGh<0", " pcustView Cimg H: "+pCustomView.centerImg_H);
+
                 startH = 0;
                 endH = pCustomView.getHeight();
             }else{
+                Log.d("CIMGELS", " pcustView Cimg H else: "+pCustomView.centerImg_H);
+
                 startH = pCustomView.centerImg_H;
                 endH = pCustomView.imgHeight;
             }
+            Log.d("SAVE-T", "savePainting: check coordinates: Start  "+startW+", "+startH+"  End: "+endH+", "+endW);
 
             // save only the range of the colored bitmap
              Bitmap savImg = Bitmap.createBitmap(pCustomView.getDrawingCache(),startW, startH,endW,endH);
@@ -638,6 +648,17 @@ For menu items on bottom tool bar
 
     }
 
+
+    /**
+     * Cloning objects - this is used to ensure date pointer passed is not incremented
+     * can be used for deep copying other objects
+     * @return
+     * @throws CloneNotSupportedException
+     */
+    protected Object clone()throws CloneNotSupportedException{
+        return super.clone();
+    }
+
     // img resize variables
     int width = 0;
     int height = 0;
@@ -672,14 +693,15 @@ For menu items on bottom tool bar
             int setMaxH = 1024;
             double thresh;
             double kernalSz;
-
-            if(imgWidth > setMaxW|| imgHeight>setMaxH){
                 thresh = 9;
                 kernalSz = 3;
-            }else{
-                thresh = 17;
-                kernalSz = 3;
-            }
+//            if(imgWidth > setMaxW || imgHeight>setMaxH){
+//                thresh = 9;
+//                kernalSz = 3;
+//            }else{
+//                thresh = 17;
+//                kernalSz = 3;
+//            }
             Log.d("Thresh: ","CUrrent Thresh - "+thresh);
 
 
@@ -689,16 +711,21 @@ For menu items on bottom tool bar
 
                 double scale;
                 //double scaleH;
-                if((double)imgWidth > setMaxW && (double)loadedImg.width()>setMaxW){
+                if((double)imgWidth > setMaxW && (double)loadedImg.width() > setMaxW){
                     scale = ((double)setMaxW/(double)loadedImg.width());
-                }else if(((double)imgWidth/(double)loadedImg.width()) <1.0) {
+                }
+                else if((double)imgHeight > setMaxW && (double)loadedImg.height() > setMaxH){
+                    scale = ((double)setMaxH/(double)loadedImg.height());
+                }
+                else if(((double)imgWidth/(double)loadedImg.width()) <1.0) {
                     scale = ((double) imgWidth / (double) loadedImg.width());
                     //scaleH = ((double) imgWidth / (double) loadedImg.height());
-                }else{
+                }
+                else{
                     //scaleW = ((double) imgHeight / (double) loadedImg.width());
                     scale = ((double) imgHeight / (double) loadedImg.height());
                 }
-                Log.d(USER_PAINT, "loadedn width: "+loadedImg.width()+"  height: "+loadedImg.height());
+                Log.d(USER_PAINT, "loaded width: "+loadedImg.width()+"  height: "+loadedImg.height());
 
                 //resize variables
                 //width = (int)(Math.min(scaleW,scaleH) * loadedImg.width());
@@ -736,16 +763,78 @@ For menu items on bottom tool bar
             // using with Laplacian
             //Imgproc.GaussianBlur(loadedImg, loadedImg, new Size(5,5),0,0,Core.BORDER_DEFAULT);
             Imgproc.GaussianBlur(loadedImg, loadedImg, new Size(5,5),0,0,Core.BORDER_DEFAULT);
+
+
+            /**
+             * setting bit map through stages - Gauss
+             */
+
+            try {
+                bitmap = Bitmap.createBitmap(loadedImg.width(), loadedImg.height(),Bitmap.Config.ARGB_8888 );
+                Utils.matToBitmap(loadedImg, bitmap);
+                pCustomView.setBitmap(bitmap, true);
+                pCustomView.invalidate();
+                savePainting();
+                Log.d("GAUS_E", "Checking flags "+pCustomView.imgToggle);
+                Log.d("GAUS_E", "Checking flags "+pCustomView.setCan);
+                Log.d("GAUS_E", "Checking flags "+pCustomView.t_up);
+                //Thread.sleep(2500);
+
+            }catch (Exception e){
+                Log.d("ERR-GA", " Gauss Error "+e);
+            }
+
+
             Imgproc.cvtColor(loadedImg, loadedImg, Imgproc.COLOR_RGB2GRAY);
 //            Utils.matToBitmap(loadedImg, bitmap);
             Log.d("IMG_TYPE","Type = "+loadedImg.type());
+
+
+            /**
+             * setting bit map through stages - Grayscale
+             */
+
+            try {
+                bitmap = Bitmap.createBitmap(loadedImg.width(), loadedImg.height(),Bitmap.Config.ARGB_8888 );
+                Utils.matToBitmap(loadedImg, bitmap);
+                pCustomView.setBitmap(bitmap, true);
+                pCustomView.invalidate();
+                savePainting();
+                Log.d("GRAY_E", "Checking flags "+pCustomView.imgToggle);
+                Log.d("GRAY_E", "Checking flags "+pCustomView.setCan);
+                Log.d("GRAY_E", "Checking flags "+pCustomView.t_up);
+                //Thread.sleep(2500);
+            }catch (Exception e){
+                Log.d("ERR-GR", " GRAY Error "+e);
+            }
+
+
+
+
 
             Mat bLap = new Mat();
             Imgproc.Laplacian(loadedImg, bLap, CvType.CV_16S,(int)kernalSz,1,0,Core.BORDER_DEFAULT);
             loadedImg.release();
 
+
             Mat lapImg = new Mat();
             bLap.convertTo(lapImg,CvType.CV_8UC4);
+
+            /**
+             * setting bit map through stages - Lap
+             */
+            try {
+
+                bitmap = Bitmap.createBitmap(lapImg.width(), lapImg.height(),Bitmap.Config.ARGB_8888 );
+                Utils.matToBitmap(lapImg, bitmap);
+                pCustomView.setBitmap(bitmap, true);
+                pCustomView.invalidate();
+                savePainting();
+                //Thread.sleep(2500);
+            }catch (Exception e){
+                Log.d("ERR-LA", " LAP Error "+e);
+            }
+
             bLap.release();
 
 //            //Core.convertScaleAbs(loadedImg, lapImg);
@@ -756,6 +845,22 @@ For menu items on bottom tool bar
             Imgproc.threshold(lapImg, lapImg, thresh, 255, Imgproc.THRESH_BINARY_INV);
             int imgCH = lapImg.channels();
             Log.d(TAG, "Pixel val "+ lapImg.type()+ " chan "+ lapImg.channels());
+
+            /**
+             * setting bit map through stages - Threshold binary inverse
+             */
+            try {
+                Log.d("ERR-BI", " BINARY Error ");
+
+                bitmap = Bitmap.createBitmap(lapImg.width(), lapImg.height(),Bitmap.Config.ARGB_8888 );
+                Utils.matToBitmap(lapImg, bitmap);
+                pCustomView.setBitmap(bitmap, true);
+                pCustomView.invalidate();
+                savePainting();
+                //Thread.sleep(2500);
+            }catch (Exception e){
+                Log.d("ERR-BI", " BINARY Error "+e);
+            }
 
             //    Core.bitwise_not(lapImg, lapImg);
             //loadedImg.release();

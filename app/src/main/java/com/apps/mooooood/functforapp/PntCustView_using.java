@@ -212,6 +212,7 @@ public class PntCustView_using extends View {
     private ScaleGestureDetector detector;
 
     public void setCanvas(){
+        Log.d("SET_CAN","checking heights "+centerImg_W+" , "+centerImg_H+" , "+imgHeight+" , "+ imgWidth);
         drawCanvas = new Canvas(canvasBitmap);
         canvasPaint = new Paint(Paint.DITHER_FLAG);
         invalidate();
