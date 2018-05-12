@@ -39,55 +39,73 @@ import org.opencv.imgproc.Imgproc;
 
 public class OpCVImage_using extends AppCompatActivity{
 
-    Button dragModeBtn;
 
+    // zoom/drag buttons
+    Button dragModeBtn;
     ImageButton zoomIn;
     ImageButton zoomOut;
     ImageButton dragUp;
     ImageButton dragDown;
     ImageButton dragLeft;
     ImageButton dragRight;
+
+    // booleans to determine which method to use to process image
     boolean lap = false;
     boolean can = false;
 
+    // Log tag consants
     private static final String SOBELTAG = "SOBEL";
     private static final String CANNYTAG = "CANNY";
     private static final String LAPTAG = "LAPLACE";
     private static final String MERGEDTAG = "SOB-CAN";
-
-    private static int RESULT_LOAD_IMG = 1;
     private static final String  TAG = "CheckOpCVImage_using";
     private static final String CHECK_TAG = "Check-OpCVImage_using ";
-    private static final String HWCHECK = "OpCVImage_using-HW ";
 
+    // Activity result intent result code
+    private static int RESULT_LOAD_IMG = 1;
+
+    // zoom/scale float variables
     private static float MIN_ZOOM = .6f;
     private static float MAX_ZOOM = 6f;
     private static float SCALE_CHANGE = 0.4f;
     private static float SHIFT_UD = 30F;
     private static float SHIFT_LR = 40F;
     private float scaleFactor = 1.f;
-    //private float btnScaleFactor = 1.f;
 
-    // Use in conjnction with pinch to zoom - scale gesture
-    //private float previousScaleFactor = 0.0f;
+    // Gesture detector variable
     private ScaleGestureDetector detector;
 
+    // Event listener state variable
+    private int mEventState;
 
     boolean DRAG_MODE = true;
     private final static int NONE = 0;
     private final static int PAN = 1;
     private final static int ZOOM = 2;
-    private int mEventState;
+
+    // screen coordinate values for move and scale
     private float mStartX = 0;
     private float mStartY = 0;
     private float prevTranslateX = 0;
     private float prevTranslateY = 0;
-
     private float mTranslateX = 0;
     private float mTranslateY = 0;
 
+
+    // initialize the pointers for onTouch events
+    final int IsREMOVED = -1;
+    int primaryPtr = IsREMOVED;
+    int primaryPtrIndex = IsREMOVED;
+    int secondPtr = IsREMOVED;
+    int secondPtrIndex = IsREMOVED;
+
+    // Object to store converted image for screen display
     ImageView loaded_img;
 
+    /**
+     * Callbach method to load and validate OpenCV library has loaded successfully
+     *      to/for this activity
+     */
     private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
 
         @Override
@@ -108,10 +126,13 @@ public class OpCVImage_using extends AppCompatActivity{
         }
     };
 
+    /**
+     *
+     *
+     */
     @Override
     public void onResume()
     {
-
         super.onResume();
         Log.d(CHECK_TAG, "in onResume");
 
@@ -123,18 +144,24 @@ public class OpCVImage_using extends AppCompatActivity{
             mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
         }
         Log.d(CHECK_TAG, "onResume, after if ");
-
     }
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_op_cvimage);
+
+        // loades OpenCV library
         System.loadLibrary("opencv_java3");
+
+        // assigns ids to button view objects
         Button lap_Btn = findViewById(R.id.lap_load_btn);
         Button can_Btn = findViewById(R.id.can_load_btn);
         Button sob_Btn = findViewById(R.id.sobel_load_btn);
-
         dragModeBtn = findViewById(R.id.drag_mode_switch_btn);
         zoomIn = findViewById(R.id.zoom_in_btn);
         zoomOut = findViewById(R.id.zoom_out_btn);
@@ -143,6 +170,8 @@ public class OpCVImage_using extends AppCompatActivity{
         dragLeft = findViewById(R.id.img_left_btn);
         dragRight = findViewById(R.id.img_right_btn);
 
+        // setting onclick listener for lap_load_btn - sets lap=true and can=false, so
+        // laplacian method would be called on image result
         lap_Btn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -153,6 +182,8 @@ public class OpCVImage_using extends AppCompatActivity{
             }
         });
 
+        // setting onclick listener for can_load_btn - sets lap=false and can=true, so
+        // canny method would be called on image result
         can_Btn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -163,6 +194,8 @@ public class OpCVImage_using extends AppCompatActivity{
             }
         });
 
+        // setting onclick listener for sobel_load_btn - sets lap and can boolean false, so
+        // sobel method would be called on image result
         sob_Btn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -173,33 +206,32 @@ public class OpCVImage_using extends AppCompatActivity{
             }
         });
 
-
+        // image view object to hold loaded image
         loaded_img = (ImageView) findViewById(R.id.loaded_image);
 
-
-        // Use in conjunciton with pinch to zoom - gesture detector
+        // sets scalegesture detector to listen to gesture events on screen
         detector = new ScaleGestureDetector(this, new MySimpleOnScaleGestureListener(loaded_img));
-
     }
 
-
-
-    final int IsREMOVED = -1;
-
-    // initialize the pointers for onTouch events
-    int primaryPtr = IsREMOVED;
-    int primaryPtrIndex = IsREMOVED;
-    int secondPtr = IsREMOVED;
-    int secondPtrIndex = IsREMOVED;
-
+    /**
+     * onToucheEvent takes in motionEvent 'heard' and passes event to switch case to process
+     *      course of action based on event
+     *      always returns true
+     * @param e
+     * @return
+     */
     @Override
     public boolean onTouchEvent(MotionEvent e){
 
-
         switch (e.getActionMasked()) {
+
+            // switch case to register primary pointer to move image, if single touchevent
+            // point is on imageView
+            // gets location of touch point, and calculates the difference between last
+            // point touched and current point so that image does not jump when
+            // new point is touched on screen
             case MotionEvent.ACTION_DOWN:
                 DRAG_MODE = true;
-
                 // Primary pointer is registered
                 primaryPtrIndex = e.getActionIndex();
                 primaryPtr = e.getPointerId(primaryPtrIndex);
@@ -209,27 +241,35 @@ public class OpCVImage_using extends AppCompatActivity{
                 }
                 break;
 
-                // Secondary pointer is registered
+            // switch case to register secondary pointer for multi-touch, if more than
+            // one touchevent point is on imageView
             case MotionEvent.ACTION_POINTER_DOWN:
                 mEventState = ZOOM;
+                // Secondary pointer is registered
                 secondPtrIndex = e.getActionIndex();
                 secondPtr = e.getPointerId(secondPtrIndex);
                 break;
 
+            // switch case to shift image based on movement of single touchevent
+            // on imageView - used for image dragging
             case MotionEvent.ACTION_MOVE:
                 mEventState = PAN;
-
                 if (primaryPtrIndex != IsREMOVED) {
                     mTranslateX = e.getX() - mStartX;
                     mTranslateY = e.getY() - mStartY;
                 }
                 break;
 
+            // switch case clear registered touchevents for multi-touch detected
             case MotionEvent.ACTION_POINTER_UP:
                 primaryPtrIndex = IsREMOVED;
                 secondPtrIndex = IsREMOVED;
                 break;
 
+            // switch case clear registered touchevents for single touch removed from
+            // screen - stores current coordinate where single touch is lifted from screen
+            // as previous translation X and Y values so image will not skip across
+            // screen when user lifts finger and moves to another point
             case MotionEvent.ACTION_UP:
                 mEventState = NONE;
                 prevTranslateX = mTranslateX;
@@ -238,8 +278,9 @@ public class OpCVImage_using extends AppCompatActivity{
                 secondPtrIndex = IsREMOVED;
         }
 
-        // Use in conjunction with pinch to zoom
         detector.onTouchEvent(e);
+
+        // sets the image to locations shifted based on user touch inputs
         if(mEventState == PAN && DRAG_MODE){
             loaded_img.setTranslationX(mTranslateX);
             loaded_img.setTranslationY(mTranslateY);
@@ -249,6 +290,11 @@ public class OpCVImage_using extends AppCompatActivity{
 
 
     //  Use for pinch Zoom
+    /**
+     * Scalegesture detector that is used with user motionevents to drag and zoom image
+     *      view to resize and move image based on constant values for MIN_ZOOM and
+     *      MAX_ZOOM and boolean DRAG_MODE
+     */
     private class MySimpleOnScaleGestureListener extends ScaleGestureDetector.SimpleOnScaleGestureListener{
 
         public MySimpleOnScaleGestureListener(ImageView imgView){
@@ -276,7 +322,12 @@ public class OpCVImage_using extends AppCompatActivity{
     }
 
     /**
-     *
+     * re-inflates activity_op_cvimage.xml after image is selected in from the device
+     *      image gallery by the user, and displays resulting image based after
+     *      image filters are applied
+     *      method takes in request code to identify which intent the callback is using,
+     *      resultCode from URI to ensure image will be returned, and intent including description
+     *      of action to be performed and passed in activity
      * @param requestCode
      * @param resultCode
      * @param data
@@ -317,7 +368,12 @@ public class OpCVImage_using extends AppCompatActivity{
 
     /***  Sobel Filter  ***/
     /**
-     *
+     *  Sobel filter method using OpenCV functions
+     *      method applies a sobel filter to image
+     *      in attempt enhance image feature edges as the image is converted to a binary image
+     *      method takes in the picture path to the selected image from
+     *      device image gallery and sets converted image to image view object
+     *      on screen
      * @param pictPath
      */
     public void sobFilter(String pictPath){
@@ -366,6 +422,15 @@ public class OpCVImage_using extends AppCompatActivity{
     }
 
     /***  Canny Filter  ***/
+    /**
+     *  Canny filter method using OpenCV functions
+     *      method applies a canny filter to image
+     *      in attempt enhance image edges as it is converted to a binary image
+     *      method takes in the picture path to the selected image from
+     *      device image gallery and sets converted image to image view object
+     *      on screen
+     * @param pictPath
+     */
     public void canFilter(String pictPath){
         Log.d(CANNYTAG," --> ** START canFilter(pp) ** <--");
         Bitmap bitmap = BitmapFactory.decodeFile(pictPath);
@@ -408,6 +473,15 @@ public class OpCVImage_using extends AppCompatActivity{
     }
 
     /*** Laplacian Filter ***/
+    /**
+     *  Laplacian filter method using OpenCV functions
+     *      method applies a laplacian filter to image
+     *      in attempt enhance image feature edges as binary image
+     *      method takes in the picture path to the selected image from
+     *      device image gallery and sets converted image to image view object
+     *      on screen
+     * @param pictPath
+     */
     public void lapFilter(String pictPath){
         Log.d(LAPTAG," --> ** START lapFilter(pp) ** <--");
 
@@ -442,7 +516,16 @@ public class OpCVImage_using extends AppCompatActivity{
         loaded_img.setImageBitmap(bitmap);
     }
 
-    /***  Sobel AND Canny   ****/
+    /***  Sobel AND Canny   currently not connected to button ****/
+    /**
+     *  Combination Sobel and Canny filter method using OpenCV functions
+     *      method applies a combination of a sobel filter and canny filter to image
+     *      in attempt enhance image feature edges as binary image
+     *      method takes in the picture path to the selected image from
+     *      device image gallery and sets converted image to image view object
+     *      on screen
+     * @param pictPath
+     */
     public void sobANDcan(String pictPath){
         Log.d(MERGEDTAG," --> ** START sobANDcan(pp) ** <--");
 
@@ -517,32 +600,11 @@ public class OpCVImage_using extends AppCompatActivity{
         loaded_img.setImageBitmap(bitmap);
     }
 
-
-    public static int calculateInSampleSize( BitmapFactory.Options options, int reqWidth, int reqHeight){
-
-        // Raw Height and width of image
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-        if (height > reqHeight || width > reqWidth){
-            final int halfHeight = height/2;
-            final int halfWidth = width/2;
-
-            // Calculate the largest insampleSize value that is a power of 2 and keeps both
-            //   height and width larger the the requested height and width
-            while((halfHeight/inSampleSize) >= reqHeight && (halfWidth/inSampleSize) >= reqWidth){
-                inSampleSize *= 2;
-            }
-        }
-
-        return inSampleSize;
-    }
-
-
     /**
-     * onClick methods that takes in button view objects
-     *
-     *
+     * onClick methods that takes in button view objects that changes
+     *      the scale factor of the image using constant
+     *      SCALE_CHANGE applied when zoom_in_btn or zoom_out_btn
+     *      is clicked
      * @param view
      */
     public void zoomIn(View view){
