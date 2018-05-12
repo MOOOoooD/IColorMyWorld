@@ -78,7 +78,7 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
         setContentView(R.layout.activity_user_paint);
 
         // loads the openCV library
-        System.loadLibrary("opencv_java3");
+        //System.loadLibrary("opencv_java3");
 
 
         /** may not need to find view by id **/
@@ -112,12 +112,12 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
                 switch (motionEvent.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         pCustomView.colorToggle = true;
-                        Log.d("COLOR_","In ColorBtn Down: "+pCustomView.colorToggle);
+                        //Log.d("COLOR_","In ColorBtn Down: "+pCustomView.colorToggle);
                         //pCustomView.invalidate();
                         break;
                     case MotionEvent.ACTION_UP:
                         pCustomView.colorToggle = false;
-                        Log.d("COLOR_","In ColorBtn Up: "+pCustomView.colorToggle);
+                        //Log.d("COLOR_","In ColorBtn Up: "+pCustomView.colorToggle);
                         view.performClick();
                         //pCustomView.invalidate();
                         break;
@@ -137,6 +137,13 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
     public void loadImg(View v){
         Intent image = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(image, RESULT_LOAD_IMG);
+        try {
+            Thread.sleep(500);
+            loadImgBtn.setText(R.string.loading);
+        }catch (Exception e){
+
+        }
+
     }
 
     /**
@@ -325,7 +332,7 @@ For menu items on bottom tool bar
         //LoadSaveImages saveImage = new LoadSaveImages();
 
         //saveImage.saveCMWImage(this, pCustomView.getCanvasBitmap());
-        Log.d("in SAVE Painting", "hope it workd");
+        //Log.d("in SAVE Painting", "hope it workd");
 
 
         File cmvSaveImg = new File(directoryName(), imageName());
@@ -344,27 +351,27 @@ For menu items on bottom tool bar
              *
              */
             if(pCustomView.centerImg_W < 0){
-                Log.d("CIMGw<0", " pcustView Cimg W: "+pCustomView.centerImg_W);
+               // Log.d("CIMGw<0", " pcustView Cimg W: "+pCustomView.centerImg_W);
                 startW = 0;
                 endW = pCustomView.getWidth();
             }else{
-                Log.d("CIMGELS", " pcustView Cimg W else: "+pCustomView.centerImg_W);
+           //     Log.d("CIMGELS", " pcustView Cimg W else: "+pCustomView.centerImg_W);
 
                 startW = pCustomView.centerImg_W;
                 endW = pCustomView.imgWidth;
             }
             if(pCustomView.centerImg_H<0){
-                Log.d("CIMGh<0", " pcustView Cimg H: "+pCustomView.centerImg_H);
+               // Log.d("CIMGh<0", " pcustView Cimg H: "+pCustomView.centerImg_H);
 
                 startH = 0;
                 endH = pCustomView.getHeight();
             }else{
-                Log.d("CIMGELS", " pcustView Cimg H else: "+pCustomView.centerImg_H);
+              //  Log.d("CIMGELS", " pcustView Cimg H else: "+pCustomView.centerImg_H);
 
                 startH = pCustomView.centerImg_H;
                 endH = pCustomView.imgHeight;
             }
-            Log.d("SAVE-T", "savePainting: check coordinates: Start  "+startW+", "+startH+"  End: "+endH+", "+endW);
+          //  Log.d("SAVE-T", "savePainting: check coordinates: Start  "+startW+", "+startH+"  End: "+endH+", "+endW);
 
             // save only the range of the colored bitmap
              Bitmap savImg = Bitmap.createBitmap(pCustomView.getDrawingCache(),startW, startH,endW,endH);
@@ -413,7 +420,7 @@ For menu items on bottom tool bar
         //LoadSaveImages saveImage = new LoadSaveImages();
 
         //saveImage.saveCMWImage(this, pCustomView.getCanvasBitmap());
-        Log.d("in SAVE Painting", "hope it workd");
+        //Log.d("in SAVE Painting", "hope it workd");
 
         File cmvSaveImg = new File(directoryName(), imageName());
         try {
@@ -426,13 +433,13 @@ For menu items on bottom tool bar
             fileAvailabilityMediaScanner(cmvSaveImg);
 
 
-            Log.d("in save...", "pleae saveimg");
-            Log.d("SAveDirPlease", cmvSaveImg.getPath());
-            Log.d("SAveFile", cmvSaveImg.getName());
+            //Log.d("in save...", "pleae saveimg");
+            //Log.d("SAveDirPlease", cmvSaveImg.getPath());
+            //Log.d("SAveFile", cmvSaveImg.getName());
 
         } catch (Exception e) {
             e.printStackTrace();
-            Log.d("In Exception", "   BLAHHHHH");
+            //Log.d("In Exception", "   BLAHHHHH");
         }
         pCustomView.save = !pCustomView.save;
     }
@@ -450,8 +457,8 @@ For menu items on bottom tool bar
         MediaScannerConnection.scanFile(this, new String[]{file.toString()}, null,
                 new MediaScannerConnection.OnScanCompletedListener(){
                     public void onScanCompleted(String path, Uri uri){
-                        Log.d(EXT_STORAGE, "Scanned "+ path+":");
-                        Log.d(EXT_STORAGE, "-> uri= "+ uri);
+                        //Log.d(EXT_STORAGE, "Scanned "+ path+":");
+                        //Log.d(EXT_STORAGE, "-> uri= "+ uri);
                     }
                 });
     }
@@ -460,12 +467,12 @@ For menu items on bottom tool bar
      *
      */
     private void sharePainting(){
+
         pCustomView.save = !pCustomView.save;
         //cache drawing/img
 
         pCustomView.setDrawingCacheEnabled(true);
         pCustomView.invalidate();
-        pCustomView.save = !pCustomView.save;
 
         String path = Environment.getExternalStorageDirectory().toString();
         OutputStream fileOut = null;
@@ -500,6 +507,8 @@ For menu items on bottom tool bar
         shareIntent.setType("image/png");
         shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         startActivity(Intent.createChooser(shareIntent, "Share Image"));
+        pCustomView.save = !pCustomView.save;
+
 
     }
 
@@ -611,7 +620,7 @@ For menu items on bottom tool bar
 
         @Override
         public void onManagerConnected(int status) {
-            Log.d(CHECK_TAG, "in BLC onManConn");
+           // Log.d(CHECK_TAG, "in BLC onManConn");
             switch (status) {
                 case LoaderCallbackInterface.SUCCESS:
                 {
@@ -619,7 +628,7 @@ For menu items on bottom tool bar
                 } break;
                 default:
                 {
-                    Log.d(CHECK_TAG, "Switch Default: "+status);
+                    //Log.d(CHECK_TAG, "Switch Default: "+status);
 
                     super.onManagerConnected(status);
                 } break;
@@ -635,16 +644,17 @@ For menu items on bottom tool bar
     {
 
         super.onResume();
-        Log.d(CHECK_TAG, "in onResume");
+
+        //Log.d(CHECK_TAG, "in onResume");
 
         if (!OpenCVLoader.initDebug()) {
-            Log.d(TAG, "Internal OpenCV library not found. Using OpenCV Manager for initialization");
+            //Log.d(TAG, "Internal OpenCV library not found. Using OpenCV Manager for initialization");
             OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_0_0, this, mLoaderCallback);
         } else {
-            Log.d(TAG, "OpenCV library found inside package. Using it!");
+            //Log.d(TAG, "OpenCV library found inside package. Using it!");
             mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
         }
-        Log.d(CHECK_TAG, "onResume, after if ");
+        //Log.d(CHECK_TAG, "onResume, after if ");
 
     }
 
@@ -666,7 +676,9 @@ For menu items on bottom tool bar
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
 
+
         super.onActivityResult(requestCode, resultCode, data);
+
         if(requestCode == RESULT_LOAD_IMG && resultCode == RESULT_OK && null != data){
             Uri selectedImage = data.getData();
             String[] filePathColumn = {MediaStore.Images.Media.DATA};
@@ -687,8 +699,8 @@ For menu items on bottom tool bar
             //if(loadedImg.width()>imgWidth||loadedImg.height()>imgHeight){
             imgWidth = pCustomView.canvasWidth;
             imgHeight = pCustomView.canvasHeight;
-            Log.d(USER_PAINT, "P Cust in UP width: "+imgWidth+"  height: "+imgHeight);
-            Log.d(USER_PAINT, "p-cust width: "+loadedImg.width()+"  height: "+loadedImg.height());
+            //Log.d(USER_PAINT, "P Cust in UP width: "+imgWidth+"  height: "+imgHeight);
+            //Log.d(USER_PAINT, "p-cust width: "+loadedImg.width()+"  height: "+loadedImg.height());
             int setMaxW = 1365;
             int setMaxH = 1024;
             double thresh;
@@ -702,11 +714,11 @@ For menu items on bottom tool bar
 //                thresh = 17;
 //                kernalSz = 3;
 //            }
-            Log.d("Thresh: ","CUrrent Thresh - "+thresh);
+            //Log.d("Thresh: ","CUrrent Thresh - "+thresh);
 
 
             if(loadedImg.width()>imgWidth||loadedImg.height()>imgHeight){
-                Log.d(USER_PAINT, "P Cust in iff width: "+imgWidth+"  height: "+imgHeight);
+                //Log.d(USER_PAINT, "P Cust in iff width: "+imgWidth+"  height: "+imgHeight);
 
 
                 double scale;
@@ -725,7 +737,7 @@ For menu items on bottom tool bar
                     //scaleW = ((double) imgHeight / (double) loadedImg.width());
                     scale = ((double) imgHeight / (double) loadedImg.height());
                 }
-                Log.d(USER_PAINT, "loaded width: "+loadedImg.width()+"  height: "+loadedImg.height());
+                //Log.d(USER_PAINT, "loaded width: "+loadedImg.width()+"  height: "+loadedImg.height());
 
                 //resize variables
                 //width = (int)(Math.min(scaleW,scaleH) * loadedImg.width());
@@ -734,8 +746,8 @@ For menu items on bottom tool bar
                 height = (int)(Math.min(scale,scale)* loadedImg.height());
                 //int width = loadedImg.width()/imgWidth;
                 //int height = loadedImg.height()/imgWidth;
-                Log.d(USER_PAINT, "width: "+width+"  height: "+height);
-                Log.d(USER_PAINT, "width: "+scale+"  height: "+scale);
+                //Log.d(USER_PAINT, "width: "+width+"  height: "+height);
+                //Log.d(USER_PAINT, "width: "+scale+"  height: "+scale);
 
                 Size imgReSize = new Size(width, height);
                 Mat resizedImg = new Mat();
@@ -747,7 +759,7 @@ For menu items on bottom tool bar
             }else{
                 width = loadedImg.width();
                 height= loadedImg.height();
-                Log.d(USER_PAINT, "in else : "+width+"  height: "+height);
+                //Log.d(USER_PAINT, "in else : "+width+"  height: "+height);
 
             }
             pCustomView.imgHeight = height;
@@ -769,44 +781,44 @@ For menu items on bottom tool bar
              * setting bit map through stages - Gauss
              */
 
-            try {
-                bitmap = Bitmap.createBitmap(loadedImg.width(), loadedImg.height(),Bitmap.Config.ARGB_8888 );
-                Utils.matToBitmap(loadedImg, bitmap);
-                pCustomView.setBitmap(bitmap, true);
-                pCustomView.invalidate();
-                savePainting();
-                Log.d("GAUS_E", "Checking flags "+pCustomView.imgToggle);
-                Log.d("GAUS_E", "Checking flags "+pCustomView.setCan);
-                Log.d("GAUS_E", "Checking flags "+pCustomView.t_up);
-                //Thread.sleep(2500);
-
-            }catch (Exception e){
-                Log.d("ERR-GA", " Gauss Error "+e);
-            }
+//            try {
+//                bitmap = Bitmap.createBitmap(loadedImg.width(), loadedImg.height(),Bitmap.Config.ARGB_8888 );
+//                Utils.matToBitmap(loadedImg, bitmap);
+//                pCustomView.setBitmap(bitmap, true);
+//                pCustomView.invalidate();
+//                savePainting();
+//                //Log.d("GAUS_E", "Checking flags "+pCustomView.imgToggle);
+//                //Log.d("GAUS_E", "Checking flags "+pCustomView.setCan);
+//                //Log.d("GAUS_E", "Checking flags "+pCustomView.t_up);
+//                //Thread.sleep(2500);
+//
+//            }catch (Exception e){
+//                Log.d("ERR-GA", " Gauss Error "+e);
+//            }
 
 
             Imgproc.cvtColor(loadedImg, loadedImg, Imgproc.COLOR_RGB2GRAY);
 //            Utils.matToBitmap(loadedImg, bitmap);
-            Log.d("IMG_TYPE","Type = "+loadedImg.type());
+            //Log.d("IMG_TYPE","Type = "+loadedImg.type());
 
 
             /**
              * setting bit map through stages - Grayscale
              */
 
-            try {
-                bitmap = Bitmap.createBitmap(loadedImg.width(), loadedImg.height(),Bitmap.Config.ARGB_8888 );
-                Utils.matToBitmap(loadedImg, bitmap);
-                pCustomView.setBitmap(bitmap, true);
-                pCustomView.invalidate();
-                savePainting();
-                Log.d("GRAY_E", "Checking flags "+pCustomView.imgToggle);
-                Log.d("GRAY_E", "Checking flags "+pCustomView.setCan);
-                Log.d("GRAY_E", "Checking flags "+pCustomView.t_up);
-                //Thread.sleep(2500);
-            }catch (Exception e){
-                Log.d("ERR-GR", " GRAY Error "+e);
-            }
+//            try {
+//                bitmap = Bitmap.createBitmap(loadedImg.width(), loadedImg.height(),Bitmap.Config.ARGB_8888 );
+//                Utils.matToBitmap(loadedImg, bitmap);
+//                pCustomView.setBitmap(bitmap, true);
+//                pCustomView.invalidate();
+//                savePainting();
+//                //Log.d("GRAY_E", "Checking flags "+pCustomView.imgToggle);
+//                //Log.d("GRAY_E", "Checking flags "+pCustomView.setCan);
+//                //Log.d("GRAY_E", "Checking flags "+pCustomView.t_up);
+//                //Thread.sleep(2500);
+//            }catch (Exception e){
+//                Log.d("ERR-GR", " GRAY Error "+e);
+//            }
 
 
 
@@ -823,44 +835,44 @@ For menu items on bottom tool bar
             /**
              * setting bit map through stages - Lap
              */
-            try {
-
-                bitmap = Bitmap.createBitmap(lapImg.width(), lapImg.height(),Bitmap.Config.ARGB_8888 );
-                Utils.matToBitmap(lapImg, bitmap);
-                pCustomView.setBitmap(bitmap, true);
-                pCustomView.invalidate();
-                savePainting();
-                //Thread.sleep(2500);
-            }catch (Exception e){
-                Log.d("ERR-LA", " LAP Error "+e);
-            }
+//            try {
+//
+//                bitmap = Bitmap.createBitmap(lapImg.width(), lapImg.height(),Bitmap.Config.ARGB_8888 );
+//                Utils.matToBitmap(lapImg, bitmap);
+//                pCustomView.setBitmap(bitmap, true);
+//                pCustomView.invalidate();
+//                savePainting();
+//                //Thread.sleep(2500);
+//            }catch (Exception e){
+//                Log.d("ERR-LA", " LAP Error "+e);
+//            }
 
             bLap.release();
 
 //            //Core.convertScaleAbs(loadedImg, lapImg);
-            Log.d("IMG_TYPE","Lap_Type_After = "+lapImg.type());
-            Log.d("IMG_TYPE","Img_Values_2 = "+lapImg);
+            //Log.d("IMG_TYPE","Lap_Type_After = "+lapImg.type());
+            //Log.d("IMG_TYPE","Img_Values_2 = "+lapImg);
             // invert colors
 
             Imgproc.threshold(lapImg, lapImg, thresh, 255, Imgproc.THRESH_BINARY_INV);
             int imgCH = lapImg.channels();
-            Log.d(TAG, "Pixel val "+ lapImg.type()+ " chan "+ lapImg.channels());
+            //Log.d(TAG, "Pixel val "+ lapImg.type()+ " chan "+ lapImg.channels());
 
             /**
              * setting bit map through stages - Threshold binary inverse
              */
-            try {
-                Log.d("ERR-BI", " BINARY Error ");
-
-                bitmap = Bitmap.createBitmap(lapImg.width(), lapImg.height(),Bitmap.Config.ARGB_8888 );
-                Utils.matToBitmap(lapImg, bitmap);
-                pCustomView.setBitmap(bitmap, true);
-                pCustomView.invalidate();
-                savePainting();
-                //Thread.sleep(2500);
-            }catch (Exception e){
-                Log.d("ERR-BI", " BINARY Error "+e);
-            }
+//            try {
+//               // Log.d("ERR-BI", " BINARY Error ");
+//
+//                bitmap = Bitmap.createBitmap(lapImg.width(), lapImg.height(),Bitmap.Config.ARGB_8888 );
+//                Utils.matToBitmap(lapImg, bitmap);
+//                pCustomView.setBitmap(bitmap, true);
+//                pCustomView.invalidate();
+//                savePainting();
+//                //Thread.sleep(2500);
+//            }catch (Exception e){
+//                Log.d("ERR-BI", " BINARY Error "+e);
+//            }
 
             //    Core.bitwise_not(lapImg, lapImg);
             //loadedImg.release();
@@ -883,6 +895,7 @@ For menu items on bottom tool bar
             pCustomView.pbarWidth = pbar.getWidth();
             pCustomView.pbarHeight = pbar.getHeight();
             pCustomView.setBitmap(bitmap, true);
+            pCustomView.invalidate();
         }
     }
 

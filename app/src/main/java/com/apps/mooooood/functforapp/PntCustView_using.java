@@ -138,6 +138,7 @@ public class PntCustView_using extends View {
 
     // Initialize Variables
     private void initialize() {
+
         currentBrushSize = getResources().getInteger(R.integer.size_small);
         lastBrushSize = currentBrushSize;
 
@@ -168,7 +169,7 @@ public class PntCustView_using extends View {
         @Override
         public boolean onScale(ScaleGestureDetector detect){
 
-            Log.d("SCALE_C","In Scale Gesture Detector");
+            //Log.d("SCALE_C","In Scale Gesture Detector");
                 scaleFactor *= detect.getScaleFactor();
                 scaleFactor = Math.max(MIN_ZOOM, Math.min(scaleFactor, MAX_ZOOM));
 
@@ -212,7 +213,7 @@ public class PntCustView_using extends View {
     private ScaleGestureDetector detector;
 
     public void setCanvas(){
-        Log.d("SET_CAN","checking heights "+centerImg_W+" , "+centerImg_H+" , "+imgHeight+" , "+ imgWidth);
+        //Log.d("SET_CAN","checking heights "+centerImg_W+" , "+centerImg_H+" , "+imgHeight+" , "+ imgWidth);
         drawCanvas = new Canvas(canvasBitmap);
         canvasPaint = new Paint(Paint.DITHER_FLAG);
         invalidate();
@@ -234,7 +235,7 @@ public class PntCustView_using extends View {
                 //if()
                 centerImg_W = (canvasWidth-imgWidth)/2;
                 centerImg_H = (canvasHeight-imgHeight)/2;
-                Log.d("TEST_37","why 37: " +centerImg_H+" result of "+canvasHeight+" - "+imgHeight+" / 2");
+                //Log.d("TEST_37","why 37: " +centerImg_H+" result of "+canvasHeight+" - "+imgHeight+" / 2");
                 setCanvas();
                 setCan = false;
                 p.setStyle(Paint.Style.FILL);
@@ -253,7 +254,7 @@ public class PntCustView_using extends View {
 
             // draws path behind canvas bitmap, and under current drawpath
             if(erasing){
-                Log.d("ERASE-", "Checking erase "+erasing);
+                //Log.d("ERASE-", "Checking erase "+erasing);
                 drawPaint.setStrokeWidth(getResources().getInteger(R.integer.medium_size));
             }else {
                 drawPaint.setStrokeWidth(getResources().getInteger(R.integer.size_small));
@@ -353,14 +354,14 @@ public class PntCustView_using extends View {
                     skew(touchX, touchY);
                     if(!erasing) {
                         touch_start(moveX + xAdj, moveY + pencil.getHeight() - yAdj);
-                        Log.d("ACTDOWN", " checking x and y : " + moveX + ", " + moveY);
+                        //Log.d("ACTDOWN", " checking x and y : " + moveX + ", " + moveY);
                         //  Log.d("CKWD", " Width "+canvasBitmap.getWidth());
                         translate.postTranslate(moveX + xAdj, moveY - yAdj);
                         // need to be able to access the colorImage function in OpenCV_Paint_Image and set the
                         // color - probably in the touch_move
                     }else{
                         touch_start(moveX + xAdj + 20, moveY + pencil.getHeight() - yAdj);
-                        Log.d("ACTDOWN", " checking x and y : " + moveX + ", " + moveY);
+                        //Log.d("ACTDOWN", " checking x and y : " + moveX + ", " + moveY);
                         //  Log.d("CKWD", " Width "+canvasBitmap.getWidth());
                         translate.postTranslate(moveX + xAdj + 20, moveY - yAdj);
                     }
@@ -406,10 +407,10 @@ public class PntCustView_using extends View {
 
     // called when finger touches screen
     private void touch_start(float x, float y) {
-        Log.d("T_START", "Checking X and Y : "+x+", "+y);
+        //Log.d("T_START", "Checking X and Y : "+x+", "+y);
 
         if(colorToggle) {
-            Log.d("T_START", "In if statement -> X, Y "+ x +", "+y+" colorToggle : "+colorToggle);
+            //Log.d("T_START", "In if statement -> X, Y "+ x +", "+y+" colorToggle : "+colorToggle);
             undonePaths.clear();
             undonePaints.clear();
             drawPath.reset();
@@ -428,7 +429,7 @@ public class PntCustView_using extends View {
            // Log.d("T_MOVE", "Checking X, Y and colortoggle : "+ x +", "+y+"  colorToggle-"+colorToggle);
 
             if(colorToggle) {
-                Log.d("T_MOVE", "In if colorToggle dX, dY "+ dx +", "+dy+"   colorTog - : "+colorToggle+" mx, my "+ mX+", "+mY+"  x, y "+x+", "+y);
+                //Log.d("T_MOVE", "In if colorToggle dX, dY "+ dx +", "+dy+"   colorTog - : "+colorToggle+" mx, my "+ mX+", "+mY+"  x, y "+x+", "+y);
 
                 if(moveTo) {
                     drawPath.moveTo(mX, mY);
@@ -448,10 +449,10 @@ public class PntCustView_using extends View {
     private void touch_up() {
         //fillToggle = !fillToggle;
 
-        Log.d("TOUCH_UP", "Color Toggle Value B4:"+ colorToggle);
-        Log.d("TOUCH_UP", "Path Size Value B4:"+ paths.size());
+        //Log.d("TOUCH_UP", "Color Toggle Value B4:"+ colorToggle);
+        //Log.d("TOUCH_UP", "Path Size Value B4:"+ paths.size());
 
-        if(colorToggle) {
+        //if(colorToggle) {
 //            drawPath.lineTo(mX, mY);
 //            drawCanvas.drawPath(drawPath, drawPaint);
             paths.add(drawPath);
@@ -459,13 +460,13 @@ public class PntCustView_using extends View {
             allPaints.add(drawPaint);
             drawPaint = new Paint(drawPaint);
             invalidate();
-            Log.d("TOUCH_UP", "Color Toggle Value In:"+ colorToggle);
-            Log.d("TOUCH_UP", "Path Size Value In:"+ paths.size());
+            //Log.d("TOUCH_UP", "Color Toggle Value In:"+ colorToggle);
+            //Log.d("TOUCH_UP", "Path Size Value In:"+ paths.size());
             //colorToggle = false;
-        }
+        //}
         moveTo = true;
-        Log.d("TOUCH_UP", "Color Toggle Value AFT:"+ colorToggle);
-        Log.d("TOUCH_UP", "Path Size Value AFT:"+ paths.size());
+        //Log.d("TOUCH_UP", "Color Toggle Value AFT:"+ colorToggle);
+        //Log.d("TOUCH_UP", "Path Size Value AFT:"+ paths.size());
 
         //drawPath.reset();
 
@@ -559,6 +560,5 @@ public class PntCustView_using extends View {
         public boolean onDoubleTapEvent(MotionEvent motionEvent) {return false;}
 
     }
-
 
 }

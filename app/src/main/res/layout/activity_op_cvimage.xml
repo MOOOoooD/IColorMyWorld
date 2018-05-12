@@ -139,9 +139,9 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
             android:fontFamily="@font/purisa_bold"
-            android:textAllCaps="false"
-            android:onClick="dragMode"
-            android:text="@string/drag_mode_btn_true" />
+            android:onClick="dragModeViewSwitch"
+            android:text="@string/drag_mode_btn_true"
+            android:textAllCaps="false" />
 
 
     </RelativeLayout>

@@ -32,6 +32,8 @@ import org.opencv.core.Point;
 import org.opencv.imgproc.Imgproc;
 
 /**
+ *
+ *
  * Created by denise on 1/28/18.
  */
 
@@ -197,35 +199,22 @@ public class OpCVImage_using extends AppCompatActivity{
         switch (e.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
                 DRAG_MODE = true;
-                //mEventState = PAN;
 
-                // Primary pinter is registered
+                // Primary pointer is registered
                 primaryPtrIndex = e.getActionIndex();
                 primaryPtr = e.getPointerId(primaryPtrIndex);
                 if (primaryPtrIndex != IsREMOVED && DRAG_MODE) {
-                    //mEventState = PAN;
                     mStartX = e.getX() - prevTranslateX;
                     mStartY = e.getY() - prevTranslateY;
-
                 }
-
                 break;
-
-//                // saves previous finger up value for smooth translate
-//                mStartX = e.getX() - prevTranslateX;
-//                mStartY = e.getY() - prevTranslateY;
-//                break;
-
-            case MotionEvent.ACTION_POINTER_DOWN:
-                mEventState = ZOOM;
 
                 // Secondary pointer is registered
-                //if(DRAG_MODE) {
+            case MotionEvent.ACTION_POINTER_DOWN:
+                mEventState = ZOOM;
                 secondPtrIndex = e.getActionIndex();
                 secondPtr = e.getPointerId(secondPtrIndex);
-                //}
                 break;
-
 
             case MotionEvent.ACTION_MOVE:
                 mEventState = PAN;
@@ -233,28 +222,20 @@ public class OpCVImage_using extends AppCompatActivity{
                 if (primaryPtrIndex != IsREMOVED) {
                     mTranslateX = e.getX() - mStartX;
                     mTranslateY = e.getY() - mStartY;
-                    //    loaded_img.setX(e.getX(primaryPtrIndex));
-                    //    loaded_img.setY(e.getY(primaryPtrIndex));
                 }
-
                 break;
 
             case MotionEvent.ACTION_POINTER_UP:
                 primaryPtrIndex = IsREMOVED;
                 secondPtrIndex = IsREMOVED;
-
                 break;
 
             case MotionEvent.ACTION_UP:
                 mEventState = NONE;
-                //DRAG_MODE = false;
-                // if (primaryPtrIndex != IsREMOVED && DRAG_MODE) {
                 prevTranslateX = mTranslateX;
                 prevTranslateY = mTranslateY;
-                // }
                 primaryPtrIndex = IsREMOVED;
                 secondPtrIndex = IsREMOVED;
-
         }
 
         // Use in conjunction with pinch to zoom
@@ -263,9 +244,6 @@ public class OpCVImage_using extends AppCompatActivity{
             loaded_img.setTranslationX(mTranslateX);
             loaded_img.setTranslationY(mTranslateY);
         }
-
-
-
         return true;
     }
 
@@ -273,10 +251,7 @@ public class OpCVImage_using extends AppCompatActivity{
     //  Use for pinch Zoom
     private class MySimpleOnScaleGestureListener extends ScaleGestureDetector.SimpleOnScaleGestureListener{
 
-        //ImageView viewImage;
-
         public MySimpleOnScaleGestureListener(ImageView imgView){
-
             super();
             if(DRAG_MODE) {
                 loaded_img = imgView;
@@ -289,20 +264,23 @@ public class OpCVImage_using extends AppCompatActivity{
         public boolean onScale(ScaleGestureDetector detect){
 
             if(DRAG_MODE) {
-                //float scale = detect.getScaleFactor()-1;
                 scaleFactor *= detect.getScaleFactor();
 
                 // minZoom before was 0.1f
                 scaleFactor = Math.max(MIN_ZOOM, Math.min(scaleFactor, MAX_ZOOM));
-//            if(DRAG_MODE){
                 loaded_img.setScaleX(scaleFactor);
                 loaded_img.setScaleY(scaleFactor);
             }
             return true;
         }
-
     }
 
+    /**
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
@@ -338,6 +316,10 @@ public class OpCVImage_using extends AppCompatActivity{
     }
 
     /***  Sobel Filter  ***/
+    /**
+     *
+     * @param pictPath
+     */
     public void sobFilter(String pictPath){
         Log.d(SOBELTAG," --> ** START sobFilter(pp) ** <--");
 
@@ -348,11 +330,6 @@ public class OpCVImage_using extends AppCompatActivity{
         //Sobel
         Imgproc.GaussianBlur(loadedImg, loadedImg, new Size(3,3),0,0,Core.BORDER_DEFAULT);
         Imgproc.GaussianBlur(loadedImg, loadedImg, new Size(3,3),0,0,Core.BORDER_DEFAULT);
-
-        //Utils.matToBitmap(loadedImg, bitmap);
-        //Imgproc.erode(loadedImg,loadedImg, new Mat(), new Point(-1,-1),2,1, Scalar.all(1));
-        //Imgproc.dilate(loadedImg,loadedImg, new Mat(), new Point(-1,-1),2,1, Scalar.all(1));
-
         Imgproc.cvtColor(loadedImg, loadedImg, Imgproc.COLOR_RGB2GRAY);
 
         // Varibles needed
@@ -362,7 +339,6 @@ public class OpCVImage_using extends AppCompatActivity{
 
         // Gradient X
         Imgproc.Sobel(loadedImg, gradXY, CvType.CV_16S,xDx,xDy,kernalSz,scale,delta,Core.BORDER_DEFAULT);
-        //Log.d(SOBELTAG,"SOBEL_Type = "+loadedImg.type());
         Core.convertScaleAbs(gradXY, absGradX);
         gradXY = new Mat();
 
@@ -379,20 +355,14 @@ public class OpCVImage_using extends AppCompatActivity{
 
         Imgproc.threshold(loadedImg, loadedImg, 17.0, 255, Imgproc.THRESH_BINARY_INV);
 
-        // invert colors
-        //Core.bitwise_not(loadedImg, loadedImg);
-        //Log.d(SOBELTAG,loadedImg.channels()+" ");
-
         // set Mat to Bitmap
         bitmap = Bitmap.createBitmap(loadedImg.width(), loadedImg.height(),Bitmap.Config.ARGB_8888 );
         Utils.matToBitmap(loadedImg, bitmap);
         loadedImg.release();
-
         Log.d(SOBELTAG," --> ** END sobFilter(pp) ** <--");
 
         loaded_img = findViewById(R.id.loaded_image);
         loaded_img.setImageBitmap(bitmap);
-        //bitmap.recycle();
     }
 
     /***  Canny Filter  ***/
@@ -406,7 +376,7 @@ public class OpCVImage_using extends AppCompatActivity{
         Mat canImg = new Mat();
 
         // Normalized Block Blur
-//            Imgproc.blur(loadedImg, loadedImg, new Size(3,3), new Point(-1,-1));
+        // Imgproc.blur(loadedImg, loadedImg, new Size(3,3), new Point(-1,-1));
 
         // Gaus Blur Filter
         Imgproc.GaussianBlur(loadedImg, canImg, new Size(3,5),0,0,Core.BORDER_DEFAULT);
@@ -422,10 +392,7 @@ public class OpCVImage_using extends AppCompatActivity{
         Imgproc.Canny(canImg, loadedImg, lowThresh, lowThresh * ratio, kernalSize, false );
         canImg = new Mat();
 
-        //Log.d("CANNY","imgh="+loadedImg.height()+", iw="+loadedImg.width());
-
         // invert colors
-        //Core.bitwise_not(loadedImg, canImg);
         Imgproc.threshold(loadedImg, canImg, 25.0, 255, Imgproc.THRESH_BINARY_INV);
 
         loadedImg.release();
@@ -459,11 +426,8 @@ public class OpCVImage_using extends AppCompatActivity{
         Mat lapImg = new Mat();
         bLap.convertTo(lapImg,CvType.CV_8UC4);
         bLap.release();
-//            //Core.convertScaleAbs(loadedImg, lapImg);
-        //Log.d(LAPTAG,"Lap_Type_After = "+lapImg.type());
 
         // invert colors
-        // Core.bitwise_not(lapImg, lapImg);
         Imgproc.threshold(lapImg, lapImg, 15.0, 255, Imgproc.THRESH_BINARY_INV);
         //Log.d(LAPTAG,lapImg.channels()+" ");
 
@@ -476,7 +440,6 @@ public class OpCVImage_using extends AppCompatActivity{
 
         loaded_img = findViewById(R.id.loaded_image);
         loaded_img.setImageBitmap(bitmap);
-        //bitmap.recycle();
     }
 
     /***  Sobel AND Canny   ****/
@@ -493,12 +456,11 @@ public class OpCVImage_using extends AppCompatActivity{
         Mat canImg = new Mat();
         Imgproc.cvtColor(loadedImg, canImg, Imgproc.COLOR_RGB2GRAY);
         // Normalized Block Blur
-//            Imgproc.blur(loadedImg, loadedImg, new Size(3,3), new Point(-1,-1));
+        // Imgproc.blur(loadedImg, loadedImg, new Size(3,3), new Point(-1,-1));
         // Gaus Blur Filter
-//            Imgproc.GaussianBlur(loadedImg, loadedImg, new Size(5,5),0,0,Core.BORDER_DEFAULT);
+        // Imgproc.GaussianBlur(loadedImg, loadedImg, new Size(5,5),0,0,Core.BORDER_DEFAULT);
         // Median Filter
         Imgproc.medianBlur(canImg,canImg,7);
-        //Log.d(MERGEDTAG,"--> In Canny sect <--");
         Mat canImgB = new Mat();
         int lowThresh = 20;
         int ratio = 3;
@@ -577,6 +539,12 @@ public class OpCVImage_using extends AppCompatActivity{
     }
 
 
+    /**
+     * onClick methods that takes in button view objects
+     *
+     *
+     * @param view
+     */
     public void zoomIn(View view){
         scaleFactor+= SCALE_CHANGE;
         // minZoom before was 0.1f
@@ -592,7 +560,16 @@ public class OpCVImage_using extends AppCompatActivity{
         loaded_img.setScaleY(scaleFactor);
     }
 
-
+    /**
+     * onClick methods that takes in button view objects that allows
+     *      the image on screen to be shifted based on directional button selected
+     *      img_up_btn, img_down_btn, img_left_btn, and img_right_btn
+     *      adding a constant value to the current x and y values
+     *      of where the image is located on screen, which will then
+     *      translate/shift where the image is located on screen
+     *      using setTranslationX and setTranslationY
+     * @param view
+     */
     public void imageUp(View view){
         Log.d(TAG, "img up");
         mTranslateY -= SHIFT_UD;
@@ -614,7 +591,15 @@ public class OpCVImage_using extends AppCompatActivity{
         loaded_img.setTranslationX(mTranslateX);
     }
 
-    public void dragMode(View view){
+    /**
+     * onClick method that takes in button view object
+     *      When drag_mode_switch_btn is clicked, changes widget/button
+     *      views visible on screen to display or remove zoom and pan buttons
+     *      This allows user to use multitouch functionality to zoom and pan
+     *      image, or use buttons to zoom and pan image
+     * @param view
+     */
+    public void dragModeViewSwitch(View view){
         DRAG_MODE = !DRAG_MODE;
         if(DRAG_MODE){
             dragModeBtn.setText(R.string.drag_mode_btn_true);
@@ -635,6 +620,12 @@ public class OpCVImage_using extends AppCompatActivity{
         }
     }
 
+    /**
+     * onClick method that takes in img_to_main_btn button view object
+     *      and finishes/closes activity_op_cvimage.xml view,
+     *      resumes activity_main.xml view
+     * @param view
+     */
     public void backToMain(View view){
         finish();
     }
