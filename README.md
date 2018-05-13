@@ -9,8 +9,9 @@
 
 Quick Start Guide: maybe <br>
 
-<b>Presentation:</b>
+<b>Product Presentation:</b>
 <blockquote>
+ <b>Senior Presentation</b>:<br>
 <a href="https://drive.google.com/open?id=13PqdqPdQEHdn9f3wNBSNGpcslKNml33sfkAyVfAbnZU">
 I Color My World: An Android Application</a>
 </blockquote>
