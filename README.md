@@ -26,7 +26,7 @@ I Color My World: An Android Application</a>
 
 <b>JavaDoc:</b>
 <blockquote>
-https://mooooood.github.io/IColorMyWorld/
+<a href="https://mooooood.github.io/IColorMyWorld/">github.io/IColorMyWorld/</a>
 </blockquote>
 <br>
 
