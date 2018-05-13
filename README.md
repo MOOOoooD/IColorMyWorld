@@ -1,15 +1,18 @@
 # I Color My World - 
 Functions and tests for color app - AS with OpenCV
 
+I Color My World - Overview
+<blockquote>
  <b>Product Paper</b>:<br>
     to be done
 </blockquote>
 
 Quick Start Guide: maybe <br>
 
-Javadoc: https://mooooood.github.io/IColorMyWorld/
-
-
+Javadoc:
+<blockquote>
+https://mooooood.github.io/IColorMyWorld/
+</blockquote>
 
 
 UMLs:
