@@ -21,7 +21,8 @@ import android.widget.RelativeLayout;
 import java.util.ArrayList;
 
 /**
- * PntCustView_using.java - Custom view class that inflates a custom container
+ * PntCustView_using.java - extends view
+ * Custom view class that inflates a custom container
  *  holding multiple canvas objects to display converted images as binary lined
  *  image and uses animation and gesture detectors, Path objects, Paint objects
  *  to 'draw'/color/erase colors in the displayed lined image
@@ -44,6 +45,10 @@ public class PntCustView_using extends View {
     // boolean toggles for setting canvas and saving colored image
     boolean save = false;
     boolean setCan = false;
+
+    // boolean toggles for erase and paint color change for eraser
+    boolean paintChange = false;
+    boolean erasing = false;
 
     // drawtool - holds pencil_icon and eraser_icon as toggled
     private Bitmap draw_tool;
@@ -115,6 +120,21 @@ public class PntCustView_using extends View {
     private ArrayList<Paint> allPaints = new ArrayList<Paint>();
     private ArrayList<Paint> undonePaints = new ArrayList<Paint>();
 
+    // toggle to set initial background canvas used under transparent image
+    boolean t_up = false;
+
+    // Paint object and Rect object to draw white canvas under trnsparent image
+    Paint p = new Paint();
+    Rect s = new Rect();
+
+    // variables used to get palette bar height and width
+    int pbarWidth;
+    int pbarHeight;
+
+    // stores pixel shift values for drawTool drawPath starting point
+    int xAdj = 0;//8;
+    int yAdj = 0;//6;;
+
     /**
      * Constructor
      * @param context
@@ -131,6 +151,7 @@ public class PntCustView_using extends View {
         drawToolHeight = draw_tool.getHeight();
         //Log.d(PAINT_TAG, "toolW: "+drawToolWidth+", toolH: "+drawToolHeight);
 
+        // used for transforming coordinates for drawTools
         translate = new Matrix();
 
         // gesture detector for gesture and scale
@@ -140,11 +161,9 @@ public class PntCustView_using extends View {
         lastPaintColor = paintColor;
 
         //Log.d(PAINT_TAG, "in Paint View constuctor");
-
         // calls function to initialize objects
         initialize();
     }
-
 
     /**
      * Method initializes brushes, paint objects, path objects for drawing
@@ -172,15 +191,6 @@ public class PntCustView_using extends View {
         drawPaint.setStrokeCap(Paint.Cap.ROUND);
     }
 
-
-//    //Bitmap saveImage;
-    public Bitmap getCanvasBitmap(){
-        return canvasBitmap;
-    }
-
-    boolean paintChange = false;
-
-    boolean erasing = false;
     /**
      * when color is changed, when color button is selected
      * store current drawpath and paint and create new ones so that
@@ -197,6 +207,10 @@ public class PntCustView_using extends View {
         drawPaint = new Paint(drawPaint);
         drawPaint.setColor(paintColor);
     }
+
+    /**
+     * setters and getters for paint color
+     */
     public void setLastPaintColor() {
         lastPaintColor = paintColor;
     }
@@ -204,8 +218,11 @@ public class PntCustView_using extends View {
         return lastPaintColor;
     }
 
-    private ScaleGestureDetector detector;
-
+    /**
+     * Method sets canvas with image data passed in by
+     *      UserPaint_using class
+     *      calls invalidate to draw results on screen
+     */
     public void setCanvas(){
         //Log.d("SET_CAN","checking heights "+centerImg_W+" , "+centerImg_H+" , "+imgHeight+" , "+ imgWidth);
         drawCanvas = new Canvas(canvasBitmap);
@@ -213,17 +230,15 @@ public class PntCustView_using extends View {
         invalidate();
     }
 
-
-    Paint p = new Paint();
-    boolean t_up = false;
-    Rect s = new Rect();
-    int pbarWidth;
-    int pbarHeight;
-    // stores drawing paths in ArrayList, draws the path on screen
+    /**
+     * Method redraws canvas each time invalidate() is called - creates
+     *      the illusion of animation and movement on screen
+     * @param canvas
+     */
     @Override
     protected void onDraw(Canvas canvas) {
 
-        // to set the canvas and image
+        // to set the canvas and image based on boolean toggles
         if(imgToggle & !t_up) {
             if(setCan){
                 //if()
@@ -237,7 +252,6 @@ public class PntCustView_using extends View {
                 canvas.drawRect(centerImg_W,centerImg_H,imgWidth+centerImg_W,imgHeight+centerImg_H,p);
                 s.set(centerImg_W,centerImg_H,imgWidth+centerImg_W,imgHeight+centerImg_H);
             }
-
 
             canvas.drawRect(centerImg_W,centerImg_H,imgWidth+centerImg_W,imgHeight+centerImg_H,p);
 
@@ -270,7 +284,6 @@ public class PntCustView_using extends View {
             t_up = !t_up;
         }
     }
-
 
     /**
      * Methods creates canvas based on screen size an
@@ -324,9 +337,6 @@ public class PntCustView_using extends View {
         }
     }
 
-    int xAdj = 0;//8;
-    int yAdj = 0;//6;;
-
     /**
      * onTouchListener for moving drawtool and creating drawpaths
      *      When user holds color button and drags drawTool, drawPaths are created
@@ -341,13 +351,18 @@ public class PntCustView_using extends View {
         float touchY = event.getY();
 
 
+        // action switch event to handle touch events
         switch (event.getAction()) {
 
+            // switch case to register touch down event
             // gets coordinate of initial touch
             // shifts drawpath coordinates to edge of drawtool
+            // calls invalidate to redraw screen
             case MotionEvent.ACTION_DOWN:
                     xDiff = Math.abs(moveX - touchX);
                     yDiff = Math.abs(moveY - touchY);
+
+                    // skews drawpath coordinates
                     skew(touchX, touchY);
                     if(!erasing) {
                         touch_start(moveX + xAdj, moveY + draw_tool.getHeight() - yAdj);
@@ -362,7 +377,10 @@ public class PntCustView_using extends View {
                     }
                     invalidate();
                 break;
-
+            // switch case to shift drawTool based on event'heard'
+            // animates drawTool on screen based on user movement
+            // draws drawpaths and paint based on movement
+            // calls invalidate() to redraw screen as movements occur
             case MotionEvent.ACTION_MOVE:
                 skew(touchX, touchY);
                 if(!erasing) {
@@ -375,6 +393,8 @@ public class PntCustView_using extends View {
                 invalidate();
                 break;
 
+            // switch case listening for event when touch up occurs
+            // calls function to store drawPaths and drawPaints in ArrayList
             case MotionEvent.ACTION_UP:
                 touch_up();
                 break;
@@ -383,7 +403,7 @@ public class PntCustView_using extends View {
                 return false;
         }
 
-        // return true;
+        // returns confirmation of on touch event
         return gestures.onTouchEvent(event);
     }
 
