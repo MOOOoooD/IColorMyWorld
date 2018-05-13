@@ -3,7 +3,7 @@
 <b>I Color My World - Overview</b>
 <blockquote>
  <b>Product Paper</b>:<br>
-    to be done
+    <a href="https://docs.google.com/document/d/1bLVBjkI1M19E0BNB9_8_NnNK8NHXPw6q1C5e7yoB_wg/edit?usp=sharing">Overview Document</a>
 </blockquote>
 <br>
 
