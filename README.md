@@ -1,7 +1,7 @@
-# I Color My World - 
+# I Color My World: An Android Application
 Functions and tests for color app - AS with OpenCV
 
-I Color My World - Overview
+<b>I Color My World - Overview</b>
 <blockquote>
  <b>Product Paper</b>:<br>
     to be done
@@ -9,13 +9,18 @@ I Color My World - Overview
 
 Quick Start Guide: maybe <br>
 
-Javadoc:
+<b>JavaDoc:</b>
 <blockquote>
 https://mooooood.github.io/IColorMyWorld/
 </blockquote>
 
 
-UMLs:
+<b>Presentation:</b>
+<blockquote>
+https://drive.google.com/open?id=13PqdqPdQEHdn9f3wNBSNGpcslKNml33sfkAyVfAbnZU
+</blockquote>
+
+<b>UMLs:</b>
 <blockquote>
  <b>User Diagram</b>: To be done
  
