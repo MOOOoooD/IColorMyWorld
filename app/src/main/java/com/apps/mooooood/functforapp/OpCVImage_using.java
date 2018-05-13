@@ -32,9 +32,15 @@ import org.opencv.core.Point;
 import org.opencv.imgproc.Imgproc;
 
 /**
+ * OpCVImage_using.java - this class takes in images seleced by users from
+ *  their device gallery and converts the image to a binary lined image
+ *  as an example of how the openCV functions can work on an image
+ *  and to provide an example of zoom and drag functionality on an
+ *  Image View object
  *
- *
- * Created by denise on 1/28/18.
+ * @author Denise Fullerton
+ * @since created 1/28/18
+ * @since last updated - 5/12/18
  */
 
 public class OpCVImage_using extends AppCompatActivity{

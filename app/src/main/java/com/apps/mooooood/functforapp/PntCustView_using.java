@@ -8,27 +8,27 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
-import android.view.animation.OvershootInterpolator;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
-
 /**
- * Created by denise on 1/28/18.
+ * PntCustView_using.java - Custom view class that inflates a custom container
+ *  holding multiple canvas objects to display converted images as binary lined
+ *  image and uses animation and gesture detectors, Path objects, Paint objects
+ *  to 'draw'/color/erase colors in the displayed lined image
+ *
+ *
+ * @author Denise Fullerton
+ * @since created 1/28/18
+ * @since last updated - 5/12/18
  */
 
 public class PntCustView_using extends View {
@@ -37,7 +37,7 @@ public class PntCustView_using extends View {
     boolean save = false;
     boolean setCan = false;
 
-    private Bitmap pencil;
+    private Bitmap draw_tool;
     private Matrix translate;
     private Canvas tool;
 
@@ -116,9 +116,9 @@ public class PntCustView_using extends View {
         // for pencil!!!
         RelativeLayout paintLayout = findViewById(R.id.paintScreen);
         //pencil = BitmapFactory.decodeResource(getResources(), R.drawable.test_pencil);
-        pencil = BitmapFactory.decodeResource(getResources(), R.drawable.pencil_icon);
-        penWidth = pencil.getWidth();
-        penHeight = pencil.getHeight();
+        draw_tool = BitmapFactory.decodeResource(getResources(), R.drawable.pencil_icon);
+        penWidth = draw_tool.getWidth();
+        penHeight = draw_tool.getHeight();
         //Log.d(PAINT_TAG, "penW: "+penWidth+", penH: "+penHeight);
 
 
@@ -268,7 +268,7 @@ public class PntCustView_using extends View {
 
           //  Log.d(PAINT_TAG," in PCust W = "+imgWidth+"  H = "+imgHeight);
             if(!save) {
-                canvas.drawBitmap(pencil, moveX, moveY, null);
+                canvas.drawBitmap(draw_tool, moveX, moveY, null);
             }
         }
         if(t_up){
@@ -353,14 +353,14 @@ public class PntCustView_using extends View {
 
                     skew(touchX, touchY);
                     if(!erasing) {
-                        touch_start(moveX + xAdj, moveY + pencil.getHeight() - yAdj);
+                        touch_start(moveX + xAdj, moveY + draw_tool.getHeight() - yAdj);
                         //Log.d("ACTDOWN", " checking x and y : " + moveX + ", " + moveY);
                         //  Log.d("CKWD", " Width "+canvasBitmap.getWidth());
                         translate.postTranslate(moveX + xAdj, moveY - yAdj);
                         // need to be able to access the colorImage function in OpenCV_Paint_Image and set the
                         // color - probably in the touch_move
                     }else{
-                        touch_start(moveX + xAdj + 20, moveY + pencil.getHeight() - yAdj);
+                        touch_start(moveX + xAdj + 20, moveY + draw_tool.getHeight() - yAdj);
                         //Log.d("ACTDOWN", " checking x and y : " + moveX + ", " + moveY);
                         //  Log.d("CKWD", " Width "+canvasBitmap.getWidth());
                         translate.postTranslate(moveX + xAdj + 20, moveY - yAdj);
@@ -371,10 +371,10 @@ public class PntCustView_using extends View {
             case MotionEvent.ACTION_MOVE:
                 skew(touchX, touchY);
                 if(!erasing) {
-                    touch_move(moveX + xAdj, moveY + pencil.getHeight() - yAdj);
+                    touch_move(moveX + xAdj, moveY + draw_tool.getHeight() - yAdj);
                     translate.postTranslate(moveX + xAdj, moveY - yAdj);
                 }else{
-                    touch_move(moveX + xAdj + 20, moveY + pencil.getHeight() - yAdj);
+                    touch_move(moveX + xAdj + 20, moveY + draw_tool.getHeight() - yAdj);
                     translate.postTranslate(moveX + xAdj + 20, moveY - yAdj);
                 }
                 invalidate();
@@ -482,41 +482,35 @@ public class PntCustView_using extends View {
         }
     }
 
+    /**
+     * onClick Method to switch onscreen onscreen pencil tool with eraser tool
+     *      switches drawable pencil_icon and eraser_icon in custom view area
+     *      and the draw_tool image button
+     *      sets erasing boolean to true or false
+     *      calls invalidate() to activate onDraw() method to update screen
+     * @param eraserPencil
+     */
     public void onClickEraseDraw(boolean eraserPencil){
         if(!eraserPencil){
             erasing = true;
-            pencil = BitmapFactory.decodeResource(getResources(), R.drawable.eraserd);
+            draw_tool = BitmapFactory.decodeResource(getResources(), R.drawable.eraser_icon);
         }else{
             erasing = false;
-            pencil = BitmapFactory.decodeResource(getResources(), R.drawable.pencil_icon);
+            draw_tool = BitmapFactory.decodeResource(getResources(), R.drawable.pencil_icon);
         }
         invalidate();
-
     }
 
+    /**
+     * Method to add drawpaths that were remvoed from active drawpath lists
+     *      back to the list of active drawpaths displayed on the canvas
+     */
     public void onClickRedo() {
         if (undonePaths.size() > 0) {
             paths.add(undonePaths.remove(undonePaths.size() - 1));
             allPaints.add(undonePaints.remove(undonePaints.size() - 1));
             invalidate();
         }
-    }
-
-    public void setBrushSize(float newSize){
-        float pixelAmt = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, newSize, getResources().getDisplayMetrics());
-        currentBrushSize = pixelAmt;
-        canvasPaint.setStrokeWidth(newSize);
-
-    }
-
-    public void setLastBrushSize(float lastSize){
-        lastBrushSize = lastSize;
-    }
-    public float getLastBrushSize(){
-        return lastBrushSize;
-    }
-    public interface OnNewBrushSizeSelectedListener{
-        void onNewBrushSizeSelected(float newBrushSize);
     }
 
     /**

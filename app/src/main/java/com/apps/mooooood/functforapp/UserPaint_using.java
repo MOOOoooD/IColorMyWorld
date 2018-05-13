@@ -48,25 +48,37 @@ import java.util.Date;
 
 public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener{
 
+    // constants for log tags
     public static final String P_TAG = "Paint Debug";
     public static final String USER_PAINT = "UserPaint_using.java";
+    public static final String EXT_STORAGE = "EXT-STORAGE";
+
+    // creates instance of menuCustView for custom menu buttons
+    MenuCustView menuCustView;
 
     //private FloatingActionButton floatActBtn;
     private PntCustView_using pCustomView;
-    Button brownBtn, blueBtn, purpleBtn, redBtn, orangeBtn, yellowBtn, greenBtn;
-    //Button loadCanvasBtn;
+    Button brownBtn, blueBtn, purpleBtn, redBtn, orangeBtn, yellowBtn, greenBtn, blackBtn;
     Button loadImgBtn;
 
+    // name of album to add to image gallery
+    private final String ALBUM_NAME = "/I_Color_My_World";
 
     // from activity_menu_cust_view
     Button color;
 
-    int imgWidth = 640;// standard
-    int imgHeight = 480;// standard
+    // standard image width - to use for smaller devices
+    int imgWidth = 640;
+    int imgHeight = 480;
 
-    private MenuCustView menuCustView;
     private LinearLayout pbar;
 
+    // toggle for draw_tool
+    private boolean eraseDraw = true;
+
+    // img resize variables
+    int width = 0;
+    int height = 0;
 
     @SuppressLint({"WrongViewCast", "ClickableViewAccessibility"})
     @Override
@@ -77,12 +89,8 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
         Log.d(P_TAG, "in onCreate before cust view");
         setContentView(R.layout.activity_user_paint);
 
-        // loads the openCV library
-        //System.loadLibrary("opencv_java3");
-
-
-        /** may not need to find view by id **/
-        //  blackBtn = findViewById(R.id.black_paint);
+        // buttons for color pallete
+        blackBtn = findViewById(R.id.colorBlkBtn);
         brownBtn = findViewById(R.id.colorBrBtn);
         blueBtn = findViewById(R.id.colorBlueBtn);
         purpleBtn = findViewById(R.id.colorPBtn);
@@ -90,21 +98,30 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
         orangeBtn = findViewById(R.id.colorOBtn);
         yellowBtn = findViewById(R.id.colorYBtn);
         greenBtn = findViewById(R.id.colorGBtn);
+
+        // palette bar to hold color buttons
+        pbar = findViewById(R.id.palette_bar);
+
+        // custom view - drawing interaction area
         pCustomView = findViewById(R.id.paint_custom_view);
-        color= findViewById(R.id.color_button);
-        pbar = findViewById(R.id.pallete_bar);
-        //loadCanvasBtn = findViewById(R.id.load_canvas);
-        loadImgBtn = findViewById(R.id.load_image);
+
+        // custom view  - menu holding undo, redo, color, and draw_tool buttons
         menuCustView = findViewById(R.id.menu_cust_view);
 
+        // press and hold button to apply drawpaths and paint to image
+        color= findViewById(R.id.color_button);
+
+        // button in center of custom view to initiate load image from gallery
+        loadImgBtn = findViewById(R.id.load_image);
+
+        // sets loadImgBtn visibility
         buttonVisibility();
 
         /**
-         * setting onTouchListener for touch and hold button
-         * may switch to on long click -
+         * onTouchListener for touch and hold button
          * When user holds button and drags pencil, creates drawPaths
          * for 'coloring' on canvas
-         *
+         * function requires performClick() method, but does not use
          */
         color.setOnTouchListener(new View.OnTouchListener(){
             @Override
@@ -113,13 +130,11 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
                     case MotionEvent.ACTION_DOWN:
                         pCustomView.colorToggle = true;
                         //Log.d("COLOR_","In ColorBtn Down: "+pCustomView.colorToggle);
-                        //pCustomView.invalidate();
                         break;
                     case MotionEvent.ACTION_UP:
                         pCustomView.colorToggle = false;
                         //Log.d("COLOR_","In ColorBtn Up: "+pCustomView.colorToggle);
                         view.performClick();
-                        //pCustomView.invalidate();
                         break;
                 }
                 return false;
@@ -128,11 +143,12 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
     }
 
 
-
-
     /**
-     * onClick method to load images
-     * @param v - load_btn
+     * onClick method that takes in loadImgBtn Button object and uses intent to
+     *      access image gallery on device - once user selectes image,
+     *      URI for image is returned and processed in onActivityResult
+     *      Changes text on loadImgBtn to indicate image is processing
+     * @param v
      */
     public void loadImg(View v){
         Intent image = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -141,14 +157,16 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
             Thread.sleep(500);
             loadImgBtn.setText(R.string.loading);
         }catch (Exception e){
-
+            Log.d(USER_PAINT, "Error "+e);
         }
-
     }
 
     /**
-     * onClick method to display popup menu
-     * @param v - menu_btn
+     * onClick method that takes in menuBtn ImageButton and
+     *      inflates a popup menu that displays options
+     *      for the user save, delete, or share images
+     *      Uses draw_menu.xml for menu options
+     * @param v
      */
     public void listMenu(View v){
         PopupMenu popupMenu = new PopupMenu(this, v);
@@ -157,42 +175,52 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
         popupMenu.show();
     }
 
-
     /**
-     * Undo - calls function in paintCustomView to undo drawpaths
+     * onClick method that takes in undoBtn ImageButton and calls function in
+     *      paintCustomView object to take move drawpath objects from
+     *      active ArrayList and adds the drawpath objects to
+     *      the storing drawpath ArrayList so the drawpath and
+     *      associated paint object will be removed from onscreen
      * @param v
      */
     public void undoClicked(View v){
-        Toast.makeText(this, "undo line", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Undo Line", Toast.LENGTH_SHORT).show();
         pCustomView.onClickUndo();
     }
 
     /**
-     * Redo - calls function in paintCustomView to redo undone drawpaths
+     * onClick method that takes in redoBtn ImageButton and calls function in
+     *      paintCustomView object to take move drawpath objects from
+     *      storing ArrayList and adds the drawpath objects back to to
+     *      the active drawpath ArrayList so the drawpath and
+     *      associated paint object will be redisplayed onscreen
      * @param v
      */
     public void redoClicked(View v){
-        Toast.makeText(this, "redo line", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Redraw Line", Toast.LENGTH_SHORT).show();
         pCustomView.onClickRedo();
     }
 
     /**
-     * Erase/Draw - changes image on tool and button
+     * onClick method that takes in the ImageButton draw_tool_btn view that switches
+     *      the draw_tool displayed on screen to the pencil_icon or eraser_icon
+     *      respectively, by resetting drawable image tied to ImageButton
+     *      and color associated with the respective tool
+     *      calls methods in PntCustView to initiate onDraw() call to update
+     *      screen to display the switch
      * @param v
      */
-    private boolean eraseDraw = true;
     public void eraseDrawClicked(View v){
-        Toast.makeText(this, "erase", Toast.LENGTH_SHORT).show();
         eraseDraw = !eraseDraw;
         pCustomView.onClickEraseDraw(eraseDraw);
         if(!eraseDraw) {
-
+            Toast.makeText(this, "Erasing", Toast.LENGTH_SHORT).show();
             pCustomView.setLastPaintColor();
             pCustomView.setPaint(getResources().getColor(R.color.erase));
-
             v.setBackgroundResource(R.drawable.pencil_icon);
         }else{
-            v.setBackgroundResource(R.drawable.eraserd);
+            Toast.makeText(this, "Coloring", Toast.LENGTH_SHORT).show();
+            v.setBackgroundResource(R.drawable.eraser_icon);
             pCustomView.setPaint(pCustomView.getLastPaintColor());
         }
     }
@@ -224,51 +252,13 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
         }
     }
 
-    /*************************************************
-For menu items on bottom tool bar
-
-    private void handleDrawingIconTouched(int itemId){
-        switch(itemId){
-            case R.id.action_delete:
-                deleteDialog();
-                break;
-            case R.id.action_undo:
-                pCustomView.onClickUndo();
-                break;
-            case R.id.action_redo:
-                pCustomView.onClickRedo();
-                break;
-            case R.id.action_share:
-                sharePainting();
-                break;
-            case R.id.action_save:
-                savePainting();
-                break;
-        }
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu){
-        // Inflate the menu; this adds the items to the action bar if present
-        getMenuInflater().inflate(R.menu.draw_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        int id = item.getItemId();
-        return super.onOptionsItemSelected(item);
-    }
-    ***********************************************/
-
-
-
-    // Allert Dialog - confirm the wipe screen call
-
     /**
-     * Delete dialogs
-     * need to connect delete behavior
+     * Method to close current activity and displays confirmation message
+     *      to user to verify they want to delete working image
+     *      Uses onClick method for delete Button in pop-up menu
+     *      if yes, restarts activity, clearing current memory and allowing
+     *      user to start over on activity
+     *      if no, cancel, return to current screen
      */
     private void deleteDialog(){
         AlertDialog.Builder deleteDialog = new AlertDialog.Builder(this);
@@ -277,7 +267,6 @@ For menu items on bottom tool bar
         deleteDialog.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                //pCustomView.eraseAll();
                 Intent intent = getIntent();
                 finish();
                 startActivity(intent);
@@ -289,19 +278,12 @@ For menu items on bottom tool bar
                 dialogInterface.cancel();
             }
         });
-
         deleteDialog.show();
     }
 
-
-
     /**
-     * name for gallery saved on phone
-     */
-    private String galleryFolder = "/Color_My_World";
-
-    /**
-     * creates name for saved/shared image
+     * Method to create a save name for images that are to be saved
+     *      uses dat eand time in image name to ensure unique name for all saved images
      * @return String image name
      */
     private String imageName(){
@@ -311,29 +293,33 @@ For menu items on bottom tool bar
         return imgName;
     }
 
+    /**
+     * Method to check for album directory in image gallery to store completed images
+     *      If album does not exist, will make album directory
+     *      returns the path to the directory to save image in
+     * @return String directory name
+     */
     private File directoryName(){
-        String filePath = Environment.getExternalStorageDirectory().getAbsolutePath()+ galleryFolder;
+        String filePath = Environment.getExternalStorageDirectory().getAbsolutePath()+ ALBUM_NAME;
         File colorDir = new File(filePath);
         if(!colorDir.exists()){
             colorDir.mkdirs();
-
         }
         return colorDir;
     }
 
     /**
-     * saves colored canvas in gallery established by app
+     * Method to save painting using save Button in pop-up menu
+     *      takes image data from pCustomView object, stores it
+     *      in cache - uses FileOutputStream to save image in app album in
+     *      gallery
      */
     private void savePainting(){
 
         pCustomView.save = !pCustomView.save;
         pCustomView.setDrawingCacheEnabled(true);
         pCustomView.invalidate();
-        //LoadSaveImages saveImage = new LoadSaveImages();
-
-        //saveImage.saveCMWImage(this, pCustomView.getCanvasBitmap());
         //Log.d("in SAVE Painting", "hope it workd");
-
 
         File cmvSaveImg = new File(directoryName(), imageName());
         try{
@@ -356,25 +342,21 @@ For menu items on bottom tool bar
                 endW = pCustomView.getWidth();
             }else{
            //     Log.d("CIMGELS", " pcustView Cimg W else: "+pCustomView.centerImg_W);
-
                 startW = pCustomView.centerImg_W;
                 endW = pCustomView.imgWidth;
             }
             if(pCustomView.centerImg_H<0){
                // Log.d("CIMGh<0", " pcustView Cimg H: "+pCustomView.centerImg_H);
-
                 startH = 0;
                 endH = pCustomView.getHeight();
             }else{
               //  Log.d("CIMGELS", " pcustView Cimg H else: "+pCustomView.centerImg_H);
-
                 startH = pCustomView.centerImg_H;
                 endH = pCustomView.imgHeight;
             }
           //  Log.d("SAVE-T", "savePainting: check coordinates: Start  "+startW+", "+startH+"  End: "+endH+", "+endW);
-
             // save only the range of the colored bitmap
-             Bitmap savImg = Bitmap.createBitmap(pCustomView.getDrawingCache(),startW, startH,endW,endH);
+            Bitmap savImg = Bitmap.createBitmap(pCustomView.getDrawingCache(),startW, startH,endW,endH);
 
             for(int x = 0; x < savImg.getWidth(); x++){
                 for(int y = 0; y < savImg.getHeight(); y++){
@@ -392,22 +374,19 @@ For menu items on bottom tool bar
             saveOut.flush();
             saveOut.close();
             fileAvailabilityMediaScanner(cmvSaveImg);
-
-
         }catch(Exception e){
             //e.printStackTrace();
-            Log.d("In Exception","Could not save file: \n"+e.getStackTrace());
+            Log.d(USER_PAINT,"Could not save file: \n"+e.getStackTrace());
         }
         pCustomView.save = !pCustomView.save;
-
     }
 
 
-    /**
-     * need to implement save for later
-     */
+    /*
+     need to implement functionality to save current working image to reload
+     and continue work at a later time
 
-    //SAve for later
+    //Save for later
     private String progressFolder = "/Inprogress";
 
     private void savePaintingForLater() {
@@ -415,36 +394,21 @@ For menu items on bottom tool bar
         pCustomView.save = !pCustomView.save;
         pCustomView.setDrawingCacheEnabled(true);
         pCustomView.invalidate();
-
-
-        //LoadSaveImages saveImage = new LoadSaveImages();
-
-        //saveImage.saveCMWImage(this, pCustomView.getCanvasBitmap());
-        //Log.d("in SAVE Painting", "hope it workd");
-
         File cmvSaveImg = new File(directoryName(), imageName());
         try {
             FileOutputStream saveOut = new FileOutputStream(cmvSaveImg);
-
             pCustomView.getDrawingCache().compress(Bitmap.CompressFormat.PNG, 100, saveOut);
-
             saveOut.flush();
             saveOut.close();
             fileAvailabilityMediaScanner(cmvSaveImg);
-
-
-            //Log.d("in save...", "pleae saveimg");
-            //Log.d("SAveDirPlease", cmvSaveImg.getPath());
-            //Log.d("SAveFile", cmvSaveImg.getName());
-
         } catch (Exception e) {
             e.printStackTrace();
             //Log.d("In Exception", "   BLAHHHHH");
         }
         pCustomView.save = !pCustomView.save;
     }
+    */
 
-    public static final String EXT_STORAGE = "EXT-STORAGE";
 
 
     /**
@@ -464,54 +428,84 @@ For menu items on bottom tool bar
     }
 
     /**
-     *
+     * Method to share painting using share Button in pop-up menu
+     *      takes image data from pCustomView object, stores it
+     *      in cache - uses FileOutputStream to save image in app album in
+     *      gallery
      */
     private void sharePainting(){
 
         pCustomView.save = !pCustomView.save;
-        //cache drawing/img
-
         pCustomView.setDrawingCacheEnabled(true);
         pCustomView.invalidate();
+        try {
+            String path = Environment.getExternalStorageDirectory().toString();
+            OutputStream fileOut = null;
+            File file = new File(path, imageName());
+            file.getParentFile().mkdirs();
+            try {
+                file.createNewFile();
+            } catch (Exception e) {
+                Log.e(P_TAG, "New File: " + e.getCause() + e.getMessage());
+            }
+            try {
+                fileOut = new FileOutputStream(file);
+            } catch (Exception e) {
+                Log.e(P_TAG, "FileOut " + e.getCause() + e.getMessage());
+            }
+            if (pCustomView.getDrawingCache() == null) {
+                Log.e(P_TAG, "Unable to get drawing cache ");
+            }
 
-        String path = Environment.getExternalStorageDirectory().toString();
-        OutputStream fileOut = null;
-        File file = new File(path,"UserPaint_app.png");
-        file.getParentFile().mkdirs();
-
-        try{
-            file.createNewFile();
-        }catch (Exception e){
-            Log.e(P_TAG, "New File: "+e.getCause()+e.getMessage());
-        }
-
-        try{
-            fileOut = new FileOutputStream(file);
-        }catch(Exception e){
-            Log.e(P_TAG, "FileOut "+e.getCause()+e.getMessage());
-        }
-        if(pCustomView.getDrawingCache() == null){
-            Log.e(P_TAG, "Unable to get drawing cache ");
-        }
-        pCustomView.getDrawingCache().compress(Bitmap.CompressFormat.JPEG, 100, fileOut);
-
-        try{
+            int startW, startH, endW, endH;
+            //int startW=481, startH=302, endW=1365, endH=767;
+            //int startW=162, startH=6, endW=640, endH=480;
+            if (pCustomView.centerImg_W < 0) {
+                // Log.d("CIMGw<0", " pcustView Cimg W: "+pCustomView.centerImg_W);
+                startW = 0;
+                endW = pCustomView.getWidth();
+            } else {
+                //     Log.d("CIMGELS", " pcustView Cimg W else: "+pCustomView.centerImg_W);
+                startW = pCustomView.centerImg_W;
+                endW = pCustomView.imgWidth;
+            }
+            if (pCustomView.centerImg_H < 0) {
+                // Log.d("CIMGh<0", " pcustView Cimg H: "+pCustomView.centerImg_H);
+                startH = 0;
+                endH = pCustomView.getHeight();
+            } else {
+                //  Log.d("CIMGELS", " pcustView Cimg H else: "+pCustomView.centerImg_H);
+                startH = pCustomView.centerImg_H;
+                endH = pCustomView.imgHeight;
+            }
+            //  Log.d("SAVE-T", "savePainting: check coordinates: Start  "+startW+", "+startH+"  End: "+endH+", "+endW);
+            // save only the range of the colored bitmap
+            Bitmap savImg = Bitmap.createBitmap(pCustomView.getDrawingCache(), startW, startH, endW, endH);
+            for (int x = 0; x < savImg.getWidth(); x++) {
+                for (int y = 0; y < savImg.getHeight(); y++) {
+                    int bmColor = savImg.getPixel(x, y);
+                    int r = Color.alpha(bmColor);
+                    if (r == 0) {
+                        savImg.setPixel(x, y, Color.rgb(255, 255, 255));
+                    }
+                }
+            }
+            savImg.compress(Bitmap.CompressFormat.PNG, 100, fileOut);
+            savImg.recycle();
             fileOut.flush();
             fileOut.close();
-        }catch(IOException e){
-            Log.e(P_TAG, "Flush-Close: "+e.getCause()+e.getMessage());
+
+            Intent shareIntent = new Intent();
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+            shareIntent.setType("image/png");
+            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            startActivity(Intent.createChooser(shareIntent, "Share Image"));
+        }catch (Exception e){
+            Log.d(USER_PAINT,"Could not share image: \n"+e.getStackTrace());
         }
-        Intent shareIntent = new Intent();
-        shareIntent.setAction(Intent.ACTION_SEND);
-        shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
-        shareIntent.setType("image/png");
-        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        startActivity(Intent.createChooser(shareIntent, "Share Image"));
         pCustomView.save = !pCustomView.save;
-
-
     }
-
 
 
     public void backToMain(View view){
@@ -669,14 +663,15 @@ For menu items on bottom tool bar
         return super.clone();
     }
 
-    // img resize variables
-    int width = 0;
-    int height = 0;
+    /**
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
-
-
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == RESULT_LOAD_IMG && resultCode == RESULT_OK && null != data){
@@ -899,9 +894,13 @@ For menu items on bottom tool bar
         }
     }
 
+    /**
+     * Method switches visibility of loadImgBtn object within pCustomView object
+     *      to be visible when image has not been selected, then not visible
+     *      when image has loaded
+     */
     private void buttonVisibility(){
         loadImgBtn.setVisibility(loadImgBtn.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
-        //loadCanvasBtn.setVisibility(loadCanvasBtn.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
     }
 
 }

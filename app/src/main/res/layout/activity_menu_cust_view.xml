@@ -89,14 +89,14 @@
 
 
         <ImageButton
-            android:id="@+id/erase_btn"
+            android:id="@+id/draw_tool_btn"
             android:layout_width="match_parent"
             android:layout_height="@dimen/img_menu"
             android:layout_below="@id/color_button"
             android:layout_centerVertical="true"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="5dp"
-            android:background="@drawable/eraserd"
+            android:background="@drawable/eraser_icon"
             android:onClick="eraseDrawClicked"
             android:contentDescription="@string/action_erase" />
 <!--

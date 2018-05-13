@@ -8,18 +8,15 @@ import android.widget.RelativeLayout;
 
 public class MenuCustView extends RelativeLayout {
 
-    Button load_btn;
-  //  Button colorBtn;
-    ImageButton menuBtn;
-    ImageButton eraseDraw;
+    ImageButton menuBtn, eraseDraw, undoBtn, redoBtn;
 
 
     public MenuCustView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
-
         menuBtn = findViewById(R.id.menu_button);
-        eraseDraw = findViewById(R.id.erase_btn);
-
+        eraseDraw = findViewById(R.id.draw_tool_btn);
+        undoBtn = findViewById(R.id.undo_button);
+        redoBtn = findViewById(R.id.redo_button);
     }
 
 }
