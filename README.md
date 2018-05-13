@@ -4,7 +4,7 @@ Functions and tests for color app - AS with OpenCV
 
 Quick Start Guide:<br>
 
-Javadoc: https://mooooood.github.io/functions_for_app/
+Javadoc: https://mooooood.github.io/IColorMyWorld/
 
 
 
