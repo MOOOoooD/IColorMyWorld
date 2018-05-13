@@ -18,8 +18,8 @@ I Color My World: An Android Application</a>
 
 <b>UMLs:</b>
 <blockquote>
- <b>User Diagram</b>: To be done
- <b>Class Diagram</b>: To be done
+ <b>User Diagram</b>: To be done<br>
+ <b>Class Diagram</b>: To be done<br>
  <b>State Diagram</b>: To be done
 </blockquote>
 <br>
