@@ -11,7 +11,7 @@
 
     >
 
-    <com.apps.mooooood.functforapp.MenuCustView
+    <com.apps.mooooood.icolormyworld.MenuCustView
 
         android:id="@+id/menu_cust_view"
         android:layout_width="match_parent"
@@ -116,7 +116,7 @@
             android:textAllCaps="false" />
 -->
 
-    </com.apps.mooooood.functforapp.MenuCustView>
+    </com.apps.mooooood.icolormyworld.MenuCustView>
 
 
 </android.support.constraint.ConstraintLayout>

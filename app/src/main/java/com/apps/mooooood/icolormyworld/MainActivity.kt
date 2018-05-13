@@ -1,4 +1,4 @@
-package com.apps.mooooood.functforapp
+package com.apps.mooooood.icolormyworld
 
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity

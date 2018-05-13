@@ -1,4 +1,4 @@
-package com.apps.mooooood.functforapp
+package com.apps.mooooood.icolormyworld
 
 import org.junit.Test
 

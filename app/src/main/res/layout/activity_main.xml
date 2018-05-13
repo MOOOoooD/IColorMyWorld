@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/title"
-    tools:context="com.apps.mooooood.functforapp.MainActivity">
+    tools:context="com.apps.mooooood.icolormyworld.MainActivity">
 
         <Button
             android:id="@+id/drag_btn"

@@ -1,4 +1,4 @@
-package com.apps.mooooood.functforapp;
+package com.apps.mooooood.icolormyworld;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -8,13 +8,10 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.RelativeLayout;
 

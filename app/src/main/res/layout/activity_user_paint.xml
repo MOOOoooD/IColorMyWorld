@@ -7,7 +7,7 @@
     android:background="@color/dkgray"
 
     android:minHeight="0dp"
-    tools:context="com.apps.mooooood.functforapp.UserPaint_using">
+    tools:context="com.apps.mooooood.icolormyworld.UserPaint_using">
 
 
     <LinearLayout
@@ -115,7 +115,7 @@
 
     </LinearLayout>
 
-    <com.apps.mooooood.functforapp.PntCustView_using
+    <com.apps.mooooood.icolormyworld.PntCustView_using
         android:id="@+id/paint_custom_view"
         android:layout_width="0dp"
         android:layout_height="0dp"

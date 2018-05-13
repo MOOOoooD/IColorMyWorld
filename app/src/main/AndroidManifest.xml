@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.apps.mooooood.functforapp">
+    package="com.apps.mooooood.icolormyworld">
 
     <!-- must have permission to access external files -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name="com.apps.mooooood.icolormyworld.MainActivity"
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,20 +24,20 @@
 
         <!-- OpenCV activity -->
         <activity
-            android:name=".OpCVImage_using"
+            android:name="com.apps.mooooood.icolormyworld.OpCVImage_using"
             android:screenOrientation="landscape">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value="com.apps.mooooood.icolormyworld.MainActivity" />
         </activity>
 
         <!-- Paint activity -->
         <activity
-            android:name=".UserPaint_using"
+            android:name="com.apps.mooooood.icolormyworld.UserPaint_using"
             android:screenOrientation="landscape">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value="com.apps.mooooood.icolormyworld.MainActivity" />
         </activity>
         <!-- <activity android:name="PntCustView_usingView"></activity> -->
 

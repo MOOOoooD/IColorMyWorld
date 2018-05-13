@@ -1,4 +1,4 @@
-package com.apps.mooooood.functforapp;
+package com.apps.mooooood.icolormyworld;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 
@@ -37,7 +37,6 @@ import org.opencv.core.CvType;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;

@@ -6,7 +6,7 @@
     android:id="@+id/paintScreen"
     tools:context=".UserPaint_using"
     >
-    <com.apps.mooooood.functforapp.PntCustView_using
+    <com.apps.mooooood.icolormyworld.PntCustView_using
         android:id="@+id/paint_custom_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
