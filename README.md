@@ -1,4 +1,4 @@
-# I Color My World: An Android Application
+# I Color My World
 Functions and tests for color app - AS with OpenCV
 
 <b>I Color My World - Overview</b>
@@ -19,7 +19,8 @@ https://mooooood.github.io/IColorMyWorld/
 
 <b>Presentation:</b>
 <blockquote>
-https://drive.google.com/open?id=13PqdqPdQEHdn9f3wNBSNGpcslKNml33sfkAyVfAbnZU
+<a href="https://drive.google.com/open?id=13PqdqPdQEHdn9f3wNBSNGpcslKNml33sfkAyVfAbnZU">
+I Color My World: An Android Application</a>
 </blockquote>
 <br>
 
