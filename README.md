@@ -6,6 +6,7 @@ Functions and tests for color app - AS with OpenCV
  <b>Product Paper</b>:<br>
     to be done
 </blockquote>
+<br>
 
 Quick Start Guide: maybe <br>
 
@@ -13,12 +14,14 @@ Quick Start Guide: maybe <br>
 <blockquote>
 https://mooooood.github.io/IColorMyWorld/
 </blockquote>
+<br>
 
 
 <b>Presentation:</b>
 <blockquote>
 https://drive.google.com/open?id=13PqdqPdQEHdn9f3wNBSNGpcslKNml33sfkAyVfAbnZU
 </blockquote>
+<br>
 
 <b>UMLs:</b>
 <blockquote>
