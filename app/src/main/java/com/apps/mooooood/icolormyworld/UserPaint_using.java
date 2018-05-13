@@ -654,17 +654,6 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
 
     }
 
-
-    /**
-     * Cloning objects - this is used to ensure date pointer passed is not incremented
-     * can be used for deep copying other objects
-     * @return
-     * @throws CloneNotSupportedException
-     */
-    protected Object clone()throws CloneNotSupportedException{
-        return super.clone();
-    }
-
     /**
      * re-inflates activity_paint_custom_view.xml after image is selected in from the device
      *      image gallery by the user, and displays resulting image based after
