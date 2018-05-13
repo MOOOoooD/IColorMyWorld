@@ -18,9 +18,9 @@ I Color My World: An Android Application</a>
 
 <b>UMLs:</b>
 <blockquote>
- <b>User Diagram</b>: To be done<br>
- <b>Class Diagram</b>: To be done<br>
- <b>State Diagram</b>: To be done
+ <b>User Diagram</b>: <a href="https://drive.google.com/file/d/1T46t4FmQfVhVf5PeOE0Sc4T9U47KA6WE/view?usp=sharing">User Case</a><br>
+ <b>Class Diagram</b>: <a href="https://drive.google.com/file/d/1i0IZUR2yOuCZGZyMtR5GvXW0KtO9LJrJ/view?usp=sharing>Classes</a><br>
+ <b>State Diagram</b>: <a href="https://drive.google.com/file/d/1XGzWC7iLlTPbIB7lctJY6Ku9CnESxLA7/view?usp=sharing>States</a><br>
 </blockquote>
 <br>
 
