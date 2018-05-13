@@ -153,7 +153,7 @@ public class OpCVImage_using extends AppCompatActivity{
     }
 
     /**
-     *
+     * inflates activity_op_cvimage.xml and instantiates buttons and listeners
      * @param savedInstanceState
      */
     @Override

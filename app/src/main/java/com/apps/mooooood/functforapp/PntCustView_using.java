@@ -11,6 +11,7 @@ import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -32,111 +33,127 @@ import java.util.ArrayList;
  */
 
 public class PntCustView_using extends View {
+
+    // Constant for log tags
+    private static final String PAINT_TAG = "PaintCustView.java";
+
+    // boolean toggles for touch behaviors
     boolean colorToggle = false;
     boolean imgToggle = false;
+
+    // boolean toggles for setting canvas and saving colored image
     boolean save = false;
     boolean setCan = false;
 
+    // drawtool - holds pencil_icon and eraser_icon as toggled
     private Bitmap draw_tool;
-    private Matrix translate;
-    private Canvas tool;
 
-    //drawing path
+    // translation matrix
+    private Matrix translate;
+
+    // holds coordinates drawn and paint object
     private Path drawPath;
-    //defines what to draw
-    private Paint canvasPaint;
-    // defines how to draw
+    // holds color and 'brush' stroke style
     private Paint drawPaint;
-    // initial color
+
+    // used to create white canvas backdrop for coloring area
+    private Paint canvasPaint;
+
+    // initial color upon instantiation
     private int paintColor;
+
+    // stores last paint color - used when toggleing eraser and pencil
     private int lastPaintColor;
+
     //canvas-holding pen, holds drawings, transfers to view
     private Canvas drawCanvas;
-    // canvas - bitmap
+
+    // bitmap object used to save image
     Bitmap canvasBitmap;
+
     // brush size
     private float currentBrushSize;
     private float lastBrushSize;
 
-    private float mX;
-    private float mY;
-    private static final float TOUCH_TOLERANCE = 8;
-    private static final String PAINT_TAG = "PaintCustView.java";
-
-    // added to drag pencil
+    // gesture detector
     private GestureDetector gestures;
+
+    // variables to hold x and y coordinates based on gesture listeners
     float moveX=0;
     float moveY=0;
-
-    private float mLastX;
-    private float mLastY;
-    private float touchedX;
-
-    private float mStartX = 0;
-    private float mStartY = 0;
     private float xDiff = 0;
     private float yDiff = 0;
+    private float mX;
+    private float mY;
 
-    private float mTranslateX = 0;
-    private float mTranslateY = 0;
+    // touch tolerance - can be adjusted - used for movement
+    private static final float TOUCH_TOLERANCE = 0;
 
-
-    private float shiftLeft = 300;
-
-    // center bitmap on canvas coord variables
+    // variables to hold and use image coordinates related to view
     int canvasWidth = 0;
     int canvasHeight = 0;
-
     int imgWidth = 0;
     int imgHeight = 0;
     int centerImg_W;
     int centerImg_H;
 
-    int penWidth = 0;
-    int penHeight = 0;
+    // variables to hold and use for animating pencil_icon and eraser_icon
+    int drawToolWidth = 0;
+    int drawToolHeight = 0;
+
+    // adjust drawpath start point always be at the tip of the tool
     int centerPen_W = 0;
     int centerPen_H = 0;
-    Context needContext;
 
-
+    // used to toggle need for moveTo function for drawpath - making sure reset
+    // does not start drawing at 0,0
     boolean moveTo = true;
-
-
-    // adding path list for drawing and undoing paths
+    
+    // ArrayLists to act as stacks for for drawing and undoing paths and paints
     private ArrayList<Path> paths = new ArrayList<Path>();
     private ArrayList<Path> undonePaths = new ArrayList<Path>();
     private ArrayList<Paint> allPaints = new ArrayList<Paint>();
     private ArrayList<Paint> undonePaints = new ArrayList<Paint>();
-    AttributeSet pAttr;
 
+    /**
+     * Constructor
+     * @param context
+     * @param attr
+     */
     public PntCustView_using(Context context, AttributeSet attr) {
         super(context, attr);
 
-        pAttr = attr;
-        // for pencil!!!
         RelativeLayout paintLayout = findViewById(R.id.paintScreen);
-        //pencil = BitmapFactory.decodeResource(getResources(), R.drawable.test_pencil);
-        draw_tool = BitmapFactory.decodeResource(getResources(), R.drawable.pencil_icon);
-        penWidth = draw_tool.getWidth();
-        penHeight = draw_tool.getHeight();
-        //Log.d(PAINT_TAG, "penW: "+penWidth+", penH: "+penHeight);
 
+        // instantiating draw_tool and storing initial height and width
+        draw_tool = BitmapFactory.decodeResource(getResources(), R.drawable.pencil_icon);
+        drawToolWidth = draw_tool.getWidth();
+        drawToolHeight = draw_tool.getHeight();
+        //Log.d(PAINT_TAG, "toolW: "+drawToolWidth+", toolH: "+drawToolHeight);
 
         translate = new Matrix();
+
+        // gesture detector for gesture and scale
         gestures = new GestureDetector(context, new GestureListener(PntCustView_using.this));
-        detector = new ScaleGestureDetector(context,new zScaleGestureListener());
 
         paintColor = getResources().getColor(R.color.red);
         lastPaintColor = paintColor;
-        needContext = context;
 
         //Log.d(PAINT_TAG, "in Paint View constuctor");
+
+        // calls function to initialize objects
         initialize();
     }
 
 
-
-    // Initialize Variables
+    /**
+     * Method initializes brushes, paint objects, path objects for drawing
+     *      functionality
+     *      Paths store coordinates of movement
+     *      Paints store color and style of strokes
+     *      setting antialiasing to false so saved lines are clear
+     *
+     */
     private void initialize() {
 
         currentBrushSize = getResources().getInteger(R.integer.size_small);
@@ -146,7 +163,6 @@ public class PntCustView_using extends View {
         drawPaint = new Paint();
         drawPaint.setColor(paintColor);
 
-        // attempting to resolve lines created in paint objects with antialiasing
         drawPaint.setAntiAlias(false);
         drawPaint.setFilterBitmap(true);
 
@@ -154,28 +170,6 @@ public class PntCustView_using extends View {
         drawPaint.setStyle(Paint.Style.STROKE);
         drawPaint.setStrokeJoin(Paint.Join.ROUND);
         drawPaint.setStrokeCap(Paint.Cap.ROUND);
-    }
-
-    private float scaleFactor = 1.f;
-    private static float MIN_ZOOM = .6f;
-    private static float MAX_ZOOM = 6f;
-    private static float SCALE_CHANGE = 0.4f;
-    private class zScaleGestureListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
-
-        public zScaleGestureListener(){
-            super();
-        }
-
-        @Override
-        public boolean onScale(ScaleGestureDetector detect){
-
-            //Log.d("SCALE_C","In Scale Gesture Detector");
-                scaleFactor *= detect.getScaleFactor();
-                scaleFactor = Math.max(MIN_ZOOM, Math.min(scaleFactor, MAX_ZOOM));
-
-            return true;
-        }
-
     }
 
 
@@ -278,8 +272,15 @@ public class PntCustView_using extends View {
     }
 
 
-
-    // creates canvas due to screen size
+    /**
+     * Methods creates canvas based on screen size an
+     *      takes in width and height
+     *
+     * @param w
+     * @param h
+     * @param oldW
+     * @param oldH
+     */
     @Override
     protected void onSizeChanged(int w, int h, int oldW, int oldH) {
         //create canvas of certain device size
@@ -287,30 +288,20 @@ public class PntCustView_using extends View {
 
         canvasWidth = w;
         canvasHeight = h-50;
-        // create Bitmap of certain w, h
-        //canvasBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-
-        //canvasBitmap = BitmapFactory.decodeResource(getContext().getResources(),R.drawable.halloween_background);
-        //canvasBitmap = canvasBitmap.copy(Bitmap.Config.ARGB_8888, true);
-
-        //Log.d(PAINT_TAG, "losing my mind - "+canvasBitmap);
-//        Log.d(PAINT_TAG, "--- new group ---");
-//        Log.d(PAINT_TAG, "---V-> V-Width: "+canvasWidth+", V-Height: "+canvasHeight);
-//        Log.d(PAINT_TAG, "---I-> I-Width: "+imgWidth+", I-Height: "+imgHeight);
-//        centerImg_W = (canvasWidth-imgWidth)/2;
-//        centerImg_H = (canvasHeight-imgHeight)/2;
-//        Log.d(PAINT_TAG,"---C-> CenterW: "+centerImg_W+", CenterH: "+centerImg_H);
-        centerPen_W = canvasWidth-penWidth;
-        centerPen_H = (canvasHeight+50-penHeight)/2;
+        centerPen_W = canvasWidth-drawToolWidth;
+        centerPen_H = (canvasHeight+50-drawToolHeight)/2;
         moveX = centerPen_W;
         moveY = centerPen_H;
-
-        //apply bitmap to graphic to start drawing
-        //drawCanvas = new Canvas(canvasBitmap);
     }
 
 
-
+    /**
+     * Method skews drawpath and drawpaint points on screen to fit 'point' of drawTool
+     *      object
+     *      takes in touch coordinates and sets movement coordinates at a shifted value
+     * @param x
+     * @param y
+     */
     public void skew(float x, float y){
         if(x > moveX ){
             moveX = x-xDiff;
@@ -336,29 +327,33 @@ public class PntCustView_using extends View {
     int xAdj = 0;//8;
     int yAdj = 0;//6;;
 
+    /**
+     * onTouchListener for moving drawtool and creating drawpaths
+     *      When user holds color button and drags drawTool, drawPaths are created
+     *      and stored in and ArrayList with paint objects to display on canvas
+     *      responds to down touch, move gesture, and touch up
+     *      invalidates as changes occurs - which calls onDraw() to redraw
+     *      view with changes
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         float touchX = event.getX();
         float touchY = event.getY();
 
-        //xDiff = Math.abs(moveX-touchX);
-        //yDiff = Math.abs(moveY-touchY);
-        // respond to down, move and up events
+
         switch (event.getAction()) {
+
+            // gets coordinate of initial touch
+            // shifts drawpath coordinates to edge of drawtool
             case MotionEvent.ACTION_DOWN:
                     xDiff = Math.abs(moveX - touchX);
                     yDiff = Math.abs(moveY - touchY);
-
-
-
                     skew(touchX, touchY);
                     if(!erasing) {
                         touch_start(moveX + xAdj, moveY + draw_tool.getHeight() - yAdj);
                         //Log.d("ACTDOWN", " checking x and y : " + moveX + ", " + moveY);
-                        //  Log.d("CKWD", " Width "+canvasBitmap.getWidth());
                         translate.postTranslate(moveX + xAdj, moveY - yAdj);
-                        // need to be able to access the colorImage function in OpenCV_Paint_Image and set the
-                        // color - probably in the touch_move
+
                     }else{
                         touch_start(moveX + xAdj + 20, moveY + draw_tool.getHeight() - yAdj);
                         //Log.d("ACTDOWN", " checking x and y : " + moveX + ", " + moveY);
@@ -392,20 +387,14 @@ public class PntCustView_using extends View {
         return gestures.onTouchEvent(event);
     }
 
-    /**************************************************/
-
-    // Start new Drawing - work on side effects that are cool
-    public void eraseAll() {
-
-        drawCanvas.drawColor(0, PorterDuff.Mode.CLEAR);
-        drawPaint.reset();
-        drawPath.reset();
-        paths.clear();
-        allPaints.clear();
-        invalidate();
-    }
-
-    // called when finger touches screen
+    /**
+     * Method called when touch listener detects the touch down of the pointer/finger
+     *      starts drawpath and paint to new path and paint object
+     *      makes new drawpath and paint object for next
+     *      takes in x and y coordinate of touch start point
+     * @param x
+     * @param y
+     */
     private void touch_start(float x, float y) {
         //Log.d("T_START", "Checking X and Y : "+x+", "+y);
 
@@ -420,17 +409,22 @@ public class PntCustView_using extends View {
         mY = y;
     }
 
-    // evaluating move of user
+    /**
+     * Method called when touch listener detects move of pointer/touch to display and add
+     *      coordinates to drawpath and store paint object with brush style
+     *      in drawpath object
+     *      takes in x and y coordinate of move points
+     * @param x
+     * @param y
+     */
     private void touch_move(float x, float y) {
 
         float dx = Math.abs(x - mX);
         float dy = Math.abs(y - mY);
         if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
            // Log.d("T_MOVE", "Checking X, Y and colortoggle : "+ x +", "+y+"  colorToggle-"+colorToggle);
-
             if(colorToggle) {
                 //Log.d("T_MOVE", "In if colorToggle dX, dY "+ dx +", "+dy+"   colorTog - : "+colorToggle+" mx, my "+ mX+", "+mY+"  x, y "+x+", "+y);
-
                 if(moveTo) {
                     drawPath.moveTo(mX, mY);
                     moveTo=false;
@@ -445,35 +439,32 @@ public class PntCustView_using extends View {
         }
     }
 
-    // called when user lifts finger
+    /**
+     * Method called when touch listener detects the lift of the pointer/finger
+     *      adds drawpath and paint to active arraylist
+     *      makes new drawpath and paint object for next
+     *      gesture, onscreen draw
+     *      calls invalidate to redraw canvas
+     *      sets moveTo to true so next starting point starts
+     *      based on touch coordinates and not 0,0
+     */
     private void touch_up() {
-        //fillToggle = !fillToggle;
 
-        //Log.d("TOUCH_UP", "Color Toggle Value B4:"+ colorToggle);
-        //Log.d("TOUCH_UP", "Path Size Value B4:"+ paths.size());
-
-        //if(colorToggle) {
-//            drawPath.lineTo(mX, mY);
-//            drawCanvas.drawPath(drawPath, drawPaint);
-            paths.add(drawPath);
-            drawPath = new Path();
-            allPaints.add(drawPaint);
-            drawPaint = new Paint(drawPaint);
-            invalidate();
-            //Log.d("TOUCH_UP", "Color Toggle Value In:"+ colorToggle);
-            //Log.d("TOUCH_UP", "Path Size Value In:"+ paths.size());
-            //colorToggle = false;
-        //}
+        paths.add(drawPath);
+        drawPath = new Path();
+        allPaints.add(drawPaint);
+        drawPaint = new Paint(drawPaint);
+        invalidate();
+        //Log.d("TOUCH_UP", "Color Toggle Value In:"+ colorToggle);
+        //Log.d("TOUCH_UP", "Path Size Value In:"+ paths.size());
         moveTo = true;
-        //Log.d("TOUCH_UP", "Color Toggle Value AFT:"+ colorToggle);
-        //Log.d("TOUCH_UP", "Path Size Value AFT:"+ paths.size());
-
-        //drawPath.reset();
-
-
     }
 
-    // methods to trigger the undo and redo
+    /**
+     * Method to remove drawpaths that are stored in active drawpath lists and moves
+     *      drawpath to inactive list of drawpaths - acts as stack
+     *      calls invalidate() to redraw view
+     */
     public void onClickUndo() {
         if (paths.size() > 0) {
             undonePaths.add(paths.remove(paths.size() - 1));
@@ -502,8 +493,9 @@ public class PntCustView_using extends View {
     }
 
     /**
-     * Method to add drawpaths that were remvoed from active drawpath lists
-     *      back to the list of active drawpaths displayed on the canvas
+     * Method to add drawpaths that are stored in inactive drawpath due to undo
+     *      list back to the list of active drawpaths displayed on the canvas
+     *      calls invalidate() to redraw view acts as a stack
      */
     public void onClickRedo() {
         if (undonePaths.size() > 0) {

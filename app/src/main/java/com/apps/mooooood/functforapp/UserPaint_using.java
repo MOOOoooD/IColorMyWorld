@@ -43,8 +43,17 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Created by denise on 1/28/18.
+ * UserPaint_using.java - inflates main drawing user interface activity,
+ *  activity_user_paint.xml which holds custom views activity_paint_custom_view.xml
+ *  and activity_menu_cust_view.xml
+ *  Class instantiates buttons and performs image conversion so user can interact with
+ *  image, color, save, and share converted image *
+ *
+ * @author Denise Fullerton
+ * @since created 1/28/18
+ * @since last updated - 5/12/18
  */
+
 
 public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener{
 
@@ -52,6 +61,8 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
     public static final String P_TAG = "Paint Debug";
     public static final String USER_PAINT = "UserPaint_using.java";
     public static final String EXT_STORAGE = "EXT-STORAGE";
+    private static final String  TAG = "Checking OpenCV";
+    private static final String CHECK_TAG = "Check ";
 
     // creates instance of menuCustView for custom menu buttons
     MenuCustView menuCustView;
@@ -80,6 +91,18 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
     int width = 0;
     int height = 0;
 
+    // Activity result intent result code
+    private static int RESULT_LOAD_IMG = 1;
+
+    /**
+     * Inflates activity_user_paint.xml
+     *      This includes the custom views for activity_paint_custom_view.xml and
+     *      activity_menu_cust_view.xml
+     *      instantiates buttons and onTouchListener for color button
+     * @param savedInstanceState
+     *
+     * supressLint due to on touch listener being attached to button
+     */
     @SuppressLint({"WrongViewCast", "ClickableViewAccessibility"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -507,12 +530,6 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
         pCustomView.save = !pCustomView.save;
     }
 
-
-    public void backToMain(View view){
-        finish();
-    }
-
-
     /**
      * onClick buttons for palette to change  pen/paint color
      * when color selected, the push to color button changes to gradient of selected color
@@ -592,20 +609,6 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
         }
     }
 
-
-    private static int RESULT_LOAD_IMG = 1;
-    private static final String  TAG = "Checking OpenCV";
-    private static final String CHECK_TAG = "Check ";
-    private static float MIN_ZOOM = .6f;
-    private static float MAX_ZOOM = 6f;
-    private static float SCALE_CHANGE = 0.4f;
-    private float scaleFactor = 1.f;
-
-    int lowThresh = 17;
-    int ratio = 3;
-    int kernalSize = 3;
-
-
     /**
      * callback method which allows the OpenCV API to be available to use in functions
      * at a later time -
@@ -664,6 +667,17 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
     }
 
     /**
+     * re-inflates activity_paint_custom_view.xml after image is selected in from the device
+     *      image gallery by the user, and displays resulting image based after
+     *      image filters are applied
+     *      method takes in request code to identify which intent the callback is using,
+     *      resultCode from URI to ensure image will be returned, and intent including description
+     *      of action to be performed and passed in activity
+     *      scales image to keep memory size down,
+     *      runs through all openCV image conversion filters to prepare image for
+     *      drawing
+     *      converts Bitmap to Mat for openCV functions, and back to Bitmap to
+     *      display on canvas
      *
      * @param requestCode
      * @param resultCode
@@ -678,7 +692,6 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
             Uri selectedImage = data.getData();
             String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
-
             assert selectedImage != null;
             Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
             assert cursor != null;
@@ -691,30 +704,18 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
             Mat loadedImg = new Mat();
             Utils.bitmapToMat(bitmap, loadedImg );
             // scaling image to fit 480x640 image space
-            //if(loadedImg.width()>imgWidth||loadedImg.height()>imgHeight){
             imgWidth = pCustomView.canvasWidth;
             imgHeight = pCustomView.canvasHeight;
             //Log.d(USER_PAINT, "P Cust in UP width: "+imgWidth+"  height: "+imgHeight);
             //Log.d(USER_PAINT, "p-cust width: "+loadedImg.width()+"  height: "+loadedImg.height());
             int setMaxW = 1365;
             int setMaxH = 1024;
-            double thresh;
-            double kernalSz;
-                thresh = 9;
-                kernalSz = 3;
-//            if(imgWidth > setMaxW || imgHeight>setMaxH){
-//                thresh = 9;
-//                kernalSz = 3;
-//            }else{
-//                thresh = 17;
-//                kernalSz = 3;
-//            }
+            double thresh = 9;
+            double kernalSz = 3;
             //Log.d("Thresh: ","CUrrent Thresh - "+thresh);
-
 
             if(loadedImg.width()>imgWidth||loadedImg.height()>imgHeight){
                 //Log.d(USER_PAINT, "P Cust in iff width: "+imgWidth+"  height: "+imgHeight);
-
 
                 double scale;
                 //double scaleH;
@@ -735,12 +736,8 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
                 //Log.d(USER_PAINT, "loaded width: "+loadedImg.width()+"  height: "+loadedImg.height());
 
                 //resize variables
-                //width = (int)(Math.min(scaleW,scaleH) * loadedImg.width());
-                //height = (int)(Math.min(scaleW,scaleH)* loadedImg.height());
                 width = (int)(Math.min(scale,scale) * loadedImg.width());
                 height = (int)(Math.min(scale,scale)* loadedImg.height());
-                //int width = loadedImg.width()/imgWidth;
-                //int height = loadedImg.height()/imgWidth;
                 //Log.d(USER_PAINT, "width: "+width+"  height: "+height);
                 //Log.d(USER_PAINT, "width: "+scale+"  height: "+scale);
 
@@ -760,20 +757,15 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
             pCustomView.imgHeight = height;
             pCustomView.imgWidth = width;
 
-
             Log.d(USER_PAINT, "PCust width: "+pCustomView.imgWidth+"  PCust height: "+pCustomView.imgHeight);
-
             Log.d(USER_PAINT,"ih="+loadedImg.height()+", iw="+loadedImg.width());
             Log.d(USER_PAINT,"scaled h="+height+", scaled w="+width);
 
-
             // using with Laplacian
-            //Imgproc.GaussianBlur(loadedImg, loadedImg, new Size(5,5),0,0,Core.BORDER_DEFAULT);
             Imgproc.GaussianBlur(loadedImg, loadedImg, new Size(5,5),0,0,Core.BORDER_DEFAULT);
 
-
             /**
-             * setting bit map through stages - Gauss
+             * setting bit map through stages for presentation - Gauss
              */
 
 //            try {
@@ -791,14 +783,13 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
 //                Log.d("ERR-GA", " Gauss Error "+e);
 //            }
 
-
             Imgproc.cvtColor(loadedImg, loadedImg, Imgproc.COLOR_RGB2GRAY);
 //            Utils.matToBitmap(loadedImg, bitmap);
             //Log.d("IMG_TYPE","Type = "+loadedImg.type());
 
 
             /**
-             * setting bit map through stages - Grayscale
+             * setting bit map through stages for presentation - Grayscale
              */
 
 //            try {
@@ -815,15 +806,9 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
 //                Log.d("ERR-GR", " GRAY Error "+e);
 //            }
 
-
-
-
-
             Mat bLap = new Mat();
             Imgproc.Laplacian(loadedImg, bLap, CvType.CV_16S,(int)kernalSz,1,0,Core.BORDER_DEFAULT);
             loadedImg.release();
-
-
             Mat lapImg = new Mat();
             bLap.convertTo(lapImg,CvType.CV_8UC4);
 
@@ -843,18 +828,12 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
 //            }
 
             bLap.release();
-
-//            //Core.convertScaleAbs(loadedImg, lapImg);
-            //Log.d("IMG_TYPE","Lap_Type_After = "+lapImg.type());
-            //Log.d("IMG_TYPE","Img_Values_2 = "+lapImg);
-            // invert colors
-
             Imgproc.threshold(lapImg, lapImg, thresh, 255, Imgproc.THRESH_BINARY_INV);
-            int imgCH = lapImg.channels();
+            //int imgCH = lapImg.channels();
             //Log.d(TAG, "Pixel val "+ lapImg.type()+ " chan "+ lapImg.channels());
 
             /**
-             * setting bit map through stages - Threshold binary inverse
+             * setting bit map through stages for presentation - Threshold binary inverse
              */
 //            try {
 //               // Log.d("ERR-BI", " BINARY Error ");
@@ -870,11 +849,12 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
 //            }
 
             //    Core.bitwise_not(lapImg, lapImg);
-            //loadedImg.release();
             bitmap = Bitmap.createBitmap(lapImg.width(), lapImg.height(),Bitmap.Config.ARGB_8888 );
             Utils.matToBitmap(lapImg, bitmap);
             lapImg.release();
 
+            // sets alpha of all white values in image to 0 to display as transparent png
+            // and only displays black lines in resulting immage
             for(int x = 0; x < bitmap.getWidth(); x++){
                 for(int y = 0; y < bitmap.getHeight(); y++){
                     int bmColor = bitmap.getPixel(x,y);
@@ -884,9 +864,7 @@ public class UserPaint_using extends AppCompatActivity implements PopupMenu.OnMe
                     }
                 }
             }
-
             buttonVisibility();
-
             pCustomView.pbarWidth = pbar.getWidth();
             pCustomView.pbarHeight = pbar.getHeight();
             pCustomView.setBitmap(bitmap, true);
