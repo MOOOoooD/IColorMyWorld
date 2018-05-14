@@ -107,7 +107,7 @@ public class OpCVImage_using extends AppCompatActivity{
     ImageView loaded_img;
 
     /**
-     * Callbach method to load and validate OpenCV library has loaded successfully
+     * Callback method to load and validate OpenCV library has loaded successfully
      *      to/for this activity
      */
     private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
